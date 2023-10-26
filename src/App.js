@@ -1,8 +1,10 @@
 import { LoginPage } from "./components/LoginPage";
+import { RecepiesPage } from "./components/RecepiesPage";
 function App() {
   return (
-    <> <h1>Hello</h1>
-    <LoginPage></LoginPage>
+    <> 
+      <LoginPage></LoginPage> 
+     {/*   <RecepiesPage></RecepiesPage>*/}
     </>
    
   );
