@@ -115,8 +115,15 @@ export function LoginPage() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
-                                value="albinka11122001@gmail.com"
                                 autoFocus
+                                sx={{
+                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#AA95BB"
+                                    },
+                                    "& .MuiInputLabel-root.Mui-focused": {
+                                        color: "#AA95BB" 
+                                    }
+                                }}
                             />
                             <TextField
                                 margin="normal"
@@ -126,14 +133,22 @@ export function LoginPage() {
                                 label="Password"
                                 type="password"
                                 id="password"
-                                value="11122001"
                                 autoComplete="current-password"
+                                sx={{
+                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#AA95BB", 
+                                    },
+                                    "& .MuiInputLabel-root.Mui-focused": {
+                                        color: "#AA95BB" 
+                                    }
+                                }}
                             />
 
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
+                                style={{   backgroundColor: '#AA95BB', color: 'white'}}
                                 sx={{ mt: 3, mb: 2 }}>
                                 Zaloguj się
                             </Button>

@@ -14,56 +14,44 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Avatar } from '@mui/material';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://github.com/orgs/PlanToPlateWMI/repositories">
         Plan To Plate
       </Link>{' '}
       {new Date().getFullYear()}
-      {'.'}
+      {'. Wszelkie prawa zastrzeżone.'}
     </Typography>
   );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const defaultTheme = createTheme();
+
 
 export function RecepiesPage() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <AppBar position="relative">
+      <AppBar position="relative" style={{backgroundColor: '#AA95BB'}}>
         <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Header
-          </Typography>
+          <Button variant="text" disableElevation style={{  backgroundColor: '#C3ACD6',color: 'white', marginRight: 20 }}>
+            O nas   
+          </Button>
+          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white'}}>
+            Zobacz przepisy
+          </Button>
+          <div style={{ flex: 1 }}></div>
+          <Button variant="text" disableElevation style={{   backgroundColor: '#C3ACD6', color: 'white'}}>
+            Zaloguj się
+          </Button>
         </Toolbar>
       </AppBar>
       <main>
-     
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Przepisy
-            </Typography>
-          </Container>
-        </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
             {cards.map((card) => (
@@ -83,9 +71,6 @@ export function RecepiesPage() {
                     <Typography gutterBottom variant="h5" component="h2">
                       Nazwa przepisu
                     </Typography>
-                    <Typography>
-                     moze tutaj bedzie desription a moze nie zobaczymy
-                    </Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small">Zobacz przepis</Button>
@@ -97,19 +82,16 @@ export function RecepiesPage() {
           </Grid>
         </Container>
       </main>
-      
+
       {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
+      <Box sx={{ backgroundColor: '#AA95BB', p: 2 }} component="footer">
         <Typography
           variant="subtitle1"
           align="center"
           color="text.secondary"
           component="p"
         >
-          Tutaj stopka strony
+          Email: <a href="mailto:plantoplatemobileapp@gmail.com">plantoplatemobileapp@gmail.com</a>
         </Typography>
         <Copyright />
       </Box>
