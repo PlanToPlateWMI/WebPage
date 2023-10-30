@@ -18,6 +18,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 import { useSigninMutation } from "../redux/api/index.js";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
@@ -25,6 +26,7 @@ export function LoginPage() {
 
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (error) {
@@ -77,6 +79,8 @@ export function LoginPage() {
                 console.log({
                     token,
                 });
+                navigate('/');
+                
             }
         } catch (error) {
             console.error('Sign-in error:', error);
@@ -175,7 +179,9 @@ export function LoginPage() {
                                 fullWidth
                                 variant="contained"
                                 style={{ backgroundColor: '#AA95BB', color: 'white' }}
-                                sx={{ mt: 3, mb: 2 }}>
+                                sx={{ mt: 3, mb: 2 }}
+                                >
+                                   
                                 Zaloguj się
                             </Button>
                         </Box>
