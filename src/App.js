@@ -4,7 +4,7 @@ import { RecepiesPage } from "./components/RecepiesPage";
 function App() {
   return (
     <> 
-      <LoginPage /> 
+      <RecepiesPage /> 
     </>
    
   );

@@ -20,7 +20,7 @@ const defaultTheme = createTheme();
 
 export function LoginPage() {
 
-    const [ signIn ] = useSigninMutation();
+    const [signIn] = useSigninMutation();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -51,9 +51,9 @@ export function LoginPage() {
             key,
         });
 
-        let signInData = JSON.stringify({ 
-          "email": email, 
-          "password": key 
+        let signInData = JSON.stringify({
+            "email": email,
+            "password": key
         });
 
         signIn(signInData);
@@ -121,7 +121,7 @@ export function LoginPage() {
                                         borderColor: "#AA95BB"
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#AA95BB" 
+                                        color: "#AA95BB"
                                     }
                                 }}
                             />
@@ -136,10 +136,10 @@ export function LoginPage() {
                                 autoComplete="current-password"
                                 sx={{
                                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "#AA95BB", 
+                                        borderColor: "#AA95BB",
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#AA95BB" 
+                                        color: "#AA95BB"
                                     }
                                 }}
                             />
@@ -148,7 +148,7 @@ export function LoginPage() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                style={{   backgroundColor: '#AA95BB', color: 'white'}}
+                                style={{ backgroundColor: '#AA95BB', color: 'white' }}
                                 sx={{ mt: 3, mb: 2 }}>
                                 Zaloguj się
                             </Button>

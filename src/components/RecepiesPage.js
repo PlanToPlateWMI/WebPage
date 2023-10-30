@@ -15,6 +15,8 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Avatar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -34,19 +36,24 @@ const defaultTheme = createTheme();
 
 
 export function RecepiesPage() {
+  const navigate = useNavigate();
+
+  const handleNavigateToLogin = () => {
+    navigate('/login');
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <AppBar position="relative" style={{backgroundColor: '#AA95BB'}}>
+      <AppBar position="relative" style={{ backgroundColor: '#AA95BB' }}>
         <Toolbar>
-          <Button variant="text" disableElevation style={{  backgroundColor: '#C3ACD6',color: 'white', marginRight: 20 }}>
-            O nas   
+          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white', marginRight: 20 }}>
+            O nas
           </Button>
-          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white'}}>
+          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white' }}>
             Zobacz przepisy
           </Button>
           <div style={{ flex: 1 }}></div>
-          <Button variant="text" disableElevation style={{   backgroundColor: '#C3ACD6', color: 'white'}}>
+          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white' }} onClick={handleNavigateToLogin}>
             Zaloguj się
           </Button>
         </Toolbar>

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { LoginPage } from "./components/LoginPage";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -14,6 +15,7 @@ root.render(
             <Router>
                 <Routes>
                     <Route path="/" element={<App />} />
+                    <Route path="/login" element={<LoginPage/>} />
                 </Routes>
             </Router>
         </Provider>
