@@ -1,9 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// import { RootState } from '../../app/store.js';
-
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ 
+  baseQuery: fetchBaseQuery({
     baseUrl: 'https://plantoplate.lm.r.appspot.com',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState()).authSlice.token;
@@ -13,14 +11,14 @@ export const api = createApi({
       return headers;
     },
   }),
-  
+
   endpoints: (builder) => ({
 
-    getToken: builder.query ({
+    getToken: builder.query({
       query: () => '/user/authorize',
     }),
 
-    signin: builder.mutation ({
+    signin: builder.mutation({
       query: (formData) => ({
         url: '/api/auth/signin',
         method: 'POST',
@@ -31,7 +29,7 @@ export const api = createApi({
       }),
     }),
   }),
-  
+
 });
 
 

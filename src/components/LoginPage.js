@@ -13,14 +13,28 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 // import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 import { useSigninMutation } from "../redux/api/index.js";
+import { useState, useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
 export function LoginPage() {
 
     const [signIn] = useSigninMutation();
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (error) {
+            const timeoutId = setTimeout(() => {
+                setError(null);
+            }, 1500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [error]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -56,7 +70,18 @@ export function LoginPage() {
             "password": key
         });
 
-        signIn(signInData);
+        try {
+            const response = await signIn(signInData);
+            if (response.data.token) {
+                const token = response.data.token;
+                console.log({
+                    token,
+                });
+            }
+        } catch (error) {
+            console.error('Sign-in error:', error);
+            setError("Niepoprawne dane do logowania!");
+        }
     };
 
 
@@ -100,7 +125,7 @@ export function LoginPage() {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            Logowanie
                         </Typography>
                         <Box
                             component="form"
@@ -112,7 +137,7 @@ export function LoginPage() {
                                 required
                                 fullWidth
                                 id="email"
-                                label="Email Address"
+                                label="Email"
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
@@ -130,7 +155,7 @@ export function LoginPage() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="Hasło"
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
@@ -144,6 +169,7 @@ export function LoginPage() {
                                 }}
                             />
 
+
                             <Button
                                 type="submit"
                                 fullWidth
@@ -153,7 +179,20 @@ export function LoginPage() {
                                 Zaloguj się
                             </Button>
                         </Box>
+                        <Box>
+                            <div>
+                                {error && (
+                                    <Stack sx={{ width: '100%' }} spacing={2}>
+                                        <Alert severity="error">
+                                            <AlertTitle>Błąd logowania</AlertTitle>
+                                            {error}
+                                        </Alert>
+                                    </Stack>
+                                )}
+                            </div>
+                        </Box>
                     </Box>
+
                 </Grid>
             </Grid>
         </ThemeProvider>
