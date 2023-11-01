@@ -12,6 +12,14 @@ const Header = () => {
         navigate("/login");
     };
 
+    const handleNavigateToAboutUs = () => {
+        navigate("/about");
+    };
+
+    const handleNavigateToRecepies = () => {
+        navigate("/");
+    };
+
     // const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.authSlice);
 
@@ -25,13 +33,15 @@ const Header = () => {
                         backgroundColor: "#C3ACD6",
                         color: "white",
                         marginRight: 20,
-                    }}>
+                    }}
+                    onClick={() => handleNavigateToAboutUs()}>
                     O nas
                 </Button>
                 <Button
                     variant="text"
                     disableElevation
-                    style={{ backgroundColor: "#C3ACD6", color: "white" }}>
+                    style={{ backgroundColor: "#C3ACD6", color: "white" }}
+                    onClick={() => handleNavigateToRecepies()}>
                     Zobacz przepisy
                 </Button>
                 <div style={{ flex: 1 }}></div>
