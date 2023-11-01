@@ -19,6 +19,10 @@ import Stack from "@mui/material/Stack";
 import { useSigninMutation } from "../redux/api/index.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 const defaultTheme = createTheme();
 
@@ -26,6 +30,17 @@ export function LoginPage() {
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const toggleShowPassword = () => {
+        setShowPassword((prev) => !prev);
+    };
 
     useEffect(() => {
         if (error) {
@@ -60,12 +75,6 @@ export function LoginPage() {
             }
         );
 
-        console.log({
-            email,
-            password,
-            key,
-        });
-
         let signInData = JSON.stringify({
             email: email,
             password: key,
@@ -75,9 +84,6 @@ export function LoginPage() {
             const response = await signIn(signInData);
             if (response.data.token) {
                 const token = response.data.token;
-                console.log({
-                    token,
-                });
                 navigate("/");
             }
         } catch (error) {
@@ -158,9 +164,19 @@ export function LoginPage() {
                                 fullWidth
                                 name="password"
                                 label="Hasło"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={handlePasswordChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={toggleShowPassword} edge="end">
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
                                 sx={{
                                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
                                     {
