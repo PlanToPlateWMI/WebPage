@@ -1,107 +1,70 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-// import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Avatar } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import * as React from "react";
 
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+// import Stack from '@mui/material/Stack';
+import Box from "@mui/material/Box";
+
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import { Avatar } from "@mui/material";
+
+import Header from "./header";
+import Przepis from "./przepis";
 
 function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://github.com/orgs/PlanToPlateWMI/repositories">
-        Plan To Plate
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'. Wszelkie prawa zastrzeżone.'}
-    </Typography>
-  );
+    return (
+        <Typography variant="body2" color="text.secondary" align="center">
+            {"Copyright © "}
+            <Link
+                color="inherit"
+                href="https://github.com/orgs/PlanToPlateWMI/repositories">
+                Plan To Plate
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {". Wszelkie prawa zastrzeżone."}
+        </Typography>
+    );
 }
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const defaultTheme = createTheme();
 
-
 export function RecepiesPage() {
-  const navigate = useNavigate();
+    return (
+        <ThemeProvider theme={defaultTheme}>
+            <CssBaseline />
+            <Header />
+            <main>
+                <Container sx={{ py: 8 }} maxWidth="md">
+                    <Grid container spacing={4}>
+                        {cards.map((card, index) => (
+                            <Przepis
+                                key={index}
+                                image="https://source.unsplash.com/random?wallpapers"
+                                title="Nazwa przepisu"
+                            />
+                        ))}
+                    </Grid>
+                </Container>
+            </main>
 
-  const handleNavigateToLogin = () => {
-    navigate('/login');
-  };
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
-      <AppBar position="relative" style={{ backgroundColor: '#AA95BB' }}>
-        <Toolbar>
-          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white', marginRight: 20 }}>
-            O nas
-          </Button>
-          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white' }}>
-            Zobacz przepisy
-          </Button>
-          <div style={{ flex: 1 }}></div>
-          <Button variant="text" disableElevation style={{ backgroundColor: '#C3ACD6', color: 'white' }} onClick={handleNavigateToLogin}>
-            Zaloguj się
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <main>
-        <Container sx={{ py: 8 }} maxWidth="md">
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <CardMedia
-                    component="div"
-                    sx={{
-                      // 16:9
-                      pt: '56.25%',
-                    }}
-                    image="https://source.unsplash.com/random?wallpapers"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Nazwa przepisu
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Zobacz przepis</Button>
-                    <Button size="small">Dodaj do ulubionych</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </main>
-
-      {/* Footer */}
-      <Box sx={{ backgroundColor: '#AA95BB', p: 2 }} component="footer">
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Email: <a href="mailto:plantoplatemobileapp@gmail.com">plantoplatemobileapp@gmail.com</a>
-        </Typography>
-        <Copyright />
-      </Box>
-    </ThemeProvider>
-  );
+            {/* Footer */}
+            <Box sx={{ backgroundColor: "#AA95BB", p: 2 }} component="footer">
+                <Typography
+                    variant="subtitle1"
+                    align="center"
+                    color="text.secondary"
+                    component="p">
+                    Email:{" "}
+                    <a href="mailto:plantoplatemobileapp@gmail.com">
+                        plantoplatemobileapp@gmail.com
+                    </a>
+                </Typography>
+                <Copyright />
+            </Box>
+        </ThemeProvider>
+    );
 }

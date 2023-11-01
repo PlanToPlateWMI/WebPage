@@ -13,17 +13,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 // import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Stack from '@mui/material/Stack';
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Stack from "@mui/material/Stack";
 import { useSigninMutation } from "../redux/api/index.js";
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export function LoginPage() {
-
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -68,8 +67,8 @@ export function LoginPage() {
         });
 
         let signInData = JSON.stringify({
-            "email": email,
-            "password": key
+            email: email,
+            password: key,
         });
 
         try {
@@ -79,15 +78,13 @@ export function LoginPage() {
                 console.log({
                     token,
                 });
-                navigate('/');
-                
+                navigate("/");
             }
         } catch (error) {
-            console.error('Sign-in error:', error);
+            console.error("Sign-in error:", error);
             setError("Niepoprawne dane do logowania!");
         }
     };
-
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -146,12 +143,13 @@ export function LoginPage() {
                                 autoComplete="email"
                                 autoFocus
                                 sx={{
-                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "#AA95BB"
+                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                    {
+                                        borderColor: "#AA95BB",
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#AA95BB"
-                                    }
+                                        color: "#AA95BB",
+                                    },
                                 }}
                             />
                             <TextField
@@ -164,33 +162,36 @@ export function LoginPage() {
                                 id="password"
                                 autoComplete="current-password"
                                 sx={{
-                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                    {
                                         borderColor: "#AA95BB",
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#AA95BB"
-                                    }
+                                        color: "#AA95BB",
+                                    },
                                 }}
                             />
-
 
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                style={{ backgroundColor: '#AA95BB', color: 'white' }}
-                                sx={{ mt: 3, mb: 2 }}
-                                >
-                                   
+                                style={{
+                                    backgroundColor: "#AA95BB",
+                                    color: "white",
+                                }}
+                                sx={{ mt: 3, mb: 2 }}>
                                 Zaloguj się
                             </Button>
                         </Box>
                         <Box>
                             <div>
                                 {error && (
-                                    <Stack sx={{ width: '100%' }} spacing={2}>
+                                    <Stack sx={{ width: "100%" }} spacing={2}>
                                         <Alert severity="error">
-                                            <AlertTitle>Błąd logowania</AlertTitle>
+                                            <AlertTitle>
+                                                Błąd logowania
+                                            </AlertTitle>
                                             {error}
                                         </Alert>
                                     </Stack>
@@ -198,7 +199,6 @@ export function LoginPage() {
                             </div>
                         </Box>
                     </Box>
-
                 </Grid>
             </Grid>
         </ThemeProvider>

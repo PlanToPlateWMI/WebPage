@@ -20,17 +20,7 @@ const authSlice = createSlice({
     .addMatcher(
       api.endpoints.signin.matchFulfilled,
       (state, { payload }) => {
-        if(payload['response'] === 'ok') {
-          state.goods = payload.items;
-          state.totalCount = payload.items.reduce((accumulator, item) => accumulator + item.count, 0);
-          state.selected = payload.items.filter((item) => item.count > 0).map((item) => item.categoryId);
-          state.isHight = payload.hight;
-        } else {
-          state.goods = [];
-          state.totalCount = 0;
-          state.selected = [];
-          state.isHight = payload.hight;
-        }
+        state.token = payload.token;
       }
     )
   },
