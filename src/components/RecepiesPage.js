@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -10,6 +10,9 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { Avatar } from "@mui/material";
+import ReactPaginate from "react-paginate";
+import Pagination from "@mui/material/Pagination";
+
 
 import Header from "./header";
 import Przepis from "./przepis";
@@ -36,7 +39,7 @@ var requestOptions = {
     redirect: 'follow'
 };
 
-let recipeData = '';
+let recipeData = [];
 
 fetch("https://plantoplate.lm.r.appspot.com/api/recipes", requestOptions)
     .then(response => response.text())
@@ -48,6 +51,15 @@ fetch("https://plantoplate.lm.r.appspot.com/api/recipes", requestOptions)
 
 
 export function RecepiesPage() {
+    const [page, setPage] = useState(1); // Current page
+    const recipesPerPage = 12;
+    const offset = (page - 1) * recipesPerPage;
+    const pageCount = Math.ceil(recipeData.length / recipesPerPage);
+
+  
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
@@ -55,16 +67,22 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                        {recipeData.map((recipe) => (
-                            <Przepis
-                                key={recipe.id}
-                                image={recipe.image}
-                                title={recipe.title}
-                            />
+                        {recipeData.slice(offset, offset + recipesPerPage).map((recipe) => (
+                            <Przepis key={recipe.id} image={recipe.image} title={recipe.title} />
                         ))}
                     </Grid>
                 </Container>
             </main>
+
+            {/* Pagination */}
+            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                <Pagination
+                    count={pageCount}
+                    page={page}
+                    onChange={handlePageChange}
+                 
+                />
+            </Box>
 
             {/* Footer */}
             <Box sx={{ backgroundColor: "#AA95BB", p: 2 }} component="footer">
