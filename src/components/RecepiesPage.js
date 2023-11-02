@@ -29,8 +29,23 @@ function Copyright() {
     );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const defaultTheme = createTheme();
+
+var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+};
+
+let recipeData = '';
+
+fetch("https://plantoplate.lm.r.appspot.com/api/recipes", requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        recipeData = JSON.parse(result);
+        console.log(result);
+    })
+    .catch(error => console.log('error', error));
+
 
 export function RecepiesPage() {
     return (
@@ -40,11 +55,11 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                        {cards.map((card, index) => (
+                        {recipeData.map((recipe) => (
                             <Przepis
-                                key={index}
-                                image="https://source.unsplash.com/random?wallpapers"
-                                title="Nazwa przepisu"
+                                key={recipe.id}
+                                image={recipe.image}
+                                title={recipe.title}
                             />
                         ))}
                     </Grid>
