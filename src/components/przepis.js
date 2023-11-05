@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -12,6 +12,32 @@ const Przepis = ({ image, title, recipeId }) => {
     const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.authSlice);
     const [isFavorite, setIsFavorite] = useState(false);
+
+    
+    useEffect(() => {
+        const getFavoriteStatus = async () => {
+            const url =`https://plantoplate.lm.r.appspot.com/api/recipes/selected`;
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${token}`);
+
+            const requestOptions = {
+                method: 'GET', 
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+
+            try {
+                const response = await fetch(url, requestOptions);
+                if (response.ok) {
+                    setIsFavorite(true); 
+                }
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        };
+
+        getFavoriteStatus();
+    }, [recipeId, token]);
 
     const handleAddToFavorites = () => {
         const url = `https://plantoplate.lm.r.appspot.com/api/recipes/selected/${recipeId}`;
