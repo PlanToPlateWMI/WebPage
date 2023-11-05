@@ -45,7 +45,6 @@ fetch("https://plantoplate.lm.r.appspot.com/api/recipes", requestOptions)
     .then(response => response.text())
     .then(result => {
         recipeData = JSON.parse(result);
-        console.log(result);
     })
     .catch(error => console.log('error', error));
 
@@ -68,7 +67,7 @@ export function RecepiesPage() {
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
                         {recipeData.slice(offset, offset + recipesPerPage).map((recipe) => (
-                            <Przepis key={recipe.id} image={recipe.image} title={recipe.title} />
+                            <Przepis key={recipe.id} image={recipe.image} title={recipe.title} recipeId={recipe.id} />
                         ))}
                     </Grid>
                 </Container>

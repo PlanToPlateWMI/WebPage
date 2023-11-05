@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -8,10 +8,29 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 
-const Przepis = ({ image, title }) => {
-
-    // const dispatch = useAppDispatch();
+const Przepis = ({ image, title, recipeId }) => {
+    const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.authSlice);
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const handleAddToFavorites = () => {
+        const url = `https://plantoplate.lm.r.appspot.com/api/recipes/selected/${recipeId}`;
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${token}`);
+
+        var raw = "";
+        const requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(url, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    };
 
     return (
         <Grid item xs={12} sm={6} md={4}>
@@ -36,7 +55,11 @@ const Przepis = ({ image, title }) => {
                 </CardContent>
                 <CardActions>
                     <Button size="small">Zobacz przepis</Button>
-                    {token !== "" ? <Button size="small">Dodaj do ulubionych</Button> : null}
+                    {token !== "" && !isFavorite ? (
+                        <Button size="small" onClick={handleAddToFavorites}>
+                            Dodaj do ulubionych
+                        </Button>
+                    ) : null}
                 </CardActions>
             </Card>
         </Grid>

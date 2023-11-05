@@ -84,6 +84,7 @@ export function LoginPage() {
             const response = await signIn(signInData);
             if (response.data.token) {
                 const token = response.data.token;
+                console.log(token);
                 navigate("/");
             }
         } catch (error) {
