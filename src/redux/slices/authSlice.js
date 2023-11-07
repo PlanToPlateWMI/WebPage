@@ -4,7 +4,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from '../api/index.js';
 
 const initialState = {
-  token: ""
+  token: "",
+  favorites: []
 };
 
 const authSlice = createSlice({
@@ -21,6 +22,13 @@ const authSlice = createSlice({
       api.endpoints.signin.matchFulfilled,
       (state, { payload }) => {
         state.token = payload.token;
+      }
+    )
+    .addMatcher(
+      api.endpoints.getFavorite.matchFulfilled,
+      (state, { payload }) => {
+        console.log(payload);
+        state.favorites = payload;
       }
     )
   },

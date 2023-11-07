@@ -149,6 +149,7 @@ export function LoginPage() {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
+                                value="albinka11122001@gmail.com"
                                 sx={{
                                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
                                     {
@@ -169,6 +170,7 @@ export function LoginPage() {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={handlePasswordChange}
+                                value="11122001"
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">

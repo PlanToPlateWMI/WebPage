@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { Avatar } from "@mui/material";
 import ReactPaginate from "react-paginate";
 import Pagination from "@mui/material/Pagination";
+import { useGetFavoriteQuery } from "../redux/api/index.js";
 
 
 import Header from "./header";
@@ -55,7 +56,8 @@ export function RecepiesPage() {
     const offset = (page - 1) * recipesPerPage;
     const pageCount = Math.ceil(recipeData.length / recipesPerPage);
 
-  
+    const { favorites } = useGetFavoriteQuery();
+
     const handlePageChange = (event, value) => {
         setPage(value);
     };
