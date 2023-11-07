@@ -12,8 +12,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { Avatar } from "@mui/material";
 import ReactPaginate from "react-paginate";
 import Pagination from "@mui/material/Pagination";
-import { useGetFavoriteQuery } from "../redux/api/index.js";
-
+import { useGetAllQuery, useGetFavoriteQuery } from "../redux/api/index.js";
+import { useAppSelector } from "../app/hooks.js";
 
 import Header from "./header";
 import Przepis from "./przepis";
@@ -35,32 +35,28 @@ function Copyright() {
 
 const defaultTheme = createTheme();
 
-var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-};
-
-let recipeData = [];
-
-fetch("https://plantoplate.lm.r.appspot.com/api/recipes", requestOptions)
-    .then(response => response.text())
-    .then(result => {
-        recipeData = JSON.parse(result);
-    })
-    .catch(error => console.log('error', error));
 
 
 export function RecepiesPage() {
     const [page, setPage] = useState(1); // Current page
+    const { token } = useAppSelector((state) => state.authSlice);
+
+    const { favorites } = useGetFavoriteQuery();
+    const { data: recipeData, isLoading, isError } = useGetAllQuery();
+
+    if(!recipeData) {
+        return;
+    }
+
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
     const pageCount = Math.ceil(recipeData.length / recipesPerPage);
-
-    const { favorites } = useGetFavoriteQuery();
-
+    
+    
     const handlePageChange = (event, value) => {
         setPage(value);
     };
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
@@ -68,9 +64,16 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                        {recipeData.slice(offset, offset + recipesPerPage).map((recipe) => (
-                            <Przepis key={recipe.id} image={recipe.image} title={recipe.title} recipeId={recipe.id} />
-                        ))}
+                        {recipeData
+                            .slice(offset, offset + recipesPerPage)
+                            .map((recipe) => (
+                                <Przepis
+                                    key={recipe.id}
+                                    image={recipe.image}
+                                    title={recipe.title}
+                                    recipeId={recipe.id}
+                                />
+                            ))}
                     </Grid>
                 </Container>
             </main>
@@ -81,7 +84,6 @@ export function RecepiesPage() {
                     count={pageCount}
                     page={page}
                     onChange={handlePageChange}
-                 
                 />
             </Box>
 

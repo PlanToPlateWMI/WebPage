@@ -17,6 +17,10 @@ export const api = createApi({
             query: () => "/api/recipes/selected",
         }),
 
+        getAll: builder.query({
+          query: () => '/api/recipes',
+        }),
+
         signin: builder.mutation({
             query: (formData) => ({
                 url: "/api/auth/signin",
@@ -30,4 +34,4 @@ export const api = createApi({
     }),
 });
 
-export const { useGetFavoriteQuery, useSigninMutation } = api;
+export const { useGetAllQuery, useGetFavoriteQuery, useSigninMutation } = api;

@@ -13,7 +13,6 @@ import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 const Przepis = ({ image, title, recipeId }) => {
     const { token, favorites } = useAppSelector((state) => state.authSlice);
 
-    const recipeIds = [];
 
     const handleAddToFavorites = () => {
         const url = `https://plantoplate.lm.r.appspot.com/api/recipes/selected/${recipeId}`;

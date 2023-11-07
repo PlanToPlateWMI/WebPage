@@ -5,7 +5,8 @@ import { api } from '../api/index.js';
 
 const initialState = {
   token: "",
-  favorites: []
+  favorites: [],
+  recipes: []
 };
 
 const authSlice = createSlice({
@@ -29,6 +30,12 @@ const authSlice = createSlice({
       (state, { payload }) => {
         console.log(payload);
         state.favorites = payload;
+      }
+    )
+    .addMatcher(
+      api.endpoints.getAll.matchFulfilled,
+      (state, { payload }) => {
+        console.log(payload);
       }
     )
   },
