@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -9,35 +9,34 @@ import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 
 const Przepis = ({ image, title, recipeId }) => {
-    const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.authSlice);
-    const [isFavorite, setIsFavorite] = useState(false);
 
+    const url = 'https://plantoplate.lm.r.appspot.com/api/recipes/selected';
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${token}`);
     
-    useEffect(() => {
-        const getFavoriteStatus = async () => {
-            const url =`https://plantoplate.lm.r.appspot.com/api/recipes/selected`;
-            const myHeaders = new Headers();
-            myHeaders.append("Authorization", `Bearer ${token}`);
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+   
+    const recipeIds = []; 
 
-            const requestOptions = {
-                method: 'GET', 
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-
-            try {
-                const response = await fetch(url, requestOptions);
-                if (response.ok) {
-                    setIsFavorite(true); 
-                }
-            } catch (error) {
-                console.log('Error:', error);
-            }
-        };
-
-        getFavoriteStatus();
-    }, [recipeId, token]);
+fetch(url, requestOptions)
+  .then(response => response.json()) 
+  .then(data => {
+    if (Array.isArray(data)) {
+      data.forEach(recipe => {
+        if (recipe.id) {
+          recipeIds.push(recipe.id); 
+        }
+      });
+    }
+    console.log('ids:', recipeIds);
+  })
+  .catch(error => console.log('erroe:', error));
+  
 
     const handleAddToFavorites = () => {
         const url = `https://plantoplate.lm.r.appspot.com/api/recipes/selected/${recipeId}`;
@@ -81,7 +80,7 @@ const Przepis = ({ image, title, recipeId }) => {
                 </CardContent>
                 <CardActions>
                     <Button size="small">Zobacz przepis</Button>
-                    {token !== "" && !isFavorite ? (
+                    {token !== "" && recipeIds.includes(recipeId) ? (
                         <Button size="small" onClick={handleAddToFavorites}>
                             Dodaj do ulubionych
                         </Button>
