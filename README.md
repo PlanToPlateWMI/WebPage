@@ -6,8 +6,7 @@ PlanToPlate is a system that helps individuals and groups (such as family) manag
 
 ## Technology
 
-Project was created using React library <img width="36" src="[https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png](https://blog.wildix.com/wp-content/uploads/2020/06/react-logo.jpg
-)" alt="React" title="React"/>
+Project was created using React library <img width="36" src="https://blog.wildix.com/wp-content/uploads/2020/06/react-logo.jpg" alt="React" title="React"/>
 
 ## Functionality
 
