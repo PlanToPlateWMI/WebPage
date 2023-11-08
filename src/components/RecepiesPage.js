@@ -41,7 +41,7 @@ export function RecepiesPage() {
     const [page, setPage] = useState(1); // Current page
     const { token } = useAppSelector((state) => state.authSlice);
 
-    const { favorites } = useGetFavoriteQuery();
+    const { data: favoriteData, refetch } = useGetFavoriteQuery();
     const { data: recipeData, isLoading, isError } = useGetAllQuery();
 
     if(!recipeData) {
@@ -72,6 +72,7 @@ export function RecepiesPage() {
                                     image={recipe.image}
                                     title={recipe.title}
                                     recipeId={recipe.id}
+                                    refetch={refetch}
                                 />
                             ))}
                     </Grid>

@@ -8,32 +8,36 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
+import {
+    useAddInFavoriteMutation,
+    useGetFavoriteQuery,
+} from "../redux/api/index.js";
 
-
-const Przepis = ({ image, title, recipeId }) => {
+const Przepis = ({ image, title, recipeId, refetch }) => {
     const { token, favorites } = useAppSelector((state) => state.authSlice);
+    const dispatch = useAppDispatch();
 
+    const safeFavorites = favorites || [];
 
-    const handleAddToFavorites = () => {
-        const url = `https://plantoplate.lm.r.appspot.com/api/recipes/selected/${recipeId}`;
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${token}`);
+    const [addInFavorite, { isSuccess }] = useAddInFavoriteMutation();
 
-        var raw = "";
-        const requestOptions = {
-            method: "PUT",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-        };
-
-        fetch(url, requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.log("error", error));
+    const handleAddToFavorites = async () => {
+        try {
+            await addInFavorite(recipeId).unwrap();
+        } catch (error) {
+            // Обрабатываем ошибки здесь
+            console.error("Error adding to favorites:", error);
+        }
     };
 
-    const isFavorite = favorites.some(recipe => recipe.id === recipeId);
+    useEffect(() => {
+        if (isSuccess) {
+            // Если мутация была успешной, перезапрашиваем данные избранных рецептов
+            refetch();
+        }
+    }, [isSuccess, refetch]);
+
+    const isFavorite = safeFavorites.some((recipe) => recipe.id === recipeId);
 
     return (
         <Grid item xs={12} sm={6} md={4}>

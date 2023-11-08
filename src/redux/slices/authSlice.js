@@ -38,6 +38,25 @@ const authSlice = createSlice({
         console.log(payload);
       }
     )
+    .addMatcher(
+      api.endpoints.addInFavorite.matchFulfilled,
+      (state, { payload }) => {
+        console.log('Correct', payload);
+      }
+    )
+    .addMatcher(
+      api.endpoints.addInFavorite.matchRejected,
+      (state, { payload, error }) => {
+        if (!payload) {
+          console.error('Error', error);
+        } else {
+          console.error('Error', payload);
+          if (payload.status === 400) {
+            console.error('Error 400', payload.data);
+          }
+        }
+      }
+    )
   },
 });
 

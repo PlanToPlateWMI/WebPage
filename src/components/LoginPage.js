@@ -149,7 +149,6 @@ export function LoginPage() {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
-
                                 sx={{
                                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
                                     {
