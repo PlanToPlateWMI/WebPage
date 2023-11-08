@@ -25,7 +25,7 @@ Project was created using React library.
 
 Clone the project
 ```bash
-  git clone [https://link-to-project](https://github.com/PlanToPlateWMI/WebPage)
+  git clone [https://github.com/PlanToPlateWMI/WebPage]
 ```
 
 Go to the project directory
