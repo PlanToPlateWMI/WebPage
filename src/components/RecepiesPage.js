@@ -72,6 +72,7 @@ export function RecepiesPage() {
                                     image={recipe.image}
                                     title={recipe.title}
                                     recipeId={recipe.id}
+                                    isVege={recipe.vege}
                                     refetch={refetch}
                                 />
                             ))}

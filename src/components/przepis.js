@@ -13,7 +13,7 @@ import {
     useGetFavoriteQuery,
 } from "../redux/api/index.js";
 
-const Przepis = ({ image, title, recipeId, refetch }) => {
+const Przepis = ({ image, title, recipeId, isVege, refetch }) => {
     const { token, favorites } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
 
@@ -25,14 +25,12 @@ const Przepis = ({ image, title, recipeId, refetch }) => {
         try {
             await addInFavorite(recipeId).unwrap();
         } catch (error) {
-            // Обрабатываем ошибки здесь
             console.error("Error adding to favorites:", error);
         }
     };
 
     useEffect(() => {
         if (isSuccess) {
-            // Если мутация была успешной, перезапрашиваем данные избранных рецептов
             refetch();
         }
     }, [isSuccess, refetch]);
@@ -58,6 +56,11 @@ const Przepis = ({ image, title, recipeId, refetch }) => {
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                         {title}
+                        {isVege ? (
+                            <span> 🌿</span>
+                        ) : (
+                            <span></span>
+                        )}
                     </Typography>
                 </CardContent>
                 <CardActions>
