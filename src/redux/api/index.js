@@ -36,9 +36,17 @@ export const api = createApi({
           query: (recipeId) => ({
               url: `/api/recipes/selected/${recipeId}`,
               method: "PUT",
-          }),
+          }), 
       }),
+
+      getDetails: builder.mutation({
+        query: (recipeId) => ({
+            url: `/api/recipes/${recipeId}`,
+            method: "GET",
+        }), 
+    }),
+
     }),
 });
 
-export const { useGetAllQuery, useGetFavoriteQuery, useSigninMutation, useAddInFavoriteMutation } = api;
+export const { useGetAllQuery, useGetFavoriteQuery, useSigninMutation, useAddInFavoriteMutation, useGetDetailsMutation } = api;
