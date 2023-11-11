@@ -6,12 +6,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+
+import { showPrzepis, setStateDialog } from "../redux/slices/authSlice.js"; 
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
@@ -19,15 +15,17 @@ import {
     useGetFavoriteQuery,
 } from "../redux/api/index.js";
 
-const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, portions, steps, refetch }) => {
+const Przepis = ({ recipe, refetch }) => {
+    const { image, title, id, isVege, time, categoryName, level, portions, steps } = recipe;
     const { token, favorites } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
-    const [openDialog, setOpenDialog] = useState(false);
+
+    console.log(recipe);
+
     const handleOpenDialog = () => {
-        setOpenDialog(true);
-    };
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
+        console.log(id);
+        dispatch(setStateDialog(true));
+        dispatch(showPrzepis(id));
     };
 
     const safeFavorites = favorites || [];
@@ -36,7 +34,7 @@ const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, po
 
     const handleAddToFavorites = async () => {
         try {
-            await addInFavorite(recipeId).unwrap();
+            await addInFavorite(id).unwrap();
         } catch (error) {
             console.error("Error adding to favorites:", error);
         }
@@ -48,7 +46,7 @@ const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, po
         }
     }, [isSuccess, refetch]);
 
-    const isFavorite = safeFavorites.some((recipe) => recipe.id === recipeId);
+    const isFavorite = safeFavorites.some((recipe) => recipe.id === id);
 
     return (
         <Grid item xs={12} sm={6} md={4}>
@@ -78,96 +76,6 @@ const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, po
                 <CardActions>
                     <div>
                         <Button size="small" onClick={handleOpenDialog}>Zobacz przepis</Button>
-                        <Dialog fullScreen open={openDialog} onClose={handleCloseDialog}>
-                            <DialogTitle style={{ textAlign: 'center', backgroundColor: 'rgb(195, 172, 214)' }} >
-                                <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-                                    {title}
-
-                                </Typography>
-
-                                <IconButton
-                                    edge="end"
-                                    style={{ position: 'absolute', right: 20, top: 10 }}
-                                    color="inherit"
-                                    onClick={handleCloseDialog}
-                                    aria-label="close"
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            </DialogTitle>
-                            <DialogContent style={{ textAlign: 'left' }}>
-                                <div style={{
-                                    maxWidth: '250px',
-                                    height: '250px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    marginTop: '15px',
-                                    overflow: 'hidden',
-                                }}>
-                                    <div style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        position: 'relative',
-                                        overflow: 'hidden',
-                                        borderRadius: '10%',
-                                    }}>
-                                        <img
-                                            src={image}
-                                            alt={title}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'cover',
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div style={{ marginTop: '10px' }}>
-                                    {isVege && (
-                                        <span style={{ fontSize: '18px', color: 'green' }}> 🌿 Przepis wegański 🌿</span>
-                                    )}
-                                </div>
-
-                                <div style={{ marginTop: '10px' }}>
-                                    <span style={{ fontSize: '18px', color: 'black' }}>📋 Kategoria: {categoryName}</span>
-                                </div>
-
-                                <div style={{ marginTop: '10px' }}>
-                                    <span style={{ fontSize: '18px', color: 'black' }}>⏰ Czas: {time} minut</span>
-                                </div>
-
-                                <div style={{ marginTop: '10px' }}>
-                                    {level === 'EASY' && (
-                                        <span style={{ fontSize: '18px', color: 'black' }}>⭐ Łatwy</span>
-                                    )}
-                                    {level === 'MEDIUM' && (
-                                        <span>
-                                            <span style={{ fontSize: '18px', color: 'black' }}>⭐⭐ Średni</span>
-                                        </span>
-                                    )}
-                                    {level === 'HARD' && (
-                                        <span>
-                                            <span style={{ fontSize: '18px', color: 'black' }}>⭐⭐⭐ Trudny</span>
-                                        </span>
-                                    )}
-                                </div>
-
-                                <div style={{ marginTop: '10px' }}>
-                                    <span style={{ fontSize: '18px', color: 'black' }}>👪 Porcje: {portions}</span>
-                                </div>
-
-                                <div style={{ marginTop: '10px' }}>
-                                    <span style={{ fontSize: '18px', color: 'black' }}>👣 kroki: {steps}</span>
-                                </div>
-
-                            </DialogContent>
-                            <DialogActions>
-                                <Button color="primary">
-                                    тут добавить кнопку удалть с любимых если рецепт в любимом
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
                     </div>
                     {token !== "" && (
                         isFavorite ? (
