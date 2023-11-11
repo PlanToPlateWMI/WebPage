@@ -73,6 +73,11 @@ export function RecepiesPage() {
                                     title={recipe.title}
                                     recipeId={recipe.id}
                                     isVege={recipe.vege}
+                                    time={recipe.time}
+                                    categoryName={recipe.categoryName}
+                                    level={recipe.level}
+                                    portions={recipe.portions}
+                                    steps={recipe.steps}
                                     refetch={refetch}
                                 />
                             ))}
