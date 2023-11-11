@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { Avatar } from "@mui/material";
 import ReactPaginate from "react-paginate";
 import Pagination from "@mui/material/Pagination";
-import { useGetAllQuery, useGetFavoriteQuery } from "../redux/api/index.js";
+import { useGetAllQuery, useGetDetailsMutation, useGetFavoriteQuery } from "../redux/api/index.js";
 import { useAppSelector } from "../app/hooks.js";
 
 import Header from "./header";
@@ -44,7 +44,13 @@ export function RecepiesPage() {
     const { data: favoriteData, refetch } = useGetFavoriteQuery();
     const { data: recipeData, isLoading, isError } = useGetAllQuery();
 
+    const { data: recipeDataDetails } = useGetDetailsMutation();
+
     if(!recipeData) {
+        return;
+    }
+
+    if(!recipeDataDetails) {
         return;
     }
 
@@ -56,6 +62,10 @@ export function RecepiesPage() {
     const handlePageChange = (event, value) => {
         setPage(value);
     };
+    const combinedData = recipeData.map((recipe) => {
+        const details = recipeDataDetails.find((detail) => detail.id === recipe.id);
+        return { ...recipe, ...(details || {}) }; // Use empty object if details not found
+      });
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -64,7 +74,8 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                        {recipeData
+                 
+                        {combinedData 
                             .slice(offset, offset + recipesPerPage)
                             .map((recipe) => (
                                 <Przepis
