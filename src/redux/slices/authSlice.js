@@ -2,23 +2,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { RootState } from '../../app/store';
 import { api } from '../api/index.js';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
   token: "",
   favorites: [],
-  recipes: []
+  recipes: [],
+  selectedRecipe: [],
+  isModalOpen: false,
 };
+
+export const showPrzepis = createAsyncThunk(
+  'auth/showPrzepis',
+  async (recipeId, { dispatch, getState }) => {
+    const response = await dispatch(api.endpoints.getDetails.initiate(recipeId)).unwrap();
+    // Добавьте response в состояние как часть примера (например, в details)
+    return response; // это будет передано как payload в extraReducers
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    activatePromo(state, { payload }) {
-      
+    setStateDialog(state, { payload }) {
+      state.isModalOpen = payload;
     },
   },
   extraReducers: (builder) => {
     builder
+    .addCase(showPrzepis.fulfilled, (state, action) => {
+      // Обновление состояния с данными рецепта
+      state.selectedRecipe = action.payload; // или любой другой способ обновления состояния
+    })
     .addMatcher(
       api.endpoints.signin.matchFulfilled,
       (state, { payload }) => {
@@ -57,8 +73,9 @@ const authSlice = createSlice({
         }
       }
     )
+    
   },
 });
 
-export const { activatePromo } = authSlice.actions;
+export const { setStateDialog } = authSlice.actions;
 export default authSlice.reducer;

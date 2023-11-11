@@ -17,6 +17,7 @@ import { useAppSelector } from "../app/hooks.js";
 
 import Header from "./header";
 import Przepis from "./przepis";
+import ModalPrzepis from "./modalPrzepis.js";
 
 function Copyright() {
     return (
@@ -35,8 +36,6 @@ function Copyright() {
 
 const defaultTheme = createTheme();
 
-
-
 export function RecepiesPage() {
     const [page, setPage] = useState(1); // Current page
     const { token } = useAppSelector((state) => state.authSlice);
@@ -44,13 +43,7 @@ export function RecepiesPage() {
     const { data: favoriteData, refetch } = useGetFavoriteQuery();
     const { data: recipeData, isLoading, isError } = useGetAllQuery();
 
-    const { data: recipeDataDetails } = useGetDetailsMutation();
-
     if(!recipeData) {
-        return;
-    }
-
-    if(!recipeDataDetails) {
         return;
     }
 
@@ -62,10 +55,6 @@ export function RecepiesPage() {
     const handlePageChange = (event, value) => {
         setPage(value);
     };
-    const combinedData = recipeData.map((recipe) => {
-        const details = recipeDataDetails.find((detail) => detail.id === recipe.id);
-        return { ...recipe, ...(details || {}) }; // Use empty object if details not found
-      });
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -74,21 +63,12 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                 
-                        {combinedData 
+                        {recipeData 
                             .slice(offset, offset + recipesPerPage)
                             .map((recipe) => (
                                 <Przepis
                                     key={recipe.id}
-                                    image={recipe.image}
-                                    title={recipe.title}
-                                    recipeId={recipe.id}
-                                    isVege={recipe.vege}
-                                    time={recipe.time}
-                                    categoryName={recipe.categoryName}
-                                    level={recipe.level}
-                                    portions={recipe.portions}
-                                    steps={recipe.steps}
+                                    recipe={recipe}
                                     refetch={refetch}
                                 />
                             ))}
@@ -119,6 +99,7 @@ export function RecepiesPage() {
                 </Typography>
                 <Copyright />
             </Box>
+            <ModalPrzepis />
         </ThemeProvider>
     );
 }
