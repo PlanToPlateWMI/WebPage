@@ -96,19 +96,33 @@ const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, po
                                 </IconButton>
                             </DialogTitle>
                             <DialogContent style={{ textAlign: 'left' }}>
-                                <div style={{ maxWidth: '250px', height: '250px', display: 'inline-block', marginTop: '15px' }}>
-                                    <img
-                                        src={image}
-                                        alt={title}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                            borderRadius: '10%',
-                                        }}
-                                    />
+                                <div style={{
+                                    maxWidth: '250px',
+                                    height: '250px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginTop: '15px',
+                                    overflow: 'hidden',
+                                }}>
+                                    <div style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        borderRadius: '10%',
+                                    }}>
+                                        <img
+                                            src={image}
+                                            alt={title}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                                
                                 <div style={{ marginTop: '10px' }}>
                                     {isVege && (
                                         <span style={{ fontSize: '18px', color: 'green' }}> 🌿 Przepis wegański 🌿</span>
