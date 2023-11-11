@@ -6,6 +6,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
@@ -13,9 +19,16 @@ import {
     useGetFavoriteQuery,
 } from "../redux/api/index.js";
 
-const Przepis = ({ image, title, recipeId, isVege, refetch }) => {
+const Przepis = ({ image, title, recipeId, isVege, time, categoryName, level, portions, steps, refetch }) => {
     const { token, favorites } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
+    const [openDialog, setOpenDialog] = useState(false);
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
 
     const safeFavorites = favorites || [];
 
@@ -48,7 +61,6 @@ const Przepis = ({ image, title, recipeId, isVege, refetch }) => {
                 <CardMedia
                     component="div"
                     sx={{
-                        // 16:9
                         pt: "56.25%",
                     }}
                     image={image}
@@ -64,7 +76,85 @@ const Przepis = ({ image, title, recipeId, isVege, refetch }) => {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">Zobacz przepis</Button>
+                    <div>
+                        <Button size="small" onClick={handleOpenDialog}>Zobacz przepis</Button>
+                        <Dialog fullScreen open={openDialog} onClose={handleCloseDialog}>
+                            <DialogTitle style={{ textAlign: 'center', backgroundColor: 'rgb(195, 172, 214)' }} >
+                                <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+                                    {title}
+
+                                </Typography>
+
+                                <IconButton
+                                    edge="end"
+                                    style={{ position: 'absolute', right: 20, top: 10 }}
+                                    color="inherit"
+                                    onClick={handleCloseDialog}
+                                    aria-label="close"
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </DialogTitle>
+                            <DialogContent style={{ textAlign: 'left' }}>
+                                <div style={{ maxWidth: '250px', height: '250px', display: 'inline-block', marginTop: '15px' }}>
+                                    <img
+                                        src={image}
+                                        alt={title}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            borderRadius: '10%',
+                                        }}
+                                    />
+                                </div>
+                                
+                                <div style={{ marginTop: '10px' }}>
+                                    {isVege && (
+                                        <span style={{ fontSize: '18px', color: 'green' }}> 🌿 Przepis wegański 🌿</span>
+                                    )}
+                                </div>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    <span style={{ fontSize: '18px', color: 'black' }}>📋 Kategoria: {categoryName}</span>
+                                </div>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    <span style={{ fontSize: '18px', color: 'black' }}>⏰ Czas: {time} minut</span>
+                                </div>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    {level === 'EASY' && (
+                                        <span style={{ fontSize: '18px', color: 'black' }}>⭐ Łatwy</span>
+                                    )}
+                                    {level === 'MEDIUM' && (
+                                        <span>
+                                            <span style={{ fontSize: '18px', color: 'black' }}>⭐⭐ Średni</span>
+                                        </span>
+                                    )}
+                                    {level === 'HARD' && (
+                                        <span>
+                                            <span style={{ fontSize: '18px', color: 'black' }}>⭐⭐⭐ Trudny</span>
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    <span style={{ fontSize: '18px', color: 'black' }}>👪 Porcje: {portions}</span>
+                                </div>
+
+                                <div style={{ marginTop: '10px' }}>
+                                    <span style={{ fontSize: '18px', color: 'black' }}>👣 kroki: {steps}</span>
+                                </div>
+
+                            </DialogContent>
+                            <DialogActions>
+                                <Button color="primary">
+                                    тут добавить кнопку удалть с любимых если рецепт в любимом
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     {token !== "" && (
                         isFavorite ? (
                             <span style={{ marginLeft: 'auto', fontSize: '24px', color: 'red' }}>❤️</span>
