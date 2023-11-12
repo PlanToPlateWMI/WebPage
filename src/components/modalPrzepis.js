@@ -12,8 +12,9 @@ import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { setStateDialog } from "../redux/slices/authSlice.js";
 
 const ModalPrzepis = () => {
-
-    const { isModalOpen, selectedRecipe } = useAppSelector((state) => state.authSlice);
+    const { isModalOpen, selectedRecipe, recipes } = useAppSelector(
+        (state) => state.authSlice
+    );
     const dispatch = useAppDispatch();
 
     const handleCloseDialog = () => {
@@ -24,7 +25,13 @@ const ModalPrzepis = () => {
         return;
     }
 
-    const { image, title, id, isVege, time, categoryName, level, portions, steps, ingredients } = selectedRecipe;
+    const { image, title, id, isVege, time, level, portions, steps } =
+        selectedRecipe;
+
+    const safeRecipes = recipes || [];
+    const categoryName = safeRecipes.find(
+        (recipe) => recipe.id === id
+    ).categoryName;
 
     return (
         <Dialog fullScreen open={isModalOpen} onClose={handleCloseDialog}>
@@ -127,24 +134,14 @@ const ModalPrzepis = () => {
 
                 <div style={{ marginTop: "10px" }}>
                     <span style={{ fontSize: "18px", color: "black" }}>
-                        👣 Kroki: <div dangerouslySetInnerHTML={{ __html: steps.join('<br>') }} />
+                        👣 kroki:{" "}
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: steps.join("<br>"),
+                            }}
+                        />
                     </span>
                 </div>
-
-                <div style={{ marginTop: "10px" }}>
-                    {ingredients.map((ingredient) => (
-                        <div key={ingredient.id}>
-                            <span style={{ fontSize: "18px", color: "black" }}>
-                                👣 Nazwa: {ingredient.ingredientName}
-                            </span>
-                            <br />
-                            <span>
-                                Quantity: {ingredient.quantity} {ingredient.unit}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
             </DialogContent>
             <DialogActions>
                 <Button color="primary">

@@ -18,7 +18,7 @@ export const api = createApi({
         }),
 
         getAll: builder.query({
-          query: () => '/api/recipes',
+            query: () => "/api/recipes",
         }),
 
         signin: builder.mutation({
@@ -33,20 +33,30 @@ export const api = createApi({
         }),
 
         addInFavorite: builder.mutation({
-          query: (recipeId) => ({
-              url: `/api/recipes/selected/${recipeId}`,
-              method: "PUT",
-          }), 
-      }),
+            query: (recipeId) => ({
+                url: `/api/recipes/selected/${recipeId}`,
+                method: "PUT",
+            }),
+        }),
 
-      getDetails: builder.mutation({
-        query: (recipeId) => ({
-            url: `/api/recipes/${recipeId}`,
-            method: "GET",
-        }), 
-    }),
+        getDetails: builder.mutation({
+            query: (recipeId) => ({
+                url: `/api/recipes/${recipeId}`,
+                method: "GET",
+            }),
+        }),
 
+        getCategories: builder.query({
+            query: () => "/api/recipe-categories",
+        }),
     }),
 });
 
-export const { useGetAllQuery, useGetFavoriteQuery, useSigninMutation, useAddInFavoriteMutation, useGetDetailsMutation } = api;
+export const {
+    useGetAllQuery,
+    useGetFavoriteQuery,
+    useSigninMutation,
+    useAddInFavoriteMutation,
+    useGetDetailsMutation,
+    useGetCategoriesQuery,
+} = api;
