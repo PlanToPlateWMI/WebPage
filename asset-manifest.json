@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/test/static/js/main.fbea031b.js",
-    "index.html": "/test/index.html",
-    "main.fbea031b.js.map": "/test/static/js/main.fbea031b.js.map"
+    "main.js": "/WebPage/static/js/main.fbea031b.js",
+    "index.html": "/WebPage/index.html",
+    "main.fbea031b.js.map": "/WebPage/static/js/main.fbea031b.js.map"
   },
   "entrypoints": [
     "static/js/main.fbea031b.js"
