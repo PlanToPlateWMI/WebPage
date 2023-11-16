@@ -25,7 +25,7 @@ const ModalPrzepis = () => {
         return;
     }
 
-    const { image, title, id, isVege, time, level, portions, steps } =
+    const { image, title, id, vege, time, level, portions, steps, ingredients, source } =
         selectedRecipe;
 
     const safeRecipes = recipes || [];
@@ -54,100 +54,123 @@ const ModalPrzepis = () => {
                 </IconButton>
             </DialogTitle>
             <DialogContent style={{ textAlign: "left" }}>
-                <div
-                    style={{
-                        maxWidth: "250px",
-                        height: "250px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginTop: "15px",
-                        overflow: "hidden",
-                    }}>
+
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <div
                         style={{
-                            width: "100%",
-                            height: "100%",
-                            position: "relative",
+                            maxWidth: "250px",
+                            height: "250px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: "15px",
                             overflow: "hidden",
-                            borderRadius: "10%",
-                        }}>
-                        <img
-                            src={image}
-                            alt={title}
+                        }}
+                    >
+                        <div
                             style={{
                                 width: "100%",
                                 height: "100%",
-                                objectFit: "cover",
+                                position: "relative",
+                                overflow: "hidden",
+                                borderRadius: "10%",
                             }}
-                        />
+                        >
+                            <img
+                                src={image}
+                                alt={title}
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div style={{ marginLeft: "50px" }}>
+                        <div style={{ marginTop: "30px" }}>
+                            {vege && (
+                                <span style={{ fontSize: "18px", color: "green" }}>
+                                    {" "}
+                                    🌿 Przepis wegański 🌿
+                                </span>
+                            )}
+                        </div>
+
+                        <div style={{ marginTop: "10px" }}>
+                            <span style={{ fontSize: "18px", color: "black" }}>
+                                📗 Kategoria: {categoryName}
+                            </span>
+                        </div>
+
+                        <div style={{ marginTop: "10px" }}>
+                            <span style={{ fontSize: "18px", color: "black" }}>
+                                ⏰ Czas: {time} minut
+                            </span>
+                        </div>
+
+                        <div style={{ marginTop: "10px" }}>
+                            {level === "EASY" && (
+                                <span style={{ fontSize: "18px", color: "black" }}>
+                                    ⭐ Łatwy
+                                </span>
+                            )}
+                            {level === "MEDIUM" && (
+                                <span>
+                                    <span style={{ fontSize: "18px", color: "black" }}>
+                                        ⭐⭐ Średni
+                                    </span>
+                                </span>
+                            )}
+                            {level === "HARD" && (
+                                <span>
+                                    <span style={{ fontSize: "18px", color: "black" }}>
+                                        ⭐⭐⭐ Trudny
+                                    </span>
+                                </span>
+                            )}
+                        </div>
+
+                        <div style={{ marginTop: "10px" }}>
+                            <span style={{ fontSize: "18px", color: "black" }}>
+                                👪 Porcje: {portions}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: "30px", marginLeft: "50px" }}>
+                        <span style={{ fontSize: "18px", color: "black" }}>
+                            📋Lista skladnikow:
+                            <ul>
+                                {ingredients.map((ingredient, index) => (
+                                    <li key={index}>
+                                        {`${ingredient.ingredientName}: ${ingredient.quantity} ${ingredient.unit}`}
+                                    </li>
+                                ))}
+                            </ul>
+                        </span>
                     </div>
                 </div>
-                <div style={{ marginTop: "10px" }}>
-                    {isVege && (
-                        <span style={{ fontSize: "18px", color: "green" }}>
-                            {" "}
-                            🌿 Przepis wegański 🌿
-                        </span>
-                    )}
-                </div>
 
-                <div style={{ marginTop: "10px" }}>
+                <div style={{ marginTop: "20px" }}>
                     <span style={{ fontSize: "18px", color: "black" }}>
-                        📋 Kategoria: {categoryName}
-                    </span>
-                </div>
-
-                <div style={{ marginTop: "10px" }}>
-                    <span style={{ fontSize: "18px", color: "black" }}>
-                        ⏰ Czas: {time} minut
-                    </span>
-                </div>
-
-                <div style={{ marginTop: "10px" }}>
-                    {level === "EASY" && (
-                        <span style={{ fontSize: "18px", color: "black" }}>
-                            ⭐ Łatwy
-                        </span>
-                    )}
-                    {level === "MEDIUM" && (
-                        <span>
-                            <span style={{ fontSize: "18px", color: "black" }}>
-                                ⭐⭐ Średni
-                            </span>
-                        </span>
-                    )}
-                    {level === "HARD" && (
-                        <span>
-                            <span style={{ fontSize: "18px", color: "black" }}>
-                                ⭐⭐⭐ Trudny
-                            </span>
-                        </span>
-                    )}
-                </div>
-
-                <div style={{ marginTop: "10px" }}>
-                    <span style={{ fontSize: "18px", color: "black" }}>
-                        👪 Porcje: {portions}
-                    </span>
-                </div>
-
-                <div style={{ marginTop: "10px" }}>
-                    <span style={{ fontSize: "18px", color: "black" }}>
-                        👣 kroki:{" "}
+                        👣 Kroki:{" "}
                         <div
                             dangerouslySetInnerHTML={{
                                 __html: steps.join("<br>"),
                             }}
                         />
+
                     </span>
                 </div>
+                <div style={{ marginTop: "10px" }}>
+                    <a href={source} style={{ fontSize: "16px", color: "black", textDecoration: "underline" }}>
+                        Źródło
+                    </a>
+                </div>
             </DialogContent>
-            <DialogActions>
-                <Button color="primary">
-                    тут добавить кнопку удалть с любимых если рецепт в любимом
-                </Button>
-            </DialogActions>
+
         </Dialog>
     );
 };

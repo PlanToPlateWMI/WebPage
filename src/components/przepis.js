@@ -19,7 +19,7 @@ const Przepis = ({ recipe, refetch }) => {
         image,
         title,
         id,
-        isVege,
+        vege,
         time,
         categoryName,
         level,
@@ -68,13 +68,29 @@ const Przepis = ({ recipe, refetch }) => {
                     component="div"
                     sx={{
                         pt: "56.25%",
+                        position: "relative",
                     }}
                     image={image}
-                />
+                >
+                    {isFavorite && (
+                        <span
+                            style={{
+                                fontSize: "40px",
+                                color: "red",
+                                position: "absolute",
+                                top: "10px",
+                                right: "10px",
+                            }}
+                        >
+                            ❤️
+                        </span>
+                    )}
+                </CardMedia>
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                         {title}
-                        {isVege ? <span> 🌿</span> : <span></span>}
+                        {vege ? <span> 🌿</span> : <span></span>}
+
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -85,14 +101,9 @@ const Przepis = ({ recipe, refetch }) => {
                     </div>
                     {token !== "" &&
                         (isFavorite ? (
-                            <span
-                                style={{
-                                    marginLeft: "auto",
-                                    fontSize: "24px",
-                                    color: "red",
-                                }}>
-                                ❤️
-                            </span>
+                            <Button size="small" >
+                                Usuń z ulubionych
+                            </Button>
                         ) : (
                             <Button size="small" onClick={handleAddToFavorites}>
                                 Dodaj do ulubionych

@@ -83,57 +83,6 @@ export function RecepiesPage() {
             <Header />
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            p: 2,
-                        }}>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    checked={filter === "Wszystkie"}
-                                    onChange={() => setFilter("Wszystkie")}
-                                    value="Wszystkie"
-                                />
-                            }
-                            label="Wszystkie"
-                            key={0}
-                        />
-                        {categories.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filter === item.name}
-                                        onChange={() => setFilter(item.name)}
-                                        value={item.name}
-                                    />
-                                }
-                                label={item.name}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            p: 2,
-                        }}>
-                        {filtersLevel.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filterLevel === item.id}
-                                        onChange={() => setFilterLevel(item.id)}
-                                        value={item.friendlyTitle}
-                                    />
-                                }
-                                label={item.friendlyTitle}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
                     <Grid container spacing={4}>
                         {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
