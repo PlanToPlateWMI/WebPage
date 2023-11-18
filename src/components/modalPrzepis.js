@@ -170,7 +170,7 @@ const ModalPrzepis = () => {
 
                 <div style={{ marginTop: "20px" }}>
                     <span style={{ fontSize: "18px", color: "black" }}>
-                        👣 Kroki:{" "}
+                        <b>Kroki:</b>{" "}
                         <div
                             dangerouslySetInnerHTML={{
                                 __html: steps.join("<br>"),
@@ -179,7 +179,7 @@ const ModalPrzepis = () => {
 
                     </span>
                 </div>
-              
+
             </DialogContent>
 
         </Dialog>
