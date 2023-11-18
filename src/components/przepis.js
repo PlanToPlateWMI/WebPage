@@ -11,7 +11,7 @@ import { showPrzepis, setStateDialog } from "../redux/slices/authSlice.js";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
-    useAddInFavoriteMutation
+    useAddInFavoriteMutation,useRemoveFromFavoriteMutation
 } from "../redux/api/index.js";
 
 const Przepis = ({ recipe, refetch }) => {
@@ -52,6 +52,22 @@ const Przepis = ({ recipe, refetch }) => {
             refetch();
         }
     }, [isSuccess, refetch]);
+
+    const [removeFromFavorite, { isSuccess: removeSuccess }] = useRemoveFromFavoriteMutation();
+
+    const handleRemoveFromFavorites = async () => {
+        try {
+            await removeFromFavorite(id).unwrap();
+        } catch (error) {
+            console.error("Error removing from favorites:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (removeSuccess) {
+            refetch();
+        }
+    }, [removeSuccess, refetch]);
 
     const safeFavorites = favorites || [];
     const isFavorite = safeFavorites.some((recipe) => recipe.id === id);
@@ -101,7 +117,7 @@ const Przepis = ({ recipe, refetch }) => {
                     </div>
                     {token !== ""  &&
                         (isFavorite ? (
-                            <Button size="small" >
+                            <Button size="small" onClick={handleRemoveFromFavorites} >
                                 Usuń z ulubionych
                             </Button>
                         ) : (
