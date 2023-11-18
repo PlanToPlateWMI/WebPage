@@ -19,8 +19,8 @@ export const showPrzepis = createAsyncThunk(
         const response = await dispatch(
             api.endpoints.getDetails.initiate(recipeId)
         ).unwrap();
-        // Добавьте response в состояние как часть примера (например, в details)
-        return response; // это будет передано как payload в extraReducers
+      
+        return response; 
     }
 );
 
@@ -35,8 +35,8 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(showPrzepis.fulfilled, (state, action) => {
-                // Обновление состояния с данными рецепта
-                state.selectedRecipe = action.payload; // или любой другой способ обновления состояния
+                
+                state.selectedRecipe = action.payload; 
             })
             .addMatcher(
                 api.endpoints.signin.matchFulfilled,

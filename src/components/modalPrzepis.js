@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import InfoIcon from "@mui/icons-material/Info";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { setStateDialog } from "../redux/slices/authSlice.js";
@@ -33,6 +34,10 @@ const ModalPrzepis = () => {
         (recipe) => recipe.id === id
     ).categoryName;
 
+
+    const handleInfoClick = () => {
+        window.open(source, '_blank'); // Opens the source URL in a new tab
+    };
     return (
         <Dialog fullScreen open={isModalOpen} onClose={handleCloseDialog}>
             <DialogTitle
@@ -40,6 +45,16 @@ const ModalPrzepis = () => {
                     textAlign: "center",
                     backgroundColor: "rgb(195, 172, 214)",
                 }}>
+
+                <IconButton
+                    style={{ position: "absolute", left: 20, top: 10 }}
+                    aria-label="info"
+                    onClick={handleInfoClick}
+                    title="Zobacz oryginalny przepis"
+                >
+                    <InfoIcon />
+                </IconButton>
+
                 <Typography variant="h5" style={{ fontWeight: "bold" }}>
                     {title}
                 </Typography>
@@ -164,11 +179,7 @@ const ModalPrzepis = () => {
 
                     </span>
                 </div>
-                <div style={{ marginTop: "10px" }}>
-                    <a href={source} style={{ fontSize: "16px", color: "black", textDecoration: "underline" }}>
-                        Źródło
-                    </a>
-                </div>
+              
             </DialogContent>
 
         </Dialog>
