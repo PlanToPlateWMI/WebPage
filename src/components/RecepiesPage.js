@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-// import Stack from '@mui/material/Stack';
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
+import Radio from "@mui/material/Radio";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import { Avatar } from "@mui/material";
-import ReactPaginate from "react-paginate";
 import Pagination from "@mui/material/Pagination";
-import { useGetAllQuery, useGetFavoriteQuery } from "../redux/api/index.js";
-import { useAppSelector } from "../app/hooks.js";
+import {
+    useGetAllQuery,
+    useGetFavoriteQuery,
+    useGetCategoriesQuery,
+} from "../redux/api/index.js";
 
 import Header from "./header";
 import Przepis from "./przepis";
+import ModalPrzepis from "./modalPrzepis.js";
 
 function Copyright() {
     return (
@@ -35,27 +36,46 @@ function Copyright() {
 
 const defaultTheme = createTheme();
 
-
-
 export function RecepiesPage() {
-    const [page, setPage] = useState(1); // Current page
-    const { token } = useAppSelector((state) => state.authSlice);
+    const [page, setPage] = useState(1); 
+    const { refetch } = useGetFavoriteQuery();
+    const { data: recipeData } = useGetAllQuery();
+    const { data: categories } = useGetCategoriesQuery();
 
-    const { data: favoriteData, refetch } = useGetFavoriteQuery();
-    const { data: recipeData, isLoading, isError } = useGetAllQuery();
+    const [filter, setFilter] = useState("Wszystkie");
+    const [filterLevel, setFilterLevel] = useState("all");
+    const filtersLevel = [
+        { friendlyTitle: "Wszystkie", id: "all" },
+        { friendlyTitle: "Łatwe", id: "EASY" },
+        { friendlyTitle: "Średnie", id: "MEDIUM" },
+        { friendlyTitle: "Ciężkie", id: "HARD" },
+    ];
 
-    if(!recipeData) {
+    if (!recipeData) {
+        return;
+    }
+
+    if (!categories) {
         return;
     }
 
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
     const pageCount = Math.ceil(recipeData.length / recipesPerPage);
-    
-    
+
     const handlePageChange = (event, value) => {
         setPage(value);
     };
+
+    const filteredRecipes = recipeData
+        .filter((recipe) => {
+            if (filter === "Wszystkie") return true;
+            return recipe.categoryName === filter;
+        })
+        .filter((recipe) => {
+            if (filterLevel === "all") return true;
+            return recipe.level === filterLevel;
+        });
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -64,14 +84,12 @@ export function RecepiesPage() {
             <main>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={4}>
-                        {recipeData
+                        {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
                             .map((recipe) => (
                                 <Przepis
                                     key={recipe.id}
-                                    image={recipe.image}
-                                    title={recipe.title}
-                                    recipeId={recipe.id}
+                                    recipe={recipe}
                                     refetch={refetch}
                                 />
                             ))}
@@ -102,6 +120,7 @@ export function RecepiesPage() {
                 </Typography>
                 <Copyright />
             </Box>
+            <ModalPrzepis />
         </ThemeProvider>
     );
 }
