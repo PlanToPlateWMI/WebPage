@@ -85,5 +85,6 @@ const authSlice = createSlice({
     },
 });
 
+
 export const { setStateDialog } = authSlice.actions;
 export default authSlice.reducer;
