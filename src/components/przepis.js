@@ -26,7 +26,7 @@ const Przepis = ({ recipe, refetch }) => {
         portions,
         steps,
     } = recipe;
-    const { token, favorites } = useAppSelector((state) => state.authSlice);
+    const { token, favorites, role } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
 
     //console.log(recipe);
@@ -115,7 +115,7 @@ const Przepis = ({ recipe, refetch }) => {
                             Zobacz przepis
                         </Button>
                     </div>
-                    {token !== ""  &&
+                    {(token !== "" && role==="ROLE_ADMIN") &&
                         (isFavorite ? (
                             <Button size="small" onClick={handleRemoveFromFavorites} >
                                 Usuń z ulubionych

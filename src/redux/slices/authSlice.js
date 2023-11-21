@@ -11,6 +11,7 @@ const initialState = {
     selectedRecipe: [],
     isModalOpen: false,
     categories: [],
+    role: "",
 };
 
 export const showPrzepis = createAsyncThunk(
@@ -19,8 +20,8 @@ export const showPrzepis = createAsyncThunk(
         const response = await dispatch(
             api.endpoints.getDetails.initiate(recipeId)
         ).unwrap();
-      
-        return response; 
+
+        return response;
     }
 );
 
@@ -35,13 +36,14 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(showPrzepis.fulfilled, (state, action) => {
-                
-                state.selectedRecipe = action.payload; 
+
+                state.selectedRecipe = action.payload;
             })
             .addMatcher(
                 api.endpoints.signin.matchFulfilled,
                 (state, { payload }) => {
                     state.token = payload.token;
+                    state.role = payload.role;
                 }
             )
             .addMatcher(
