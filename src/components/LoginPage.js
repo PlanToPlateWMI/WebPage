@@ -105,7 +105,7 @@ export function LoginPage() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: `url(/Logo2.jpg)`,
+                        backgroundImage: `url(/public/Logo2.jpg)`,
                         backgroundRepeat: "no-repeat",
                         backgroundColor: (t) =>
                             t.palette.mode === "light"
