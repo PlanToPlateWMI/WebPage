@@ -23,6 +23,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
+import Logo from "../images/Logo2.jpg";
 
 const defaultTheme = createTheme();
 
@@ -104,8 +105,9 @@ export function LoginPage() {
                     xs={false}
                     sm={4}
                     md={7}
+                    component={Logo}
                     sx={{
-                        backgroundImage: `url(/public/Logo2.jpg)`,
+                        backgroundImage: Logo,
                         backgroundRepeat: "no-repeat",
                         backgroundColor: (t) =>
                             t.palette.mode === "light"
