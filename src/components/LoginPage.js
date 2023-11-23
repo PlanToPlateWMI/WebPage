@@ -86,8 +86,6 @@ export function LoginPage() {
             if (response.data.token) {
                 const token = response.data.token;
                 const role = response.data.role;
-                console.log(token);
-                console.log(role);
                 navigate("/");
             }
         } catch (error) {
@@ -100,14 +98,10 @@ export function LoginPage() {
         <ThemeProvider theme={defaultTheme}>
             <Grid container component="main" sx={{ height: "100vh" }}>
                 <CssBaseline />
-                <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
-                    component={Logo}
-                    sx={{
-                        backgroundImage: Logo,
+                <img 
+                    src={Logo} 
+                    style={{
+                        flex: "1",
                         backgroundRepeat: "no-repeat",
                         backgroundColor: (t) =>
                             t.palette.mode === "light"
