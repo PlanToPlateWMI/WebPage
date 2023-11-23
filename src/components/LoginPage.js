@@ -23,6 +23,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
+import Logo from "../images/Logo2.jpg";
 
 const defaultTheme = createTheme();
 
@@ -85,8 +86,6 @@ export function LoginPage() {
             if (response.data.token) {
                 const token = response.data.token;
                 const role = response.data.role;
-                console.log(token);
-                console.log(role);
                 navigate("/");
             }
         } catch (error) {
@@ -99,13 +98,10 @@ export function LoginPage() {
         <ThemeProvider theme={defaultTheme}>
             <Grid container component="main" sx={{ height: "100vh" }}>
                 <CssBaseline />
-                <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
-                    sx={{
-                        backgroundImage: `url(/public/Logo2.jpg)`,
+                <img 
+                    src={Logo} 
+                    style={{
+                        flex: "1",
                         backgroundRepeat: "no-repeat",
                         backgroundColor: (t) =>
                             t.palette.mode === "light"
