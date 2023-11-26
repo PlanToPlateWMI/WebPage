@@ -18,6 +18,11 @@ import {
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 function Copyright() {
     return (
@@ -37,7 +42,7 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
-    const [page, setPage] = useState(1); 
+    const [page, setPage] = useState(1);
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
@@ -77,12 +82,82 @@ export function RecepiesPage() {
             return recipe.level === filterLevel;
         });
 
+    let filteredRecipesCount = 0;
+
+    if (filteredRecipes) {
+        filteredRecipesCount = filteredRecipes.length;
+    }
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
             <main>
-                <Container sx={{ py: 8 }} maxWidth="md">
+                <Paper
+                    component="form"
+                    sx={{ p: '5px 10px', display: 'flex', alignItems: 'center', width: 600, margin: '0 auto', }}
+                >
+                    <InputBase
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="Szukaj przepis"
+                        inputProps={{ 'aria-label': 'search google maps' }}
+                    />
+                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                        <SearchIcon />
+                    </IconButton>
+
+                </Paper>
+                <Container sx={{ py: 2 }} maxWidth="md">
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            p: 2,
+                        }}>
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    checked={filter === "Wszystkie"}
+                                    onChange={() => setFilter("Wszystkie")}
+                                    value="Wszystkie"
+                                />
+                            }
+                            label="Wszystkie"
+                            key={0}
+                        />
+                        {categories.map((item) => (
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        checked={filter === item.name}
+                                        onChange={() => setFilter(item.name)}
+                                        value={item.name}
+                                    />
+                                }
+                                label={item.name}
+                                key={item.id}
+                            />
+                        ))}
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            p: 2,
+                        }}>
+                        {filtersLevel.map((item) => (
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        checked={filterLevel === item.id}
+                                        onChange={() => setFilterLevel(item.id)}
+                                        value={item.friendlyTitle}
+                                    />
+                                }
+                                label={item.friendlyTitle}
+                                key={item.id}
+                            />
+                        ))}
+                    </Box>
                     <Grid container spacing={4}>
                         {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
@@ -98,13 +173,15 @@ export function RecepiesPage() {
             </main>
 
             {/* Pagination */}
-            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
-                <Pagination
-                    count={pageCount}
-                    page={page}
-                    onChange={handlePageChange}
-                />
-            </Box>
+            {Math.ceil(filteredRecipesCount / recipesPerPage) > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                    <Pagination
+                        count={Math.ceil(filteredRecipesCount / recipesPerPage)}
+                        page={page}
+                        onChange={handlePageChange}
+                    />
+                </Box>
+            )}
 
             {/* Footer */}
             <Box sx={{ backgroundColor: "#AA95BB", p: 2 }} component="footer">
