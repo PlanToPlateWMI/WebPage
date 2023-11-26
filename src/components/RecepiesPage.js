@@ -91,7 +91,7 @@ export function RecepiesPage() {
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <main>
+            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
                 <Paper
                     component="form"
                     sx={{ p: '5px 10px', display: 'flex', alignItems: 'center', width: 600, margin: '0 auto', }}
@@ -184,19 +184,20 @@ export function RecepiesPage() {
             )}
 
             {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2 }} component="footer">
-                <Typography
-                    variant="subtitle1"
-                    align="center"
-                    color="text.secondary"
-                    component="p">
-                    Email:{" "}
-                    <a href="mailto:plantoplatemobileapp@gmail.com">
-                        plantoplatemobileapp@gmail.com
-                    </a>
-                </Typography>
-                <Copyright />
-            </Box>
+            <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
+      <Typography
+        variant="subtitle1"
+        align="center"
+        color="text.secondary"
+        component="p"
+      >
+        Email:{" "}
+        <a href="mailto:plantoplatemobileapp@gmail.com">
+          plantoplatemobileapp@gmail.com
+        </a>
+      </Typography>
+      <Copyright />
+    </Box>
             <ModalPrzepis />
         </ThemeProvider>
     );
