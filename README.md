@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/PlanToPlateWMI/WebPage/blob/main/public/Logo2.jpg" alt="LOGO">
+  <img src="https://github.com/PlanToPlateWMI/WebPage/blob/Sprint3_aboutUs/public/Logo2.jpg" alt="LOGO">
 </p>
 
 # 👋 PlanToPlate
