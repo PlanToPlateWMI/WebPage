@@ -88,8 +88,8 @@ export function AboutUs() {
             </div>
             <div style={{ textAlign: 'center' }}>
                 <img src={QR} alt="QR code" style={{
-                    width: '170px',
-                    height: '150px',
+                    width: '175px',
+                    height: '175px',
                     display: 'inline-block',
                 }} />
                 <h4>Pobierz aplikację mobilną w GooglePlay</h4>

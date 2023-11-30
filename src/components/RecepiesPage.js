@@ -43,6 +43,7 @@ const defaultTheme = createTheme();
 
 export function RecepiesPage() {
     const [page, setPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState(''); // Состояние для хранения запроса поиска
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
@@ -72,6 +73,13 @@ export function RecepiesPage() {
         setPage(value);
     };
 
+
+    // Обработчик изменения значения в поле поиска
+    const handleSearchChange = (event) => {
+        const query = event.target.value.toLowerCase(); // Приводим запрос к нижнему регистру для удобства поиска
+        setSearchQuery(query); // Обновляем состояние при изменении значения поля поиска
+    };
+
     const filteredRecipes = recipeData
         .filter((recipe) => {
             if (filter === "Wszystkie") return true;
@@ -80,6 +88,10 @@ export function RecepiesPage() {
         .filter((recipe) => {
             if (filterLevel === "all") return true;
             return recipe.level === filterLevel;
+        })
+        .filter((recipe) => {
+            if (searchQuery === '') return true;
+            return recipe.title.toLowerCase().includes(searchQuery); // Фильтруем по вхождению запроса в название рецепта
         });
 
     let filteredRecipesCount = 0;
@@ -92,20 +104,21 @@ export function RecepiesPage() {
             <CssBaseline />
             <Header />
             <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-                <Paper
-                    component="form"
-                    sx={{ p: '5px 10px', display: 'flex', alignItems: 'center', width: 600, margin: '0 auto', }}
-                >
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Szukaj przepis"
-                        inputProps={{ 'aria-label': 'search google maps' }}
-                    />
-                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
-
-                </Paper>
+            <Paper
+                component="form"
+                sx={{ p: '5px 10px', display: 'flex', alignItems: 'center', width: 600, margin: '0 auto', }}
+            >
+                <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Szukaj przepis"
+                    inputProps={{ 'aria-label': 'search google maps' }}
+                    value={searchQuery} // Привязываем значение поля к состоянию поиска
+                    onChange={handleSearchChange} // Привязываем обработчик изменения значения
+                />
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                    <SearchIcon />
+                </IconButton>
+            </Paper>
                 <Container sx={{ py: 2 }} maxWidth="md">
                     <Box
                         sx={{
@@ -185,19 +198,19 @@ export function RecepiesPage() {
 
             {/* Footer */}
             <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
-      <Typography
-        variant="subtitle1"
-        align="center"
-        color="text.secondary"
-        component="p"
-      >
-        Email:{" "}
-        <a href="mailto:plantoplatemobileapp@gmail.com">
-          plantoplatemobileapp@gmail.com
-        </a>
-      </Typography>
-      <Copyright />
-    </Box>
+                <Typography
+                    variant="subtitle1"
+                    align="center"
+                    color="text.secondary"
+                    component="p"
+                >
+                    Email:{" "}
+                    <a href="mailto:plantoplatemobileapp@gmail.com">
+                        plantoplatemobileapp@gmail.com
+                    </a>
+                </Typography>
+                <Copyright />
+            </Box>
             <ModalPrzepis />
         </ThemeProvider>
     );
