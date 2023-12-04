@@ -21,7 +21,7 @@ import ModalPrzepis from "./modalPrzepis.js";
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function Copyright() {
@@ -91,7 +91,7 @@ export function RecepiesPage() {
         })
         .filter((recipe) => {
             if (searchQuery === '') return true;
-            return recipe.title.toLowerCase().includes(searchQuery); // Фильтруем по вхождению запроса в название рецепта
+            return recipe.title.toLowerCase().includes(searchQuery);
         });
 
     let filteredRecipesCount = 0;
@@ -104,28 +104,42 @@ export function RecepiesPage() {
             <CssBaseline />
             <Header />
             <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-            <Paper
-                component="form"
-                sx={{ p: '5px 10px', display: 'flex', alignItems: 'center', width: 600, margin: '0 auto', }}
-            >
-                <InputBase
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="Szukaj przepis"
-                    inputProps={{ 'aria-label': 'search google maps' }}
-                    value={searchQuery} // Привязываем значение поля к состоянию поиска
-                    onChange={handleSearchChange} // Привязываем обработчик изменения значения
-                />
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                    <SearchIcon />
-                </IconButton>
-            </Paper>
+                <Paper
+                    component="form"
+                    sx={{
+                        p: '5px 10px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 600,
+                        margin: '0 auto',
+                    }}
+                >
+                    <InputBase
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="Szukaj przepis"
+                        inputProps={{ 'aria-label': 'search google maps' }}
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                    {searchQuery && (
+                        <IconButton
+                            type="button"
+                            sx={{ p: '10px' }}
+                            aria-label="clear"
+                            onClick={() => setSearchQuery('')}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    )}
+                </Paper>
                 <Container sx={{ py: 2 }} maxWidth="md">
                     <Box
                         sx={{
                             display: "flex",
-                            justifyContent: "center",
+                            justifyContent: "flex-start",
                             p: 2,
                         }}>
+                        <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
                         <FormControlLabel
                             control={
                                 <Radio
@@ -137,6 +151,7 @@ export function RecepiesPage() {
                             label="Wszystkie"
                             key={0}
                         />
+
                         {categories.map((item) => (
                             <FormControlLabel
                                 control={
@@ -154,9 +169,10 @@ export function RecepiesPage() {
                     <Box
                         sx={{
                             display: "flex",
-                            justifyContent: "center",
+                            justifyContent: "flex-start",
                             p: 2,
                         }}>
+                        <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
                         {filtersLevel.map((item) => (
                             <FormControlLabel
                                 control={
