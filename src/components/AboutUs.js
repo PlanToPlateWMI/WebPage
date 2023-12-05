@@ -92,7 +92,7 @@ export function AboutUs() {
                     height: '175px',
                     display: 'inline-block',
                 }} />
-                <h4>Pobierz aplikację mobilną w GooglePlay</h4>
+                <h4>Pobierz aplikację mobilną w <a href="  https://play.google.com/store/apps/details?id=pl.plantoplate&pcampaignid=web_share" target="_blank">Google Play</a></h4>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px', flexDirection: 'column', textAlign: 'right' }}>
