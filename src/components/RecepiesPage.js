@@ -18,6 +18,11 @@ import {
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 function Copyright() {
     return (
@@ -37,7 +42,8 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
-    const [page, setPage] = useState(1); 
+    const [page, setPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState(''); // Состояние для хранения запроса поиска
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
@@ -67,6 +73,13 @@ export function RecepiesPage() {
         setPage(value);
     };
 
+
+    // Обработчик изменения значения в поле поиска
+    const handleSearchChange = (event) => {
+        const query = event.target.value.toLowerCase(); // Приводим запрос к нижнему регистру для удобства поиска
+        setSearchQuery(query); // Обновляем состояние при изменении значения поля поиска
+    };
+
     const filteredRecipes = recipeData
         .filter((recipe) => {
             if (filter === "Wszystkie") return true;
@@ -75,14 +88,105 @@ export function RecepiesPage() {
         .filter((recipe) => {
             if (filterLevel === "all") return true;
             return recipe.level === filterLevel;
+        })
+        .filter((recipe) => {
+            if (searchQuery === '') return true;
+            return recipe.title.toLowerCase().includes(searchQuery);
         });
 
+    let filteredRecipesCount = 0;
+
+    if (filteredRecipes) {
+        filteredRecipesCount = filteredRecipes.length;
+    }
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <main>
-                <Container sx={{ py: 8 }} maxWidth="md">
+            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
+                <Paper
+                    component="form"
+                    sx={{
+                        p: '5px 10px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 600,
+                        margin: '0 auto',
+                    }}
+                >
+                    <InputBase
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="Szukaj przepis"
+                        inputProps={{ 'aria-label': 'search google maps' }}
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                    {searchQuery && (
+                        <IconButton
+                            type="button"
+                            sx={{ p: '10px' }}
+                            aria-label="clear"
+                            onClick={() => setSearchQuery('')}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    )}
+                </Paper>
+                <Container sx={{ py: 2 }} maxWidth="md">
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            p: 2,
+                        }}>
+                        <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
+                        <FormControlLabel
+                            control={
+                                <Radio
+                                    checked={filter === "Wszystkie"}
+                                    onChange={() => setFilter("Wszystkie")}
+                                    value="Wszystkie"
+                                />
+                            }
+                            label="Wszystkie"
+                            key={0}
+                        />
+
+                        {categories.map((item) => (
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        checked={filter === item.name}
+                                        onChange={() => setFilter(item.name)}
+                                        value={item.name}
+                                    />
+                                }
+                                label={item.name}
+                                key={item.id}
+                            />
+                        ))}
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            p: 2,
+                        }}>
+                        <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
+                        {filtersLevel.map((item) => (
+                            <FormControlLabel
+                                control={
+                                    <Radio
+                                        checked={filterLevel === item.id}
+                                        onChange={() => setFilterLevel(item.id)}
+                                        value={item.friendlyTitle}
+                                    />
+                                }
+                                label={item.friendlyTitle}
+                                key={item.id}
+                            />
+                        ))}
+                    </Box>
                     <Grid container spacing={4}>
                         {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
@@ -98,21 +202,24 @@ export function RecepiesPage() {
             </main>
 
             {/* Pagination */}
-            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
-                <Pagination
-                    count={pageCount}
-                    page={page}
-                    onChange={handlePageChange}
-                />
-            </Box>
+            {Math.ceil(filteredRecipesCount / recipesPerPage) > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                    <Pagination
+                        count={Math.ceil(filteredRecipesCount / recipesPerPage)}
+                        page={page}
+                        onChange={handlePageChange}
+                    />
+                </Box>
+            )}
 
             {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2 }} component="footer">
+            <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
                 <Typography
                     variant="subtitle1"
                     align="center"
                     color="text.secondary"
-                    component="p">
+                    component="p"
+                >
                     Email:{" "}
                     <a href="mailto:plantoplatemobileapp@gmail.com">
                         plantoplatemobileapp@gmail.com
