@@ -14,7 +14,7 @@ import {
     useGetFavoriteQuery,
     useGetCategoriesQuery,
 } from "../redux/api/index.js";
-
+import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
@@ -43,7 +43,7 @@ const defaultTheme = createTheme();
 
 export function RecepiesPage() {
     const [page, setPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState(''); // Состояние для хранения запроса поиска
+    const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
@@ -74,10 +74,10 @@ export function RecepiesPage() {
     };
 
 
-    // Обработчик изменения значения в поле поиска
+
     const handleSearchChange = (event) => {
-        const query = event.target.value.toLowerCase(); // Приводим запрос к нижнему регистру для удобства поиска
-        setSearchQuery(query); // Обновляем состояние при изменении значения поля поиска
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
     };
 
     const filteredRecipes = recipeData
@@ -199,6 +199,24 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
+                <div style={{ position: 'fixed', bottom: '18%', right: '35px', zIndex: '999' }}>
+                <Button
+                    variant="text"
+                    disableElevation
+                    style={{
+                        backgroundColor: "#C3ACD6",
+                        color: "white",
+                        width: 30,
+                        height: 60,
+                        borderRadius: '50%',
+                        fontSize: '36px',
+                    }}
+                    title="Dodaj własny przepis"
+                >
+                    +
+                </Button>
+            </div>
+
             </main>
 
             {/* Pagination */}
