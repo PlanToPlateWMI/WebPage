@@ -10,12 +10,14 @@ import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { closeDialogs } from "../redux/slices/authSlice.js";
 import Autocomplete from '@mui/material/Autocomplete';
 import {
-    useGetCategoriesQuery,
+    useGetCategoriesQuery, useGetAllProductsQuery,
 } from "../redux/api/index.js";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
+import SkladnikiComponent from "./skladnikiComponent.js";
+import KrokiComponent from "./krokiComponent.js";
+import Button from '@mui/material/Button';
 const ModalAddPrzepis = () => {
     const { isModalAddPrzepisOpen } = useAppSelector(
         (state) => state.authSlice
@@ -122,10 +124,27 @@ const ModalAddPrzepis = () => {
                             <FormControlLabel control={<Checkbox defaultChecked />} label="Ten przepis jest wegański" />
                         </FormGroup>
                     </div>
-                    <Typography variant="h6"  style={{  paddingTop: '5px' }}>
-                       Dodaj składniki
+                    <Typography variant="h6" style={{ paddingTop: '5px', paddingBottom: '5px' }}>
+                        Dodaj składniki
                     </Typography>
+                    <SkladnikiComponent />
+
+                    <Typography variant="h6" style={{ paddingTop: '5px', paddingBottom: '5px' }}>
+                        Dodaj kroki
+                    </Typography>
+                    <KrokiComponent />
                 </div>
+
+                <div style={{ position: 'fixed', bottom: '5%', right: '45px', zIndex: '999' }}>
+                    <Button
+                        variant="text"
+                        disableElevation
+                        style={{ backgroundColor: "#C3ACD6", color: "white" }}
+                    >
+                        Dodaj przepis
+                    </Button>
+                </div>
+
             </DialogContent>
         </Dialog>
     );

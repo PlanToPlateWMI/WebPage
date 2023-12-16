@@ -56,6 +56,12 @@ export const api = createApi({
         getCategories: builder.query({
             query: () => "/api/recipe-categories",
         }),
+
+
+        getAllProducts: builder.query({
+            query: () => "/api/products?type=all",
+        }),
+
     }),
 });
 
@@ -66,5 +72,6 @@ export const {
     useAddInFavoriteMutation,
     useGetDetailsMutation,
     useGetCategoriesQuery,
+    useGetAllProductsQuery,
     useRemoveFromFavoriteMutation
 } = api;
