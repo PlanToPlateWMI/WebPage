@@ -10,8 +10,10 @@ const initialState = {
     recipes: [],
     selectedRecipe: [],
     isModalOpen: false,
+    isModalAddPrzepisOpen: false,
     categories: [],
     role: "",
+    
 };
 
 export const showPrzepis = createAsyncThunk(
@@ -29,8 +31,15 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setStateDialog(state, { payload }) {
+        openModalAddDialog(state, { payload }) {
+            state.isModalAddPrzepisOpen = payload;
+        },
+        openModalPrzepisDialog(state, { payload }) {
             state.isModalOpen = payload;
+        },
+        closeDialogs(state, { payload }) {
+            state.isModalOpen = payload;
+            state.isModalAddPrzepisOpen = payload;
         },
     },
     extraReducers: (builder) => {
@@ -88,5 +97,5 @@ const authSlice = createSlice({
 });
 
 
-export const { setStateDialog } = authSlice.actions;
+export const { closeDialogs, openModalPrzepisDialog, openModalAddDialog } = authSlice.actions;
 export default authSlice.reducer;

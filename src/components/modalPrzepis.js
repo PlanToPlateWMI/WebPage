@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
-import { setStateDialog } from "../redux/slices/authSlice.js";
+import { closeDialogs } from "../redux/slices/authSlice.js";
 
 const ModalPrzepis = () => {
     const { isModalOpen, selectedRecipe, recipes } = useAppSelector(
@@ -19,7 +19,7 @@ const ModalPrzepis = () => {
     const dispatch = useAppDispatch();
 
     const handleCloseDialog = () => {
-        dispatch(setStateDialog(false));
+        dispatch(closeDialogs(false));
     };
 
     if (!selectedRecipe.id) {

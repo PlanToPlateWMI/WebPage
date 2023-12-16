@@ -7,7 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-import { showPrzepis, setStateDialog } from "../redux/slices/authSlice.js";
+import { showPrzepis, openModalPrzepisDialog } from "../redux/slices/authSlice.js";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
@@ -33,7 +33,7 @@ const Przepis = ({ recipe, refetch }) => {
 
     const handleOpenDialog = () => {
         console.log(id);
-        dispatch(setStateDialog(true));
+        dispatch(openModalPrzepisDialog(true));
         dispatch(showPrzepis(id));
     };
 
@@ -43,7 +43,7 @@ const Przepis = ({ recipe, refetch }) => {
         try {
             await addInFavorite(id).unwrap();
         } catch (error) {
-            console.error("Error adding to favorites:", error);
+            console.error("Error adding to favorites: ", error);
         }
     };
 

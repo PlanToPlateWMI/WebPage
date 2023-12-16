@@ -18,11 +18,15 @@ import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
+import ModalAddPrzepis from "./modalAddPrzepis.js";
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { openModalAddDialog } from "../redux/slices/authSlice.js";
+import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 
 function Copyright() {
     return (
@@ -42,6 +46,7 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
+    const dispatch = useAppDispatch();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
@@ -73,11 +78,13 @@ export function RecepiesPage() {
         setPage(value);
     };
 
-
-
     const handleSearchChange = (event) => {
         const query = event.target.value.toLowerCase();
         setSearchQuery(query);
+    };
+
+    const handleOpenAddDialog = () => {
+        dispatch(openModalAddDialog(true));
     };
 
     const filteredRecipes = recipeData
@@ -199,23 +206,18 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
-                <div style={{ position: 'fixed', bottom: '18%', right: '35px', zIndex: '999' }}>
-                <Button
-                    variant="text"
-                    disableElevation
-                    style={{
-                        backgroundColor: "#C3ACD6",
-                        color: "white",
-                        width: 30,
-                        height: 60,
-                        borderRadius: '50%',
-                        fontSize: '36px',
-                    }}
-                    title="Dodaj własny przepis"
-                >
-                    +
-                </Button>
-            </div>
+                <div style={{ position: 'fixed', bottom: '10%', right: '35px', zIndex: '999' }}>
+                    <Fab 
+                        color="primary" 
+                        aria-label="add"
+                        style={{
+                            backgroundColor: "#C3ACD6",
+                        }}
+                        onClick={handleOpenAddDialog}
+                    >
+                        <AddIcon />
+                    </Fab>
+                </div>
 
             </main>
 
@@ -246,6 +248,7 @@ export function RecepiesPage() {
                 <Copyright />
             </Box>
             <ModalPrzepis />
+            <ModalAddPrzepis />
         </ThemeProvider>
     );
 }
