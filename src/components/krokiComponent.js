@@ -16,16 +16,8 @@ const KrokiComponent = () => {
         ...(products || []).map(category => ({ label: `${category.name} - ${category.unit}` }))
     ];
 
-    const [numericValue, setNumericValue] = useState('');
-
-    const handleNumericChange = (event) => {
-        const enteredValue = event.target.value;
-        const onlyNums = enteredValue.replace(/\D/g, ''); // Keep only numeric characters
-
-        setNumericValue(onlyNums);
-    };
     return (
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
             <TextField
                 id="outlined-multiline-flexible"
                 label="Wpisz krok"

@@ -18,6 +18,11 @@ import Checkbox from '@mui/material/Checkbox';
 import SkladnikiComponent from "./skladnikiComponent.js";
 import KrokiComponent from "./krokiComponent.js";
 import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import Grid from "@mui/material/Grid";
+import RemoveIcon from '@mui/icons-material/Remove';
+
 const ModalAddPrzepis = () => {
     const { isModalAddPrzepisOpen } = useAppSelector(
         (state) => state.authSlice
@@ -56,9 +61,29 @@ const ModalAddPrzepis = () => {
 
     const handleNumericChange = (event) => {
         const enteredValue = event.target.value;
-        const onlyNums = enteredValue.replace(/\D/g, ''); // Keep only numeric characters
+        const onlyNums = enteredValue.replace(/\D/g, '');
 
         setNumericValue(onlyNums);
+    };
+
+    const [skladnikiCount, setSkladnikiCount] = useState(1);
+    const handleAddSkladniki = () => {
+        setSkladnikiCount(prevCount => prevCount + 1);
+    };
+    const handleRemoveSkladniki = () => {
+        if (skladnikiCount > 1) {
+            setSkladnikiCount(prevCount => prevCount - 1);
+        }
+    };
+
+    const [krokiCount, setKrokiCount] = useState(1);
+    const handleAddKroki = () => {
+        setKrokiCount(prevCount => prevCount + 1);
+    };
+    const handleRemoveKroki = () => {
+        if (krokiCount > 1) {
+            setKrokiCount(prevCount => prevCount - 1);
+        }
     };
 
     return (
@@ -121,18 +146,108 @@ const ModalAddPrzepis = () => {
                             renderInput={(params) => <TextField {...params} label="Wybierz liczbę porcji" />}
                         />
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox defaultChecked />} label="Ten przepis jest wegański" />
+                            <FormControlLabel
+                                control={<Checkbox />}
+                                label="Ten przepis jest wegański"
+                                sx={{
+                                    paddingTop: '5px',
+                                    paddingLeft: '65px',
+                                    '& .MuiSvgIcon-root': {
+                                        color: '#a0db5c' 
+                                    }
+                                }}
+                            />
                         </FormGroup>
                     </div>
-                    <Typography variant="h6" style={{ paddingTop: '5px', paddingBottom: '5px' }}>
-                        Dodaj składniki
-                    </Typography>
-                    <SkladnikiComponent />
+                    <Grid container spacing={4}>
+                        {/* Контейнер для компонентов "Kroki" */}
+                        <Grid item xs={6}>
+                            {/* Содержимое первого контейнера "Kroki" */}
+                            <Grid container spacing={1}>
+                                <Typography variant="h6" style={{ paddingTop: '25px', paddingBottom: '15px', paddingRight: '15px' }}>
+                                    Dodaj kroki
+                                </Typography>
+                                <Grid item style={{ paddingTop: '20px' }}>
+                                    <Fab
+                                        color="primary"
+                                        aria-label="add"
+                                        style={{
+                                            backgroundColor: "#a0db5c",
+                                            width: "35px",
+                                            height: "25px",
+                                        }}
+                                        onClick={handleAddKroki}
+                                    >
+                                        <AddIcon />
+                                    </Fab>
+                                    <Fab
+                                        color="secondary"
+                                        aria-label="remove"
+                                        style={{
+                                            backgroundColor: "#d11f1f",
+                                            width: "35px",
+                                            height: "25px",
+                                            visibility: krokiCount <= 1 ? 'hidden' : 'visible',
+                                            marginLeft: '25px',
+                                        }}
+                                        onClick={handleRemoveKroki}
+                                    >
+                                        <RemoveIcon />
+                                    </Fab>
+                                </Grid>
+                            </Grid>
+                            {/* Рендеринг компонентов Kroki */}
+                            {[...Array(krokiCount)].map((_, index) => (
+                                <Grid item key={index}>
+                                    <KrokiComponent />
+                                </Grid>
+                            ))}
+                        </Grid>
 
-                    <Typography variant="h6" style={{ paddingTop: '5px', paddingBottom: '5px' }}>
-                        Dodaj kroki
-                    </Typography>
-                    <KrokiComponent />
+                        {/* Контейнер для компонентов "Skladniki" */}
+                        <Grid item xs={6}>
+                            {/* Содержимое второго контейнера "Skladniki" */}
+                            <Grid container spacing={1}>
+                                <Typography variant="h6" style={{ paddingTop: '25px', paddingBottom: '15px', paddingRight: '15px' }}>
+                                    Dodaj składniki
+                                </Typography>
+                                <Grid item style={{ paddingTop: '20px' }}>
+                                    <Fab
+                                        color="primary"
+                                        aria-label="add"
+                                        style={{
+                                            backgroundColor: "#a0db5c",
+                                            width: "35px",
+                                            height: "25px",
+                                        }}
+                                        onClick={handleAddSkladniki}
+                                    >
+                                        <AddIcon />
+                                    </Fab>
+                                    <Fab
+                                        color="secondary"
+                                        aria-label="remove"
+                                        style={{
+                                            backgroundColor: "#d11f1f",
+                                            width: "35px",
+                                            height: "25px",
+                                            visibility: skladnikiCount <= 1 ? 'hidden' : 'visible',
+                                            marginLeft: '25px',
+                                        }}
+                                        onClick={handleRemoveSkladniki}
+                                    >
+                                        <RemoveIcon />
+                                    </Fab>
+                                </Grid>
+                            </Grid>
+                            {/* Рендеринг компонентов Skladniki */}
+                            {[...Array(skladnikiCount)].map((_, index) => (
+                                <Grid item key={index}>
+                                    <SkladnikiComponent />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Grid>
                 </div>
 
                 <div style={{ position: 'fixed', bottom: '5%', right: '45px', zIndex: '999' }}>

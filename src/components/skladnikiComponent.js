@@ -24,7 +24,7 @@ const SkladnikiComponent = () => {
         setNumericValue(onlyNums);
     };
     return (
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingBottom:'10px' }}>
             <Autocomplete
                 disablePortal
                 id="combo-box-demo"
