@@ -61,6 +61,7 @@ export function RecepiesPage() {
         { friendlyTitle: "Średnie", id: "MEDIUM" },
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
+    const { token, role } = useAppSelector((state) => state.authSlice);
 
     if (!recipeData) {
         return;
@@ -206,18 +207,24 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
-                <div style={{ position: 'fixed', bottom: '10%', right: '35px', zIndex: '999' }}>
-                    <Fab 
-                        color="primary" 
-                        aria-label="add"
-                        style={{
-                            backgroundColor: "#C3ACD6",
-                        }}
-                        onClick={handleOpenAddDialog}
-                    >
-                        <AddIcon />
-                    </Fab>
-                </div>
+
+
+                {token !== "" && role === "ROLE_ADMIN" ? (
+                    <div style={{ position: 'fixed', bottom: '10%', right: '35px', zIndex: '999' }}>
+                        <Fab
+                            color="primary"
+                            aria-label="add"
+                            style={{
+                                backgroundColor: "#C3ACD6",
+                            }}
+                            onClick={handleOpenAddDialog}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </div>
+                ) : (
+                    null
+                )}
 
             </main>
 
