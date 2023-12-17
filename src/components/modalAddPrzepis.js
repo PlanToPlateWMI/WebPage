@@ -34,9 +34,9 @@ const ModalAddPrzepis = () => {
     };
 
     const poziomyTrudnosci = [
-        { label: 'Łatwe' },
-        { label: 'Średnie' },
-        { label: 'Ciężkie' },
+        { label: 'Łatwy' },
+        { label: 'Średni' },
+        { label: 'Trudny' },
     ];
     const liczbaPorcji = [
         { label: '1' },
@@ -58,12 +58,14 @@ const ModalAddPrzepis = () => {
     ];
 
     const [numericValue, setNumericValue] = useState('');
+    const [timeValue, setTimeValue] = useState('');
 
     const handleNumericChange = (event) => {
         const enteredValue = event.target.value;
         const onlyNums = enteredValue.replace(/\D/g, '');
 
         setNumericValue(onlyNums);
+        setTimeValue(onlyNums);
     };
 
     const [skladnikiCount, setSkladnikiCount] = useState(1);
@@ -84,6 +86,62 @@ const ModalAddPrzepis = () => {
         if (krokiCount > 1) {
             setKrokiCount(prevCount => prevCount - 1);
         }
+    };
+    const [titleValue, setTitleValue] = useState('');
+    const [levelValue, setLevelValue] = useState('');
+    const [categoryValue, setCategoryValue] = useState('');
+    const [portionsValue, setPortionsValue] = useState('');
+    const [isVegeValue, setIsVegeValue] = useState(false);
+
+    const newPrzepisArray = [
+        { name: "title", value: titleValue },
+        { name: "level", value: levelValue },
+        { name: "time", value: timeValue },
+        { name: "steps", value: "" },
+        { name: "portions", value: portionsValue },
+        { name: "isVege", value: isVegeValue },
+        { name: "category", value: categoryValue },
+        { name: "ingredients", value: [] }
+    ];
+
+    const handleTitleChange = (event) => {
+        const newValue = event.target.value;
+        setTitleValue(newValue);
+    };
+    const handleLevelChange = (event, newValue) => {
+        let englishValue = '';
+
+        if (newValue) {
+            switch (newValue.label) {
+                case 'Łatwy':
+                    englishValue = 'EASY';
+                    break;
+                case 'Średni':
+                    englishValue = 'MEDIUM';
+                    break;
+                case 'Trudny':
+                    englishValue = 'HARD';
+                    break;
+            }
+        }
+        setLevelValue(englishValue);
+    };
+
+    const handleCategoryChange = (event, newValue) => {
+        setCategoryValue(newValue.label);
+    };
+
+    const handlePortionsChange = (event, newValue) => {
+        setPortionsValue(newValue.label);
+    };
+
+    const handleCheckboxChange = (event) => {
+        const newValue = event.target.checked;
+        setIsVegeValue(newValue); // Update the state based on checkbox status
+    };
+
+    const handleDodajPrzepis = () => {
+        console.log(newPrzepisArray);
     };
 
     return (
@@ -113,6 +171,7 @@ const ModalAddPrzepis = () => {
                             label="Wpisz nazwę"
                             variant="outlined"
                             style={{ width: 500 }}
+                            onChange={handleTitleChange}
                         />
                         <Autocomplete
                             disablePortal
@@ -120,6 +179,7 @@ const ModalAddPrzepis = () => {
                             options={poziomyTrudnosci}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Wybierz poziom trudności" />}
+                            onChange={handleLevelChange}
                         />
                         <Autocomplete
                             disablePortal
@@ -127,6 +187,7 @@ const ModalAddPrzepis = () => {
                             options={kategorieLista}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Wybierz kategorię" />}
+                            onChange={handleCategoryChange}
                         />
                     </div>
 
@@ -144,20 +205,26 @@ const ModalAddPrzepis = () => {
                             options={liczbaPorcji}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Wybierz liczbę porcji" />}
+                            onChange={handlePortionsChange}
                         />
                         <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox />}
-                                label="Ten przepis jest wegański"
-                                sx={{
-                                    paddingTop: '5px',
-                                    paddingLeft: '65px',
-                                    '& .MuiSvgIcon-root': {
-                                        color: '#a0db5c' 
-                                    }
-                                }}
-                            />
-                        </FormGroup>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isVegeValue}
+                        onChange={handleCheckboxChange}
+                    />
+                }
+                label="Ten przepis jest wegański"
+                sx={{
+                    paddingTop: '5px',
+                    paddingLeft: '65px',
+                    '& .MuiSvgIcon-root': {
+                        color: '#a0db5c'
+                    }
+                }}
+            />
+        </FormGroup>
                     </div>
                     <Grid container spacing={4}>
                         {/* Контейнер для компонентов "Kroki" */}
@@ -255,6 +322,7 @@ const ModalAddPrzepis = () => {
                         variant="text"
                         disableElevation
                         style={{ backgroundColor: "#C3ACD6", color: "white" }}
+                        onClick={handleDodajPrzepis}
                     >
                         Dodaj przepis
                     </Button>

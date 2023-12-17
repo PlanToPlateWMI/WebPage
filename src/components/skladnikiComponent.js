@@ -9,7 +9,7 @@ import React, { useState } from "react";
 
 const SkladnikiComponent = () => {
     const { data: products } = useGetAllProductsQuery();
-    console.log(products);
+   // console.log(products);
     const produktyLista = [
         { label: '' },
         ...(products || []).map(category => ({ label: `${category.name} - ${category.unit}` }))

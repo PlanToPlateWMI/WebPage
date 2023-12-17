@@ -10,7 +10,6 @@ import React, { useState } from "react";
 
 const KrokiComponent = () => {
     const { data: products } = useGetAllProductsQuery();
-    console.log(products);
     const produktyLista = [
         { label: '' },
         ...(products || []).map(category => ({ label: `${category.name} - ${category.unit}` }))
