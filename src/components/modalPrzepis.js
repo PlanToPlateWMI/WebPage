@@ -16,6 +16,7 @@ const ModalPrzepis = () => {
     const { isModalOpen, selectedRecipe, recipes } = useAppSelector(
         (state) => state.authSlice
     );
+    const { token, role } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
 
     const handleCloseDialog = () => {
@@ -179,6 +180,22 @@ const ModalPrzepis = () => {
 
                     </span>
                 </div>
+
+                {token !== "" && role === "ROLE_ADMIN" ? (// и если ид рецепта находится среди ид тех, которые мы добавили сами
+                    <div style={{ position: 'fixed', bottom: '75%', right: '45px', zIndex: '999' }}>
+                        <Button
+                            variant="text"
+                            disableElevation
+                            style={{ backgroundColor: "#d11f1f", color: "white" }}
+
+                        >
+                            Usuń przepis
+                        </Button>
+                    </div>
+
+                ) : (
+                    null
+                )}
 
             </DialogContent>
 
