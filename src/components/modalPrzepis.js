@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
-
+import Own from "../images/own.jpg";
 import { useGetMyRecipesQuery, useDeleteRecipeMutation, useGetAllQuery } from "../redux/api";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { closeDialogs } from "../redux/slices/authSlice.js";
@@ -111,7 +111,7 @@ const ModalPrzepis = () => {
                             }}
                         >
                             <img
-                                src={image}
+                                src={image || Own}
                                 alt={title}
                                 style={{
                                     width: "100%",
