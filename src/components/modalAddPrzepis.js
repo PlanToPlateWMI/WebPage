@@ -198,6 +198,7 @@ const ModalAddPrzepis = () => {
             const result = await createRecipe(recipeData).unwrap();
             refetch();
             console.log("Recipe submitted successfully", result);
+            handleCloseDialog();
         } catch (error) {
             console.error("Error submitting recipe", error);
         }
