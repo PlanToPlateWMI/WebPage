@@ -6,9 +6,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-
 import { showPrzepis, openModalPrzepisDialog } from "../redux/slices/authSlice.js";
-
+import Own from "../images/own.jpg";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
     useAddInFavoriteMutation,useRemoveFromFavoriteMutation
@@ -86,7 +85,7 @@ const Przepis = ({ recipe, refetch }) => {
                         pt: "56.25%",
                         position: "relative",
                     }}
-                    image={image}
+                    image={image ||Own}
                 >
                     {isFavorite && (
                         <span

@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
-import { useSigninMutation } from "../redux/api/index.js";
+import { useSigninMutation, useGetAllQuery } from "../redux/api/index.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -28,6 +28,7 @@ import Logo from "../images/Logo2.jpg";
 const defaultTheme = createTheme();
 
 export function LoginPage() {
+    const { refetch } = useGetAllQuery();
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -86,6 +87,7 @@ export function LoginPage() {
             if (response.data.token) {
                 const token = response.data.token;
                 const role = response.data.role;
+                refetch();
                 navigate("/");
             }
         } catch (error) {

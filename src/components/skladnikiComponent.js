@@ -1,43 +1,49 @@
-import Typography from '@mui/material/Typography';
+import React, { useState } from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {
-    useGetAllProductsQuery,
-} from "../redux/api/index.js";
-import React, { useState } from "react";
 
+const SkladnikiComponent = ({ updateIngredients, index, products }) => {
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-const SkladnikiComponent = () => {
-    const { data: products } = useGetAllProductsQuery();
-   // console.log(products);
-    const produktyLista = [
-        { label: '' },
-        ...(products || []).map(category => ({ label: `${category.name} - ${category.unit}` }))
-    ];
-    
-    const [numericValue, setNumericValue] = useState('');
+    // When a product is selected or the input is changed
+    const handleProductChange = (event, newValue) => {
+        // Set the selected product
+        setSelectedProduct(newValue);
 
-    const handleNumericChange = (event) => {
-        const enteredValue = event.target.value;
-        const onlyNums = enteredValue.replace(/\D/g, ''); // Keep only numeric characters
-
-        setNumericValue(onlyNums);
+        // Update the parent component's state
+        if (newValue) {
+            updateIngredients({ id: newValue.id, qty: '' }, index);
+        } else {
+            updateIngredients({ id: '', qty: '' }, index);
+        }
     };
+
+    // When the quantity is changed
+    const handleQuantityChange = (event) => {
+        // Update the parent component's state with the new quantity
+        if (selectedProduct) {
+            updateIngredients({ id: selectedProduct.id, qty: event.target.value }, index);
+        }
+    };
+
     return (
-        <div style={{ display: 'flex', gap: '20px', paddingBottom:'10px' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
             <Autocomplete
                 disablePortal
-                id="combo-box-demo"
-                options={produktyLista}
+                id={`product-autocomplete-${index}`}
+                options={products}
+                getOptionLabel={(option) => option.label || ''}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={(params) => <TextField {...params} label="Wybierz produkt" />}
+                onChange={handleProductChange}
+                value={selectedProduct}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Wpisz nazwę produktu" />}
             />
             <TextField
-                id="outlined-basic-numbers"
+                id={`product-quantity-${index}`}
                 label="Wpisz ilość"
                 variant="outlined"
-                value={numericValue}
-                onChange={handleNumericChange}
+                onChange={handleQuantityChange}
                 sx={{ width: '120px' }}
             />
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -63,14 +63,14 @@ export function RecepiesPage() {
     ];
     const { token, role } = useAppSelector((state) => state.authSlice);
 
-    if (!recipeData) {
-        return;
-    }
+    useEffect(() => {
+        setPage(1);
+    }, [filter, filterLevel]);
 
-    if (!categories) {
-        return;
+    if (!recipeData || !categories) {
+        return; 
     }
-
+    
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
     const pageCount = Math.ceil(recipeData.length / recipesPerPage);

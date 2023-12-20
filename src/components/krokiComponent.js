@@ -1,19 +1,20 @@
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import React from "react";
 import TextField from '@mui/material/TextField';
 
-import React, { useState } from "react";
+const KrokiComponent = ({ updateSteps, index }) => {
+    const handleStepChange = (event) => {
+        updateSteps(event.target.value, index);
+    };
 
-
-const KrokiComponent = () => {
     return (
         <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
             <TextField
-                id="outlined-multiline-flexible"
+                id={`step-${index}`}
                 label="Wpisz krok"
                 multiline
                 maxRows={4}
                 style={{ width: '500px' }}
+                onChange={handleStepChange}
             />
         </div>
     );
