@@ -97,5 +97,5 @@ const authSlice = createSlice({
 });
 
 
-export const { closeDialogs, openModalPrzepisDialog, openModalAddDialog } = authSlice.actions;
+export const { closeDialogs, openModalPrzepisDialog, openModalAddDialog, selectedRecipe } = authSlice.actions;
 export default authSlice.reducer;

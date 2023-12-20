@@ -53,6 +53,7 @@ const ModalPrzepis = () => {
     ).categoryName;
 
     const isMyRecipe = myRecipes?.some(recipe => recipe.id === selectedRecipe.id);
+    console.log(myRecipes);
 
     const handleInfoClick = () => {
         window.open(source, '_blank'); // Opens the source URL in a new tab
