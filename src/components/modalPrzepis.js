@@ -29,20 +29,19 @@ const ModalPrzepis = () => {
         dispatch(closeDialogs(false));
     };
 
+    if (selectedRecipe.id == null || recipes == null) {
+        return;
+    }
+
     const handleDeleteRecipe = async () => {
         try {
             await deleteRecipe(selectedRecipe.id).unwrap();
-            // handleCloseDialog();
-            // refetch();
+            await refetch();
             // Handle success - e.g., show notification, refetch recipes, close dialog, etc.
         } catch (error) {
             // Handle error - e.g., show error notification
         }
     };
-
-    if (!selectedRecipe.id || !recipes) {
-        return;
-    }
 
     const { image, title, id, vege, time, level, portions, steps, ingredients, source } =
         selectedRecipe;
@@ -53,7 +52,6 @@ const ModalPrzepis = () => {
     ).categoryName;
 
     const isMyRecipe = myRecipes?.some(recipe => recipe.id === selectedRecipe.id);
-    console.log(myRecipes);
 
     const handleInfoClick = () => {
         window.open(source, '_blank'); // Opens the source URL in a new tab

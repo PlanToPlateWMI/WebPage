@@ -20,25 +20,11 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
 
     // When the quantity is changed
     const handleQuantityChange = (event) => {
-        let enteredValue = event.target.value;
-      
-        // Оставляем только цифры, точку и запятую
-        enteredValue = enteredValue.replace(/[^\d.,]/g, '');
-      
-        // Убираем лишние точки и запятые
-        const commaCount = enteredValue.split(',').length - 1;
-        const dotCount = enteredValue.split('.').length - 1;
-        
-        if (commaCount > 1 || dotCount > 1) {
-          const parts = enteredValue.split(/[,.]/);
-          enteredValue = parts[0] + '.' + parts.slice(1).join('');
-        }
-      
-        // Обновляем состояние родительского компонента с новым значением quantity
+        // Update the parent component's state with the new quantity
         if (selectedProduct) {
-          updateIngredients({ id: selectedProduct.id, qty: enteredValue }, index);
+            updateIngredients({ id: selectedProduct.id, qty: event.target.value }, index);
         }
-      };
+    };
 
     return (
         <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>

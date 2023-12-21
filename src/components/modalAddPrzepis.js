@@ -113,17 +113,6 @@ const ModalAddPrzepis = () => {
     const [portionsValue, setPortionsValue] = useState("");
     const [isVegeValue, setIsVegeValue] = useState(false);
 
-    const newPrzepisArray = [
-        { name: "title", value: titleValue },
-        { name: "level", value: levelValue },
-        { name: "time", value: timeValue },
-        { name: "steps", value: "" },
-        { name: "portions", value: portionsValue },
-        { name: "isVege", value: isVegeValue },
-        { name: "category", value: categoryValue },
-        { name: "ingredients", value: [] },
-    ];
-
     const handleTitleChange = (event) => {
         const newValue = event.target.value;
         setTitleValue(newValue);
@@ -198,11 +187,25 @@ const ModalAddPrzepis = () => {
             const result = await createRecipe(recipeData).unwrap();
             refetch();
             console.log("Recipe submitted successfully", result);
-            handleCloseDialog();
+
+            setTitleValue("");
+            setLevelValue("");
+            setCategoryValue("");
+            setPortionsValue("");
+            setTimeValue("");
+            setIsVegeValue(false);
+            setSteps([]);
+            setIngredients([]);
+            setNumericValue("");
+            setSkladnikiCount(1);
+            setKrokiCount(1);
         } catch (error) {
             console.error("Error submitting recipe", error);
         }
     };
+
+    const isFormIncomplete = !titleValue || !levelValue || !categoryValue || !numericValue || !portionsValue;
+
 
     return (
         <Dialog
@@ -234,6 +237,7 @@ const ModalAddPrzepis = () => {
                             label="Wpisz nazwę"
                             variant="outlined"
                             style={{ width: 500 }}
+                            value={titleValue}
                             onChange={handleTitleChange}
                         />
                         <Autocomplete
@@ -241,10 +245,12 @@ const ModalAddPrzepis = () => {
                             id="combo-box-demo-poziomy"
                             options={poziomyTrudnosci}
                             sx={{ width: 300 }}
+                            value={levelValue}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     label="Wybierz poziom trudności"
+                                    value={levelValue}
                                 />
                             )}
                             onChange={handleLevelChange}
@@ -431,8 +437,13 @@ const ModalAddPrzepis = () => {
                     <Button
                         variant="text"
                         disableElevation
-                        style={{ backgroundColor: "#C3ACD6", color: "white" }}
-                        onClick={handleDodajPrzepis}>
+                        style={{ 
+                            backgroundColor: isFormIncomplete ? "#CCC" : "#C3ACD6", 
+                            color: isFormIncomplete ? "#999" : "white" 
+                        }}
+                        onClick={handleDodajPrzepis}
+                        disabled={isFormIncomplete}
+                    >
                         Dodaj przepis
                     </Button>
                 </div>
