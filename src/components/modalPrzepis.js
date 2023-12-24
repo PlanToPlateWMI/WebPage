@@ -12,8 +12,12 @@ import Own from "../images/own.jpg";
 import { useGetMyRecipesQuery, useDeleteRecipeMutation, useGetAllQuery } from "../redux/api";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { closeDialogs } from "../redux/slices/authSlice.js";
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const ModalPrzepis = () => {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const { refetch } = useGetAllQuery();
     const { isModalOpen, selectedRecipe, recipes } = useAppSelector(
         (state) => state.authSlice
@@ -121,15 +125,16 @@ const ModalPrzepis = () => {
                                 borderRadius: "10%",
                             }}
                         >
-                            <img
-                                src={image || Own}
-                                alt={title}
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                }}
-                            />
+                            {!isSmallScreen && (
+                                <img
+                                    src={image || Own}
+                                    alt={title}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                />)}
                         </div>
                     </div>
 
