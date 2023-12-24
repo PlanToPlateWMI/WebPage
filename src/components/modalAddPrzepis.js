@@ -42,7 +42,6 @@ const ModalAddPrzepis = () => {
 
     const { data: productsData } = useGetAllProductsQuery();
 
-    // Format products data for Autocomplete
     const products = productsData
         ? productsData.map((product) => ({
               label: `${product.name} - ${product.unit}`,
@@ -150,20 +149,18 @@ const ModalAddPrzepis = () => {
 
     const handleCheckboxChange = (event) => {
         const newValue = event.target.checked;
-        setIsVegeValue(newValue); // Update the state based on checkbox status
+        setIsVegeValue(newValue); 
     };
 
     const [steps, setSteps] = useState([]);
     const [ingredients, setIngredients] = useState([]);
 
-    // Function to update steps
     const updateSteps = (step, index) => {
         let newSteps = [...steps];
         newSteps[index] = step;
         setSteps(newSteps);
     };
 
-    // Function to update ingredients
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
         newIngredients[index] = ingredient;
@@ -320,9 +317,7 @@ const ModalAddPrzepis = () => {
                         </FormGroup>
                     </div>
                     <Grid container spacing={4}>
-                        {/* Контейнер для компонентов "Kroki" */}
                         <Grid item xs={6}>
-                            {/* Содержимое первого контейнера "Kroki" */}
                             <Grid container spacing={1}>
                                 <Typography
                                     variant="h6"
@@ -363,7 +358,7 @@ const ModalAddPrzepis = () => {
                                     </Fab>
                                 </Grid>
                             </Grid>
-                            {/* Рендеринг компонентов Kroki */}
+
                             {[...Array(krokiCount)].map((_, index) => (
                                 <Grid item key={index}>
                                     <KrokiComponent
@@ -374,9 +369,8 @@ const ModalAddPrzepis = () => {
                             ))}
                         </Grid>
 
-                        {/* Контейнер для компонентов "Skladniki" */}
+
                         <Grid item xs={6}>
-                            {/* Содержимое второго контейнера "Skladniki" */}
                             <Grid container spacing={1}>
                                 <Typography
                                     variant="h6"
@@ -417,7 +411,7 @@ const ModalAddPrzepis = () => {
                                     </Fab>
                                 </Grid>
                             </Grid>
-                            {/* Рендеринг компонентов Skladniki */}
+
                             {[...Array(skladnikiCount)].map((_, index) => (
                                 <Grid item key={index}>
                                     <SkladnikiComponent

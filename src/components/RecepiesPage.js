@@ -14,7 +14,6 @@ import {
     useGetFavoriteQuery,
     useGetCategoriesQuery,
 } from "../redux/api/index.js";
-import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
@@ -65,7 +64,6 @@ export function RecepiesPage() {
         { friendlyTitle: "Średnie", id: "MEDIUM" },
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
-    const { token, role } = useAppSelector((state) => state.authSlice);
 
     useEffect(() => {
         setPage(1);
@@ -77,7 +75,6 @@ export function RecepiesPage() {
 
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
-    const pageCount = Math.ceil(recipeData.length / recipesPerPage);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -86,10 +83,6 @@ export function RecepiesPage() {
     const handleSearchChange = (event) => {
         const query = event.target.value.toLowerCase();
         setSearchQuery(query);
-    };
-
-    const handleOpenAddDialog = () => {
-        dispatch(openModalAddDialog(true));
     };
 
     const filteredRecipes = recipeData

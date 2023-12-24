@@ -58,7 +58,7 @@ const ModalPrzepis = () => {
     const isMyRecipe = myRecipes?.some(recipe => recipe.id === selectedRecipe.id);
 
     const handleInfoClick = () => {
-        window.open(source, '_blank'); // Opens the source URL in a new tab
+        window.open(source, '_blank'); 
     };
     return (
         <Dialog fullScreen open={isModalOpen} onClose={handleCloseDialog}>
@@ -84,10 +84,10 @@ const ModalPrzepis = () => {
                     style={{
                         fontWeight: "bold",
                         maxWidth: "1200px",
-                        padding: "0 50px", // Padding halved to keep within maxWidth
-                        boxSizing: "border-box", // To include padding within maxWidth
-                        whiteSpace: "normal", // Allow text to wrap
-                        wordWrap: "break-word", // Wrap long words
+                        padding: "0 50px", 
+                        boxSizing: "border-box", 
+                        whiteSpace: "normal", 
+                        wordWrap: "break-word", 
                     }}
                 >
                     {title}
@@ -218,7 +218,7 @@ const ModalPrzepis = () => {
                     </span>
                 </div>
 
-                {token !== "" && role === "ROLE_ADMIN" && isMyRecipe ? (// и если ид рецепта находится среди ид тех, которые мы добавили сами
+                {token !== "" && role === "ROLE_ADMIN" && isMyRecipe ? (
                     <div style={{ position: 'fixed', bottom: '75%', right: '45px', zIndex: '999' }}>
                         <Button
                             variant="text"

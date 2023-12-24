@@ -8,7 +8,6 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Own from "../images/own.jpg";
 import { showPrzepis, openModalPrzepisDialog } from "../redux/slices/authSlice.js";
-
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
     useAddInFavoriteMutation, useRemoveFromFavoriteMutation

@@ -24,7 +24,6 @@ const Header = () => {
     const handleOpenAddDialog = () => {
         dispatch(openModalAddDialog(true));
     };
-    // const dispatch = useAppDispatch();
 
     const { token, role } = useAppSelector((state) => state.authSlice);
     return (

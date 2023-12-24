@@ -3,9 +3,7 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Header from "./header";
 import Button from '@mui/material/Button';
@@ -62,11 +60,6 @@ export function AboutUs() {
         margin: '35px',
         display: 'inline-block',
     }
-
-    const captionStyle = {
-        fontSize: '14px',
-        marginTop: '5px',
-    };
 
     return (
         <ThemeProvider theme={defaultTheme}>

@@ -5,12 +5,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 const SkladnikiComponent = ({ updateIngredients, index, products }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
-    // When a product is selected or the input is changed
     const handleProductChange = (event, newValue) => {
-        // Set the selected product
         setSelectedProduct(newValue);
-
-        // Update the parent component's state
         if (newValue) {
             updateIngredients({ id: newValue.id, qty: '' }, index);
         } else {
@@ -18,7 +14,6 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
         }
     };
 
-    // When the quantity is changed
     const handleQuantityChange = (event) => {
         // Update the parent component's state with the new quantity
         if (selectedProduct) {
