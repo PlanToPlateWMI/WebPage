@@ -22,6 +22,9 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Checkbox from '@mui/material/Checkbox';
+
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function Copyright() {
     return (
@@ -129,12 +132,38 @@ export function RecepiesPage() {
                         </IconButton>
                     )}
                 </Paper>
-                <Container sx={{ py: 2 }} maxWidth="md">
+                <Container sx={{ py: 1 }} maxWidth="md">
+                    <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    p: 1,
+                                }}
+                            >
+                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
+                                <Checkbox {...label} />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    p: 1,
+                                }}
+                            >
+                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
+                                <Checkbox {...label} />
+                            </Box>
+                        </Grid>
+                    </Grid>
                     <Box
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 2,
+                            p: 1,
                         }}>
                         <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
                         <FormControlLabel
@@ -167,7 +196,7 @@ export function RecepiesPage() {
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 2,
+                            p: 1,
                         }}>
                         <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
                         {filtersLevel.map((item) => (
