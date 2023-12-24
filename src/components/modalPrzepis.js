@@ -64,16 +64,28 @@ const ModalPrzepis = () => {
                     backgroundColor: "rgb(195, 172, 214)",
                 }}>
 
-                <IconButton
-                    style={{ position: "absolute", left: 20, top: 10 }}
-                    aria-label="info"
-                    onClick={handleInfoClick}
-                    title="Zobacz oryginalny przepis"
-                >
-                    <InfoIcon />
-                </IconButton>
+                {source !== null && (
+                    <IconButton
+                        style={{ position: "absolute", left: 20, top: 10 }}
+                        aria-label="info"
+                        onClick={handleInfoClick}
+                        title="Zobacz oryginalny przepis"
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                )}
 
-                <Typography variant="h5" style={{ fontWeight: "bold" }}>
+                <Typography
+                    variant="h5"
+                    style={{
+                        fontWeight: "bold",
+                        maxWidth: "1200px",
+                        padding: "0 50px", // Padding halved to keep within maxWidth
+                        boxSizing: "border-box", // To include padding within maxWidth
+                        whiteSpace: "normal", // Allow text to wrap
+                        wordWrap: "break-word", // Wrap long words
+                    }}
+                >
                     {title}
                 </Typography>
 
