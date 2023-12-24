@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -14,15 +14,19 @@ import {
     useGetFavoriteQuery,
     useGetCategoriesQuery,
 } from "../redux/api/index.js";
-
+import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
+import ModalAddPrzepis from "./modalAddPrzepis.js";
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { openModalAddDialog } from "../redux/slices/authSlice.js";
+import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 
 function Copyright() {
     return (
@@ -42,8 +46,9 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
+    const dispatch = useAppDispatch();
     const [page, setPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState(''); // Состояние для хранения запроса поиска
+    const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
@@ -56,15 +61,16 @@ export function RecepiesPage() {
         { friendlyTitle: "Średnie", id: "MEDIUM" },
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
+    const { token, role } = useAppSelector((state) => state.authSlice);
 
-    if (!recipeData) {
-        return;
+    useEffect(() => {
+        setPage(1);
+    }, [filter, filterLevel]);
+
+    if (!recipeData || !categories) {
+        return; 
     }
-
-    if (!categories) {
-        return;
-    }
-
+    
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
     const pageCount = Math.ceil(recipeData.length / recipesPerPage);
@@ -73,11 +79,13 @@ export function RecepiesPage() {
         setPage(value);
     };
 
-
-    // Обработчик изменения значения в поле поиска
     const handleSearchChange = (event) => {
-        const query = event.target.value.toLowerCase(); // Приводим запрос к нижнему регистру для удобства поиска
-        setSearchQuery(query); // Обновляем состояние при изменении значения поля поиска
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
+    };
+
+    const handleOpenAddDialog = () => {
+        dispatch(openModalAddDialog(true));
     };
 
     const filteredRecipes = recipeData
@@ -199,6 +207,25 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
+
+
+                {token !== "" && role === "ROLE_ADMIN" ? (
+                    <div style={{ position: 'fixed', bottom: '10%', right: '35px', zIndex: '999' }}>
+                        <Fab
+                            color="primary"
+                            aria-label="add"
+                            style={{
+                                backgroundColor: "#C3ACD6",
+                            }}
+                            onClick={handleOpenAddDialog}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </div>
+                ) : (
+                    null
+                )}
+
             </main>
 
             {/* Pagination */}
@@ -228,6 +255,7 @@ export function RecepiesPage() {
                 <Copyright />
             </Box>
             <ModalPrzepis />
+            <ModalAddPrzepis />
         </ThemeProvider>
     );
 }

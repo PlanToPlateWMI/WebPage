@@ -8,23 +8,40 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
-
+import Own from "../images/own.jpg";
+import { useGetMyRecipesQuery, useDeleteRecipeMutation, useGetAllQuery } from "../redux/api";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
-import { setStateDialog } from "../redux/slices/authSlice.js";
+import { closeDialogs } from "../redux/slices/authSlice.js";
 
 const ModalPrzepis = () => {
+    const { refetch } = useGetAllQuery();
     const { isModalOpen, selectedRecipe, recipes } = useAppSelector(
         (state) => state.authSlice
     );
+    const { token, role } = useAppSelector((state) => state.authSlice);
+    const isAuthenticated = token !== "";
     const dispatch = useAppDispatch();
 
+    const { data: myRecipes } = useGetMyRecipesQuery(undefined, { skip: !isAuthenticated });
+    const [deleteRecipe] = useDeleteRecipeMutation();
+
     const handleCloseDialog = () => {
-        dispatch(setStateDialog(false));
+        dispatch(closeDialogs(false));
     };
 
-    if (!selectedRecipe.id) {
+    if (selectedRecipe.id == null || recipes == null) {
         return;
     }
+
+    const handleDeleteRecipe = async () => {
+        try {
+            await deleteRecipe(selectedRecipe.id).unwrap();
+            await refetch();
+            // Handle success - e.g., show notification, refetch recipes, close dialog, etc.
+        } catch (error) {
+            // Handle error - e.g., show error notification
+        }
+    };
 
     const { image, title, id, vege, time, level, portions, steps, ingredients, source } =
         selectedRecipe;
@@ -34,6 +51,7 @@ const ModalPrzepis = () => {
         (recipe) => recipe.id === id
     ).categoryName;
 
+    const isMyRecipe = myRecipes?.some(recipe => recipe.id === selectedRecipe.id);
 
     const handleInfoClick = () => {
         window.open(source, '_blank'); // Opens the source URL in a new tab
@@ -92,7 +110,7 @@ const ModalPrzepis = () => {
                             }}
                         >
                             <img
-                                src={image}
+                                src={image || Own}
                                 alt={title}
                                 style={{
                                     width: "100%",
@@ -179,6 +197,22 @@ const ModalPrzepis = () => {
 
                     </span>
                 </div>
+
+                {token !== "" && role === "ROLE_ADMIN" && isMyRecipe ? (// и если ид рецепта находится среди ид тех, которые мы добавили сами
+                    <div style={{ position: 'fixed', bottom: '75%', right: '45px', zIndex: '999' }}>
+                        <Button
+                            variant="text"
+                            disableElevation
+                            style={{ backgroundColor: "#d11f1f", color: "white" }}
+                            onClick={handleDeleteRecipe}
+                        >
+                            Usuń przepis
+                        </Button>
+                    </div>
+
+                ) : (
+                    null
+                )}
 
             </DialogContent>
 

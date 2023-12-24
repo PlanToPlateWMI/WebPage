@@ -10,8 +10,10 @@ const initialState = {
     recipes: [],
     selectedRecipe: [],
     isModalOpen: false,
+    isModalAddPrzepisOpen: false,
     categories: [],
     role: "",
+    
 };
 
 export const showPrzepis = createAsyncThunk(
@@ -29,8 +31,15 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setStateDialog(state, { payload }) {
+        openModalAddDialog(state, { payload }) {
+            state.isModalAddPrzepisOpen = payload;
+        },
+        openModalPrzepisDialog(state, { payload }) {
             state.isModalOpen = payload;
+        },
+        closeDialogs(state, { payload }) {
+            state.isModalOpen = payload;
+            state.isModalAddPrzepisOpen = payload;
         },
     },
     extraReducers: (builder) => {
@@ -72,21 +81,31 @@ const authSlice = createSlice({
                 }
             )
             .addMatcher(
-                api.endpoints.addInFavorite.matchRejected,
+                api.endpoints.getCategories.matchFulfilled,
+                (state, { payload }) => {
+                    state.categories = payload;
+                }
+            )
+            .addMatcher(
+                api.endpoints.deleteRecipe.matchFulfilled,
                 (state, { payload, error }) => {
-                    if (!payload) {
-                        console.error("Error", error);
-                    } else {
-                        console.error("Error", payload);
-                        if (payload.status === 400) {
-                            console.error("Error 400", payload.data);
-                        }
-                    }
+                    console.log("close");
+                    state.isModalOpen = false;
+                    state.selectedRecipe = [];
+                }
+            )
+            .addMatcher(
+                api.endpoints.createRecipe.matchFulfilled,
+                (state, { payload, error }) => {
+                    console.log("close");
+                    state.isModalAddPrzepisOpen = false;
                 }
             );
+
+            //createRecipe
     },
 });
 
 
-export const { setStateDialog } = authSlice.actions;
+export const { closeDialogs, openModalPrzepisDialog, openModalAddDialog } = authSlice.actions;
 export default authSlice.reducer;
