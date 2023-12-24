@@ -198,15 +198,18 @@ const ModalPrzepis = () => {
                     </div>
                 </div>
 
-                <div style={{ marginTop: "20px" }}>
+                <div style={{ marginTop: "20px", maxWidth: "1100px" }}>
                     <span style={{ fontSize: "18px", color: "black" }}>
                         <b>Kroki:</b>{" "}
                         <div
                             dangerouslySetInnerHTML={{
                                 __html: steps.join("<br>"),
                             }}
+                            style={{
+                                wordWrap: "break-word",
+                                overflowWrap: "break-word",
+                            }}
                         />
-
                     </span>
                 </div>
 
