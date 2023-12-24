@@ -104,9 +104,20 @@ const Przepis = ({ recipe, refetch }) => {
                 </CardMedia>
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {title}
                         {vege ? <span> 🌿</span> : <span></span>}
-
+                        <div style={{
+                            display: '-webkit-box',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            WebkitLineClamp: 2, // Maximum number of lines
+                            WebkitBoxOrient: 'vertical',
+                            maxHeight: '3em', // Three lines' height
+                            boxSizing: "border-box", // To include padding within maxWidth
+                            whiteSpace: "normal", // Allow text to wrap
+                            wordWrap: "break-word", // Wrap long words
+                        }}>
+                            {title}
+                        </div>
                     </Typography>
                 </CardContent>
                 <CardActions>
