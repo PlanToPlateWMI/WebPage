@@ -60,7 +60,7 @@ const Header = () => {
                 ) : (
                     null
                 )}
-                <div style={{ flex: 1 }}></div>
+                <div style={{ flex: 1, marginLeft: '10px' }}></div>
                 {token === "" ? (
                     <Button
                         variant="text"

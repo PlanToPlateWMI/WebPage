@@ -14,6 +14,7 @@ import {
     useGetFavoriteQuery,
     useGetCategoriesQuery,
 } from "../redux/api/index.js";
+import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
@@ -22,9 +23,13 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Checkbox from '@mui/material/Checkbox';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { openModalAddDialog } from "../redux/slices/authSlice.js";
+import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function Copyright() {
     return (
@@ -44,6 +49,9 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const dispatch = useAppDispatch();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
@@ -58,6 +66,7 @@ export function RecepiesPage() {
         { friendlyTitle: "Średnie", id: "MEDIUM" },
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
+    const { token, role } = useAppSelector((state) => state.authSlice);
 
     useEffect(() => {
         setPage(1);
@@ -78,6 +87,10 @@ export function RecepiesPage() {
     const handleSearchChange = (event) => {
         const query = event.target.value.toLowerCase();
         setSearchQuery(query);
+    };
+
+    const handleOpenAddDialog = () => {
+        dispatch(openModalAddDialog(true));
     };
 
     const filteredRecipes = recipeData
@@ -110,7 +123,7 @@ export function RecepiesPage() {
                         p: '5px 10px',
                         display: 'flex',
                         alignItems: 'center',
-                        width: 600,
+                        width: isSmallScreen ? '90vw' : 600,
                         margin: '0 auto',
                     }}
                 >
@@ -132,38 +145,14 @@ export function RecepiesPage() {
                         </IconButton>
                     )}
                 </Paper>
-                <Container sx={{ py: 1 }} maxWidth="md">
-                    <Grid container spacing={1}>
-                        <Grid item xs={6}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 1,
-                                }}
-                            >
-                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
-                                <Checkbox {...label} />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 1,
-                                }}
-                            >
-                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
-                                <Checkbox {...label} />
-                            </Box>
-                        </Grid>
-                    </Grid>
+                <Container sx={{ py: 2 }} maxWidth="md">
                     <Box
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 1,
+                            p: 2,
+                            flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
+                            alignItems: { xs: 'flex-start', md: 'center' },
                         }}>
                         <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
                         <FormControlLabel
@@ -196,7 +185,9 @@ export function RecepiesPage() {
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 1,
+                            p: 2,
+                            flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
+                            alignItems: { xs: 'flex-start', md: 'center' },
                         }}>
                         <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
                         {filtersLevel.map((item) => (

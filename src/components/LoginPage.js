@@ -24,10 +24,14 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import Logo from "../images/Logo2.jpg";
-
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export function LoginPage() {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     const { refetch } = useGetAllQuery();
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
@@ -100,19 +104,21 @@ export function LoginPage() {
         <ThemeProvider theme={defaultTheme}>
             <Grid container component="main" sx={{ height: "100vh" }}>
                 <CssBaseline />
-                <img 
-                    src={Logo} 
-                    style={{
-                        flex: "1",
-                        backgroundRepeat: "no-repeat",
-                        backgroundColor: (t) =>
-                            t.palette.mode === "light"
-                                ? t.palette.grey[50]
-                                : t.palette.grey[900],
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                />
+                {!isSmallScreen && ( // Check if it's not a small screen
+                    <img
+                        src={Logo}
+                        style={{
+                            flex: '1',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: (t) =>
+                                t.palette.mode === 'light'
+                                    ? t.palette.grey[50]
+                                    : t.palette.grey[900],
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        }}
+                    />
+                )}
                 <Grid
                     item
                     xs={12}
