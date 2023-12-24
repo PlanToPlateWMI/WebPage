@@ -81,9 +81,13 @@ const ModalAddPrzepis = () => {
     const [timeValue, setTimeValue] = useState("");
 
     const handleNumericChange = (event) => {
-        const enteredValue = event.target.value;
-        const onlyNums = enteredValue.replace(/\D/g, "");
-
+        let enteredValue = event.target.value;
+        let onlyNums = enteredValue.replace(/\D/g, ""); 
+    
+        if (onlyNums.length > 3) {
+            onlyNums = onlyNums.substring(0, 3); 
+        }
+    
         setNumericValue(onlyNums);
         setTimeValue(onlyNums);
     };
