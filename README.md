@@ -6,6 +6,8 @@
 
 PlanToPlate is a system that helps individuals and groups (such as family) manage their diets. It consists of a mobile app and a website. This system helps to easily plan menus, manage shopping lists and pantry, and find new recipes. This is a repository of a website. 
 
+https://plantoplatewmi.github.io/WebPage
+
 
 
 ## 💻 Technology
