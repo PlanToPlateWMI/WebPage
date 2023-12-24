@@ -23,14 +23,13 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import { openModalAddDialog } from "../redux/slices/authSlice.js";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
-
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Checkbox from '@mui/material/Checkbox';
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 function Copyright() {
     return (
         <Typography variant="body2" color="text.secondary" align="center">
@@ -145,16 +144,43 @@ export function RecepiesPage() {
                         </IconButton>
                     )}
                 </Paper>
-                <Container sx={{ py: 2 }} maxWidth="md">
+              
+                <Container sx={{ py: 1 }} maxWidth="md">
+                <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    p: 1,
+                                }}
+                            >
+                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
+                                <Checkbox {...label} />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    p: 1,
+                                }}
+                            >
+                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
+                                <Checkbox {...label} />
+                            </Box>
+                        </Grid>
+                    </Grid>
                     <Box
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 2,
+                            p: 1,
                             flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
                             alignItems: { xs: 'flex-start', md: 'center' },
                         }}>
-                        <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
+                        <h3>Wybierz<br></br> kategorię: &nbsp;&nbsp;</h3>
                         <FormControlLabel
                             control={
                                 <Radio
@@ -185,7 +211,7 @@ export function RecepiesPage() {
                         sx={{
                             display: "flex",
                             justifyContent: "flex-start",
-                            p: 2,
+                            p: 1,
                             flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
                             alignItems: { xs: 'flex-start', md: 'center' },
                         }}>
