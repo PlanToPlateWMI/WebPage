@@ -11,7 +11,7 @@ import { showPrzepis, openModalPrzepisDialog } from "../redux/slices/authSlice.j
 
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import {
-    useAddInFavoriteMutation,useRemoveFromFavoriteMutation
+    useAddInFavoriteMutation, useRemoveFromFavoriteMutation
 } from "../redux/api/index.js";
 
 const Przepis = ({ recipe, refetch }) => {
@@ -86,7 +86,7 @@ const Przepis = ({ recipe, refetch }) => {
                         pt: "56.25%",
                         position: "relative",
                     }}
-                    image={image ||Own}
+                    image={image || Own}
                 >
                     {isFavorite && (
                         <span
@@ -111,17 +111,38 @@ const Przepis = ({ recipe, refetch }) => {
                 </CardContent>
                 <CardActions>
                     <div>
-                        <Button size="small" onClick={handleOpenDialog}>
+                        <Button variant="text"
+                            disableElevation
+                            style={{
+                                backgroundColor: "#C3ACD6",
+                                color: "white",
+                                marginRight: 20,
+                                width: "100px",
+                            }} onClick={handleOpenDialog}>
                             Zobacz przepis
                         </Button>
                     </div>
-                    {(token !== "" && role==="ROLE_ADMIN") &&
+                    {(token !== "" && role === "ROLE_ADMIN") &&
                         (isFavorite ? (
-                            <Button size="small" onClick={handleRemoveFromFavorites} >
+                            <Button variant="text"
+                                disableElevation
+                                style={{
+                                    backgroundColor: "#C3ACD6",
+                                    color: "white",
+                                    marginRight: 20,
+                                    width: "100px",
+                                }} onClick={handleRemoveFromFavorites} >
                                 Usuń z ulubionych
                             </Button>
                         ) : (
-                            <Button size="small" onClick={handleAddToFavorites}>
+                            <Button variant="text"
+                                disableElevation
+                                style={{
+                                    backgroundColor: "#C3ACD6",
+                                    color: "white",
+                                    marginRight: 20,
+                                    width: "100px",
+                                }} onClick={handleAddToFavorites}>
                                 Dodaj do ulubionych
                             </Button>
                         ))}
