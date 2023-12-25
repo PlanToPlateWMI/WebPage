@@ -17,6 +17,10 @@ export const api = createApi({
             query: () => "/api/recipes/selected",
         }),
 
+        getOwn: builder.query({
+            query: () => "/api/recipes/owned",
+        }),
+
         getAll: builder.query({
             query: () => "/api/recipes",
         }),
@@ -95,5 +99,6 @@ export const {
     useRemoveFromFavoriteMutation,
     useCreateRecipeMutation,
     useGetMyRecipesQuery,
-    useDeleteRecipeMutation
+    useDeleteRecipeMutation,
+    useGetOwnQuery
 } = api;

@@ -14,23 +14,7 @@ import Przepisy from "../images/prz.jpg";
 import Spizarnia from "../images/spiz.jpg";
 import QR from "../images/qr.jpg";
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link
-                color="inherit"
-                href="https://github.com/orgs/PlanToPlateWMI/repositories">
-                Plan To Plate
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {". Wszelkie prawa zastrzeżone."}
-        </Typography>
-    );
-}
-
 const defaultTheme = createTheme();
-
 
 export function AboutUs() {
 
@@ -109,12 +93,6 @@ export function AboutUs() {
                     Napisz do nas
                 </Button>
             </div>
-
-
-            {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2, bottom: 0, width: "100%" }} component="footer">
-                <Copyright />
-            </Box>
         </ThemeProvider>
     );
 }

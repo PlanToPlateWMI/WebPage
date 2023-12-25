@@ -13,6 +13,7 @@ import {
     useGetAllQuery,
     useGetFavoriteQuery,
     useGetCategoriesQuery,
+    useGetOwnQuery
 } from "../redux/api/index.js";
 import Header from "./header";
 import Przepis from "./przepis";
@@ -29,21 +30,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link
-                color="inherit"
-                href="https://github.com/orgs/PlanToPlateWMI/repositories">
-                Plan To Plate
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {". Wszelkie prawa zastrzeżone."}
-        </Typography>
-    );
-}
-
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
@@ -66,6 +52,19 @@ export function RecepiesPage() {
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
 
+    const { data: favoriteRecipesData } = useGetFavoriteQuery();
+    const { data: ownRecipesData } = useGetOwnQuery();
+
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+    const [showOnlyOwn, setShowOnlyOwn] = useState(false);
+
+    const handleCheckboxChange = (event) => {
+        setShowOnlyFavorites(event.target.checked);
+    };
+    const handleOwnCheckboxChange = (event) => {
+        setShowOnlyOwn(event.target.checked);
+    };
+
     useEffect(() => {
         setPage(1);
     }, [filter, filterLevel]);
@@ -87,6 +86,18 @@ export function RecepiesPage() {
     };
 
     const filteredRecipes = recipeData
+        .filter((recipe) => {
+            if (showOnlyFavorites) {
+                return favoriteRecipesData.some((favRecipe) => favRecipe.id === recipe.id);
+            }
+            return true;
+        })
+        .filter((recipe) => {
+            if (showOnlyOwn) {
+                return ownRecipesData.some((ownRecipe) => ownRecipe.id === recipe.id);
+            }
+            return true;
+        })
         .filter((recipe) => {
             if (filter === "Wszystkie") return true;
             return recipe.categoryName === filter;
@@ -151,7 +162,11 @@ export function RecepiesPage() {
                                     }}
                                 >
                                     <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
-                                    <Checkbox {...label} />
+                                    <Checkbox
+                                        checked={showOnlyOwn}
+                                        onChange={handleOwnCheckboxChange}
+                                        {...label}
+                                    />
                                 </Box>
                             </Grid>
                             <Grid item xs={6}>
@@ -163,7 +178,11 @@ export function RecepiesPage() {
                                     }}
                                 >
                                     <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
-                                    <Checkbox {...label} />
+                                    <Checkbox
+                                        checked={showOnlyFavorites}
+                                        onChange={handleCheckboxChange}
+                                        {...label}
+                                    />
                                 </Box>
                             </Grid>
                         </Grid>
@@ -253,11 +272,6 @@ export function RecepiesPage() {
                     />
                 </Box>
             )}
-
-            {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
-                <Copyright />
-            </Box>
             <ModalPrzepis />
             <ModalAddPrzepis />
         </ThemeProvider>
