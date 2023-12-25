@@ -55,6 +55,7 @@ export function RecepiesPage() {
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
+    const { token, role } = useAppSelector((state) => state.authSlice);
 
     const [filter, setFilter] = useState("Wszystkie");
     const [filterLevel, setFilterLevel] = useState("all");
@@ -137,34 +138,39 @@ export function RecepiesPage() {
                         </IconButton>
                     )}
                 </Paper>
-              
+
                 <Container sx={{ py: 1 }} maxWidth="md">
-                <Grid container spacing={1}>
-                        <Grid item xs={6}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 1,
-                                }}
-                            >
-                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
-                                <Checkbox {...label} />
-                            </Box>
+                    {token !== "" && role === "ROLE_ADMIN" ? (
+                        <Grid container spacing={1}>
+                            <Grid item xs={6}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        p: 1,
+                                    }}
+                                >
+                                    <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
+                                    <Checkbox {...label} />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        p: 1,
+                                    }}
+                                >
+                                    <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
+                                    <Checkbox {...label} />
+                                </Box>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 1,
-                                }}
-                            >
-                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
-                                <Checkbox {...label} />
-                            </Box>
-                        </Grid>
-                    </Grid>
+                    ) : (
+                        null
+                    )}
+
                     <Box
                         sx={{
                             display: "flex",
