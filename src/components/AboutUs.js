@@ -44,6 +44,8 @@ export function AboutUs() {
         backgroundColor: '#C3ACD6',
         color: 'white',
         marginLeft: 'auto',
+        marginRight: 'auto', // Центрирует по горизонтали
+
     };
 
     const divStyle = {
@@ -87,9 +89,16 @@ export function AboutUs() {
                 }} />
                 <h4>Pobierz aplikację mobilną w <a href="  https://play.google.com/store/apps/details?id=pl.plantoplate&pcampaignid=web_share" target="_blank">Google Play</a></h4>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px', flexDirection: 'column', textAlign: 'right' }}>
-                <p style={{ marginBottom: '5px', marginLeft: 'auto' }}>Jeżeli chcesz usunąć konto:</p>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '10px',
+                marginRight: '10px',
+                flexDirection: 'column',
+                textAlign: 'center'
+            }}>
+                <p style={{ marginBottom: '5px' }}>Jeżeli chcesz usunąć konto:</p>
                 <Button
                     variant="contained"
                     endIcon={<SendIcon />}
@@ -99,6 +108,7 @@ export function AboutUs() {
                     Napisz do nas
                 </Button>
             </div>
+
 
             {/* Footer */}
             <Box sx={{ backgroundColor: "#AA95BB", p: 2, bottom: 0, width: "100%" }} component="footer">

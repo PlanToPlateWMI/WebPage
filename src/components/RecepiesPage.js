@@ -256,17 +256,6 @@ export function RecepiesPage() {
 
             {/* Footer */}
             <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
-                <Typography
-                    variant="subtitle1"
-                    align="center"
-                    color="text.secondary"
-                    component="p"
-                >
-                    Email:{" "}
-                    <a href="mailto:plantoplatemobileapp@gmail.com">
-                        plantoplatemobileapp@gmail.com
-                    </a>
-                </Typography>
                 <Copyright />
             </Box>
             <ModalPrzepis />

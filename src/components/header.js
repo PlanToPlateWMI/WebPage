@@ -27,7 +27,7 @@ const Header = () => {
 
     const { token, role } = useAppSelector((state) => state.authSlice);
     return (
-        <AppBar position="relative" style={{ backgroundColor: "#AA95BB", marginBottom: 20, }}>
+        <AppBar position="fixed" style={{ backgroundColor: "#AA95BB", marginBottom: 20, }}>
             <Toolbar>
                 <Button
                     variant="text"
