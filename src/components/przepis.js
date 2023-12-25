@@ -13,6 +13,15 @@ import {
     useAddInFavoriteMutation, useRemoveFromFavoriteMutation
 } from "../redux/api/index.js";
 
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import GrassTwoToneIcon from '@mui/icons-material/GrassTwoTone';
+
+import SignalCellular1BarIcon from '@mui/icons-material/SignalCellular1Bar';
+import SignalCellular3BarIcon from '@mui/icons-material/SignalCellular3Bar';
+import SignalCellular4BarIcon from '@mui/icons-material/SignalCellular4Bar';
+
 const Przepis = ({ recipe, refetch }) => {
     const {
         image,
@@ -78,94 +87,71 @@ const Przepis = ({ recipe, refetch }) => {
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                }}>
+                    borderRadius: 5,
+                    transition: "transform 0.2s, box-shadow 0.2s",
+                                    "&:hover": {
+                                        boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+                                        transform: "scale(1.05)",
+                                    },
+                }}
+            >
                 <CardMedia
                     component="div"
                     sx={{
-                        pt: "56.25%",
+                        pt: "70%",
                         position: "relative",
+                        "&:hover": {
+                            cursor: "pointer",
+                        },
                     }}
+                    onClick={handleOpenDialog}
                     image={image || Own}
                 >
-                    {isFavorite && (
-                        <span
-                            style={{
-                                fontSize: "40px",
-                                color: "red",
-                                position: "absolute",
-                                top: "10px",
-                                right: "10px",
-                            }}
-                        >
-                            ❤️
-                        </span>
-                    )}
                 </CardMedia>
-                <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-
-                        <div style={{
-                            display: '-webkit-box',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            WebkitLineClamp: 2, // Maximum number of lines
-                            WebkitBoxOrient: 'vertical',
-                            maxHeight: '3em', // Three lines' height
-                            boxSizing: "border-box", // To include padding within maxWidth
-                            whiteSpace: "normal", // Allow text to wrap
-                            wordWrap: "break-word", // Wrap long words
-                        }}>
-                            {vege ? <span> 🌿</span> : <span></span>}
-                            {title}
-                        </div>
-                    </Typography>
-                </CardContent>
-                <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
-                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                        <Button
-                            variant="text"
-                            disableElevation
-                            style={{
-                                backgroundColor: "#C3ACD6",
-                                color: "white",
-                                flex: 1,
-                            }}
-                            onClick={handleOpenDialog}
-                        >
-                            Zobacz przepis
+                <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    {(token !== "" && role === "ROLE_ADMIN") && (
+                        <Button size="small" onClick={isFavorite ? handleRemoveFromFavorites : handleAddToFavorites} style={{ minWidth: 'unset' }}>
+                            {isFavorite ? <FavoriteOutlinedIcon style={{ color: "#757575", fontSize: '1.1rem' }}/> :
+                                        <FavoriteBorderOutlinedIcon style={{ color: "#757575", fontSize: '1.1rem' }}/>}
                         </Button>
-                        {(token !== "" && role === "ROLE_ADMIN") &&
-                            (isFavorite ? (
-                                <Button
-                                    variant="text"
-                                    disableElevation
-                                    style={{
-                                        backgroundColor: "#C3ACD6",
-                                        color: "white",
-                                        flex: 1,
-                                    }}
-                                    onClick={handleRemoveFromFavorites}
-                                >
-                                    Usuń z ulubionych
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant="text"
-                                    disableElevation
-                                    style={{
-                                        backgroundColor: "#C3ACD6",
-                                        color: "white",
-                                        flex: 1,
-                                    }}
-                                    onClick={handleAddToFavorites}
-                                >
-                                    Dodaj do ulubionych
-                                </Button>
-                            ))}
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <AccessTimeOutlinedIcon style={{ color: "#757575", fontSize: '1.1rem', marginRight: '4px' }}/> 
+                        <Typography variant="body2" color="text.secondary" style={{ fontSize: '1.1rem' }}>{time} min.</Typography>
                     </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {level === "EASY" ? 
+                            <SignalCellular1BarIcon style={{ color: "#757575", fontSize: '1.1rem', marginRight: '4px' }}/> : 
+                            level === "MEDIUM" ? 
+                                <SignalCellular3BarIcon style={{ color: "#757575", fontSize: '1.1rem', marginRight: '4px' }}/> : 
+                                <SignalCellular4BarIcon style={{ color: "#757575", fontSize: '1.1rem', marginRight: '4px' }}/>
+                        }
+                        <Typography variant="body2" color="text.secondary" style={{ fontSize: '1.1rem' }}>
+                            {level === "EASY" ? "łat." : level === "MEDIUM" ? "śr." : "tr."}
+                        </Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <GrassTwoToneIcon style={{ color: vege ? "#04610f" : '#757575', fontSize: '1.1rem' }} />
+                        <Typography variant="body2" color="text.secondary" style={{ fontSize: '1.1rem' }}></Typography>
+                    </div>
+
                 </CardActions>
-
-
+                <Typography
+                    gutterBottom
+                    variant="subtitle1"
+                    component="div"
+                    noWrap="true"
+                    sx={{
+                        height: '38px',
+                        maxWidth: '100%',
+                        paddingRight: '12px',
+                        paddingLeft: '12px',
+                        textAlign: 'center',
+                        fontSize: '1.1rem'
+                    }}
+                    >
+                    {title}
+                </Typography>
             </Card>
         </Grid>
     );
