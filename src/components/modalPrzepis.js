@@ -58,7 +58,7 @@ const ModalPrzepis = () => {
     const isMyRecipe = myRecipes?.some(recipe => recipe.id === selectedRecipe.id);
 
     const handleInfoClick = () => {
-        window.open(source, '_blank'); 
+        window.open(source, '_blank');
     };
     return (
         <Dialog fullScreen open={isModalOpen} onClose={handleCloseDialog}>
@@ -84,10 +84,10 @@ const ModalPrzepis = () => {
                     style={{
                         fontWeight: "bold",
                         maxWidth: "1200px",
-                        padding: "0 50px", 
-                        boxSizing: "border-box", 
-                        whiteSpace: "normal", 
-                        wordWrap: "break-word", 
+                        padding: "0 50px",
+                        boxSizing: "border-box",
+                        whiteSpace: "normal",
+                        wordWrap: "break-word",
                     }}
                 >
                     {title}
@@ -107,8 +107,8 @@ const ModalPrzepis = () => {
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <div
                         style={{
-                            maxWidth: "250px",
-                            height: "250px",
+                            maxWidth: "450px",
+                            height: "450px",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -163,20 +163,20 @@ const ModalPrzepis = () => {
                         <div style={{ marginTop: "10px" }}>
                             {level === "EASY" && (
                                 <span style={{ fontSize: "18px", color: "black" }}>
-                                    ⭐ Łatwy
+                                    ⭐ Poziom trudności: Łatwy
                                 </span>
                             )}
                             {level === "MEDIUM" && (
                                 <span>
                                     <span style={{ fontSize: "18px", color: "black" }}>
-                                        ⭐⭐ Średni
+                                        ⭐⭐ Poziom trudności: Średni
                                     </span>
                                 </span>
                             )}
                             {level === "HARD" && (
                                 <span>
                                     <span style={{ fontSize: "18px", color: "black" }}>
-                                        ⭐⭐⭐ Trudny
+                                        ⭐⭐⭐ Poziom trudności: Trudny
                                     </span>
                                 </span>
                             )}
@@ -187,6 +187,22 @@ const ModalPrzepis = () => {
                                 👪 Porcje: {portions}
                             </span>
                         </div>
+
+                        {token !== "" && role === "ROLE_ADMIN" && isMyRecipe ? (
+                            <div style={{ marginTop: "50px", width: "200px" }}>
+                                <Button
+                                    variant="text"
+                                    disableElevation
+                                    style={{ backgroundColor: "#d11f1f", color: "white", width: "100%" }}
+                                    onClick={handleDeleteRecipe}
+                                >
+                                    Usuń przepis
+                                </Button>
+                            </div>
+
+                        ) : (
+                            null
+                        )}
                     </div>
 
                     <div style={{ marginTop: "30px", marginLeft: "50px" }}>
@@ -204,35 +220,22 @@ const ModalPrzepis = () => {
                 </div>
 
                 <div style={{ marginTop: "20px", maxWidth: "1100px" }}>
-                    <span style={{ fontSize: "18px", color: "black" }}>
-                        <b>Kroki:</b>{" "}
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: steps.join("<br>"),
-                            }}
-                            style={{
-                                wordWrap: "break-word",
-                                overflowWrap: "break-word",
-                            }}
-                        />
-                    </span>
-                </div>
-
-                {token !== "" && role === "ROLE_ADMIN" && isMyRecipe ? (
-                    <div style={{ position: 'fixed', bottom: '75%', right: '45px', zIndex: '999' }}>
-                        <Button
-                            variant="text"
-                            disableElevation
-                            style={{ backgroundColor: "#d11f1f", color: "white" }}
-                            onClick={handleDeleteRecipe}
-                        >
-                            Usuń przepis
-                        </Button>
+                    <div style={{ textAlign: "center" }}>
+                        <span style={{ fontSize: "20px", color: "black" }}>
+                            <b>Kroki:</b>{" "}
+                        </span>
                     </div>
-
-                ) : (
-                    null
-                )}
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: steps.map(step => `⦿ ${step}`).join("<br>"),
+                        }}
+                        style={{
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                            fontSize: "18px",
+                        }}
+                    />
+                </div>
 
             </DialogContent>
 

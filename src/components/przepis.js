@@ -103,7 +103,7 @@ const Przepis = ({ recipe, refetch }) => {
                 </CardMedia>
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {vege ? <span> 🌿</span> : <span></span>}
+
                         <div style={{
                             display: '-webkit-box',
                             overflow: 'hidden',
@@ -115,48 +115,57 @@ const Przepis = ({ recipe, refetch }) => {
                             whiteSpace: "normal", // Allow text to wrap
                             wordWrap: "break-word", // Wrap long words
                         }}>
+                            {vege ? <span> 🌿</span> : <span></span>}
                             {title}
                         </div>
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <div>
-                        <Button variant="text"
+                <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                        <Button
+                            variant="text"
                             disableElevation
                             style={{
                                 backgroundColor: "#C3ACD6",
                                 color: "white",
-                                marginRight: 20,
-                                width: "100px",
-                            }} onClick={handleOpenDialog}>
+                                flex: 1,
+                            }}
+                            onClick={handleOpenDialog}
+                        >
                             Zobacz przepis
                         </Button>
+                        {(token !== "" && role === "ROLE_ADMIN") &&
+                            (isFavorite ? (
+                                <Button
+                                    variant="text"
+                                    disableElevation
+                                    style={{
+                                        backgroundColor: "#C3ACD6",
+                                        color: "white",
+                                        flex: 1,
+                                    }}
+                                    onClick={handleRemoveFromFavorites}
+                                >
+                                    Usuń z ulubionych
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="text"
+                                    disableElevation
+                                    style={{
+                                        backgroundColor: "#C3ACD6",
+                                        color: "white",
+                                        flex: 1,
+                                    }}
+                                    onClick={handleAddToFavorites}
+                                >
+                                    Dodaj do ulubionych
+                                </Button>
+                            ))}
                     </div>
-                    {(token !== "" && role === "ROLE_ADMIN") &&
-                        (isFavorite ? (
-                            <Button variant="text"
-                                disableElevation
-                                style={{
-                                    backgroundColor: "#C3ACD6",
-                                    color: "white",
-                                    marginRight: 20,
-                                    width: "100px",
-                                }} onClick={handleRemoveFromFavorites} >
-                                Usuń z ulubionych
-                            </Button>
-                        ) : (
-                            <Button variant="text"
-                                disableElevation
-                                style={{
-                                    backgroundColor: "#C3ACD6",
-                                    color: "white",
-                                    marginRight: 20,
-                                    width: "100px",
-                                }} onClick={handleAddToFavorites}>
-                                Dodaj do ulubionych
-                            </Button>
-                        ))}
                 </CardActions>
+
+
             </Card>
         </Grid>
     );
