@@ -87,6 +87,8 @@ export function LoginPage() {
             if (response.data.token) {
                 const token = response.data.token;
                 const role = response.data.role;
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', role);
                 refetch();
                 navigate("/");
             }

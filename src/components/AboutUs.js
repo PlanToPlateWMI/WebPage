@@ -67,7 +67,7 @@ export function AboutUs() {
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <div style={divStyle}>
+            <div style={{ ...divStyle, paddingTop: '80px' }}>
                 PlanToPlate to niezbędne narzędzie dla każdego pragnącego w pełni kontrolować swoje codzienne nawyki żywieniowe. Nasza aplikacja mobilna i strona internetowa to klucz do łatwego planowania jadłospisów, precyzyjnego zarządzania zakupami oraz odkrywania nowych, kulinarnych inspiracji osobom indywidualnym i grupom.    <br />
                 Z PlanToPlate zdobędziesz kontrolę nad swoją dietą, odkryjesz kulinarne horyzonty i zaoszczędzisz cenny czas, który dotąd poświęcałeś na codzienny stres związany z posiłkami. Zobacz możliwości naszej aplikacji mobilnej!
             </div>
@@ -78,9 +78,10 @@ export function AboutUs() {
                 <img src={Spizarnia} alt="Spizarnia" style={imageStyle} />
             </div>
 
-            <div style={divStyle}>
+            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
                 Dołącz do naszej społeczności i odkryj, jak łatwo może być cieszyć się smakiem zdrowego życia!
             </div>
+
             <div style={{ textAlign: 'center' }}>
                 <img src={QR} alt="QR code" style={{
                     width: '175px',

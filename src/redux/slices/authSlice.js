@@ -2,15 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { api } from "../api/index.js";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const storedToken = localStorage.getItem('token');
+const storedRole = localStorage.getItem('role');
+
 const initialState = {
-    token: "",
+    token: storedToken || "",
     favorites: [],
     recipes: [],
     selectedRecipe: [],
     isModalOpen: false,
     isModalAddPrzepisOpen: false,
     categories: [],
-    role: "",
+    role: storedRole || "",
     
 };
 

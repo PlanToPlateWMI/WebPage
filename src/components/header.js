@@ -12,6 +12,11 @@ const Header = () => {
     const handleNavigateToLogin = () => {
         navigate("/login");
     };
+    const handleNavigateToLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        navigate("/login");
+    };
 
     const handleNavigateToAboutUs = () => {
         navigate("/about");
@@ -73,7 +78,7 @@ const Header = () => {
                         variant="text"
                         disableElevation
                         style={{ backgroundColor: "#C3ACD6", color: "white" }}
-                        onClick={() => handleNavigateToLogin()}>
+                        onClick={() => handleNavigateToLogout()}>
                         Wyloguj się
                     </Button>
                 )}
