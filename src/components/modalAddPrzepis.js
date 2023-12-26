@@ -261,7 +261,7 @@ const ModalAddPrzepis = () => {
                             id="outlined-basic"
                             label="Wpisz nazwę"
                             variant="outlined"
-                            style={{ width: 450 }}
+                            style={{ width: 300 }}
                             value={titleValue}
                             onChange={handleTitleChange}
                         />

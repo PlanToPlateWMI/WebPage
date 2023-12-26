@@ -61,7 +61,7 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
             />
             <TextField
                 id={`product-quantity-${index}`}
-                label="Wpisz ilość"
+                label="Ilość"
                 variant="outlined"
                 onChange={handleQuantityChange}
                 onKeyPress={handleQuantityKeyPress}

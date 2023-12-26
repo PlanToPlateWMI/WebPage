@@ -43,7 +43,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks.js";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
-
+import { Button } from '@mui/material';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const defaultTheme = createTheme();
 
@@ -67,6 +67,11 @@ export function RecepiesPage() {
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
 
+    const [containerVisible, setContainerVisible] = useState(false);
+
+    const toggleContainer = () => {
+        setContainerVisible(!containerVisible);
+    };
     const { data: favoriteRecipesData } = useGetFavoriteQuery();
     const { data: ownRecipesData } = useGetOwnQuery();
 
@@ -131,6 +136,7 @@ export function RecepiesPage() {
     if (filteredRecipes) {
         filteredRecipesCount = filteredRecipes.length;
     }
+    ;
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
@@ -163,107 +169,123 @@ export function RecepiesPage() {
                             <CloseIcon />
                         </IconButton>
                     )}
+
                 </Paper>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                        variant="text"
+                        disableElevation
+                        style={{
+                            backgroundColor: '#C3ACD6',
+                            color: 'white',
+                            width: '220px',
+                            marginTop: '20px',
+                        }}
+                        onClick={toggleContainer}
+                    >
+                        {containerVisible ? 'Zamknij filtrowanie' : 'Otwórz filtrowanie'}
+                    </Button>
+                </div>
 
                 <Container sx={{ py: 1 }} maxWidth="md">
-                    {token !== "" && role === "ROLE_ADMIN" ? (
-                        <Grid container spacing={1}>
-                            <Grid item xs={6}>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        p: 1,
-                                    }}
-                                >
-                                    <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
-                                    <Checkbox
-                                        checked={showOnlyOwn}
-                                        onChange={handleOwnCheckboxChange}
-                                        {...label}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        p: 1,
-                                    }}
-                                >
-                                    <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
-                                    <Checkbox
-                                        checked={showOnlyFavorites}
-                                        onChange={handleCheckboxChange}
-                                        {...label}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    ) : (
-                        null
-                    )}
+                    <div>
 
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            p: 1,
-                            flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
-                            alignItems: { xs: 'flex-start', md: 'center' },
-                        }}>
-                        <h3>Wybierz<br></br> kategorię: &nbsp;&nbsp;</h3>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    checked={filter === "Wszystkie"}
-                                    onChange={() => setFilter("Wszystkie")}
-                                    value="Wszystkie"
-                                />
-                            }
-                            label="Wszystkie"
-                            key={0}
-                        />
 
-                        {categories.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filter === item.name}
-                                        onChange={() => setFilter(item.name)}
-                                        value={item.name}
-                                    />
-                                }
-                                label={item.name}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            p: 1,
-                            flexDirection: { xs: 'column', md: 'row' }, // Change direction on small screens
-                            alignItems: { xs: 'flex-start', md: 'center' },
-                        }}>
-                        <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
-                        {filtersLevel.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filterLevel === item.id}
-                                        onChange={() => setFilterLevel(item.id)}
-                                        value={item.friendlyTitle}
-                                    />
-                                }
-                                label={item.friendlyTitle}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
-                    <Grid container spacing={4}>
+                        {containerVisible && (
+                            <div>
+                                {token !== "" && role === "ROLE_ADMIN" ? (
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={6}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    p: 1,
+                                                }}
+                                            >
+                                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
+                                                <Checkbox
+                                                    checked={showOnlyOwn}
+                                                    onChange={handleOwnCheckboxChange}
+                                                    {...label}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    p: 1,
+                                                }}
+                                            >
+                                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
+                                                <Checkbox
+                                                    checked={showOnlyFavorites}
+                                                    onChange={handleCheckboxChange}
+                                                    {...label}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                ) : (
+                                    null
+                                )}
+
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                    <Grid container spacing={4}>
+                                        <Grid item xs={6} md={6}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                <h3>Wybierz kategorię:</h3>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Radio
+                                                            checked={filter === 'Wszystkie'}
+                                                            onChange={() => setFilter('Wszystkie')}
+                                                            value="Wszystkie"
+                                                        />
+                                                    }
+                                                    label="Wszystkie"
+                                                />
+                                                {categories.map((item) => (
+                                                    <FormControlLabel
+                                                        key={item.id}
+                                                        control={
+                                                            <Radio
+                                                                checked={filter === item.name}
+                                                                onChange={() => setFilter(item.name)}
+                                                                value={item.name}
+                                                            />
+                                                        }
+                                                        label={item.name}
+                                                    />
+                                                ))}
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={6} md={6}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                <h3>Wybierz poziom trudności:</h3>
+                                                {filtersLevel.map((item) => (
+                                                    <FormControlLabel
+                                                        key={item.id}
+                                                        control={
+                                                            <Radio
+                                                                checked={filterLevel === item.id}
+                                                                onChange={() => setFilterLevel(item.id)}
+                                                                value={item.friendlyTitle}
+                                                            />
+                                                        }
+                                                        label={item.friendlyTitle}
+                                                    />
+                                                ))}
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </div>
+                        )}
+                    </div>
+                    <Grid container spacing={4} sx={{ marginTop: '10px' }}>
                         {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
                             .map((recipe) => (
@@ -275,6 +297,7 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
+
             </main>
 
             {/* Pagination */}
