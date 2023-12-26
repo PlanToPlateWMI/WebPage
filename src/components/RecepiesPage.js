@@ -135,7 +135,7 @@ export function RecepiesPage() {
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh', paddingTop: '80px' }}>
+            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh', paddingTop: '90px' }}>
                 <Paper
                     component="form"
                     sx={{
