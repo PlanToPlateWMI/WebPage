@@ -41,8 +41,12 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const ModalAddPrzepis = () => {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const { refetch } = useGetAllQuery();
 
     const { isModalAddPrzepisOpen } = useAppSelector(
@@ -60,9 +64,9 @@ const ModalAddPrzepis = () => {
 
     const products = productsData
         ? productsData.map((product) => ({
-              label: `${product.name} - ${product.unit}`,
-              id: product.id,
-          }))
+            label: `${product.name} - ${product.unit}`,
+            id: product.id,
+        }))
         : [];
 
     const poziomyTrudnosci = [
@@ -97,12 +101,12 @@ const ModalAddPrzepis = () => {
 
     const handleNumericChange = (event) => {
         let enteredValue = event.target.value;
-        let onlyNums = enteredValue.replace(/\D/g, ""); 
-    
+        let onlyNums = enteredValue.replace(/\D/g, "");
+
         if (onlyNums.length > 3) {
-            onlyNums = onlyNums.substring(0, 3); 
+            onlyNums = onlyNums.substring(0, 3);
         }
-    
+
         setNumericValue(onlyNums);
         setTimeValue(onlyNums);
     };
@@ -165,7 +169,7 @@ const ModalAddPrzepis = () => {
 
     const handleCheckboxChange = (event) => {
         const newValue = event.target.checked;
-        setIsVegeValue(newValue); 
+        setIsVegeValue(newValue);
     };
 
     const [steps, setSteps] = useState([]);
@@ -235,7 +239,7 @@ const ModalAddPrzepis = () => {
                     backgroundColor: "rgb(195, 172, 214)",
                 }}>
                 <Typography variant="h5" style={{ fontWeight: "bold" }}>
-                    Dodawanie własnego przepisu
+                    Dodanie własnego przepisu
                 </Typography>
                 <IconButton
                     edge="end"
@@ -248,12 +252,16 @@ const ModalAddPrzepis = () => {
             </DialogTitle>
             <DialogContent style={{ textAlign: "left", paddingTop: "15px" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ display: "flex", gap: "16px" }}>
+                    <div style={{
+                        display: "flex",
+                        flexDirection: isSmallScreen ? "column" : "row",
+                        gap: "16px"
+                    }}>
                         <TextField
                             id="outlined-basic"
                             label="Wpisz nazwę"
                             variant="outlined"
-                            style={{ width: 500 }}
+                            style={{ width: 450 }}
                             value={titleValue}
                             onChange={handleTitleChange}
                         />
@@ -291,6 +299,7 @@ const ModalAddPrzepis = () => {
                         style={{
                             display: "flex",
                             gap: "16px",
+                            flexDirection: isSmallScreen ? "column" : "row",
                             paddingTop: "15px",
                         }}>
                         <TextField
@@ -299,6 +308,9 @@ const ModalAddPrzepis = () => {
                             variant="outlined"
                             value={numericValue}
                             onChange={handleNumericChange}
+                            style={{
+                                width: 300
+                            }}
                         />
                         <Autocomplete
                             disablePortal
@@ -324,7 +336,8 @@ const ModalAddPrzepis = () => {
                                 label="Ten przepis jest wegański"
                                 sx={{
                                     paddingTop: "5px",
-                                    paddingLeft: "65px",
+                                    paddingLeft: isSmallScreen ? "0" : "65px",
+                                    textAlign: isSmallScreen ? "left" : "initial",
                                     "& .MuiSvgIcon-root": {
                                         color: "#a0db5c",
                                     },
@@ -333,8 +346,8 @@ const ModalAddPrzepis = () => {
                         </FormGroup>
                     </div>
                     <Grid container spacing={4}>
-                        <Grid item xs={6}>
-                            <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <Grid container spacing={1} direction={isSmallScreen ? 'column' : 'row'}>
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -386,8 +399,8 @@ const ModalAddPrzepis = () => {
                         </Grid>
 
 
-                        <Grid item xs={6}>
-                            <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <Grid container spacing={1} direction={isSmallScreen ? 'column' : 'row'}>
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -443,17 +456,20 @@ const ModalAddPrzepis = () => {
 
                 <div
                     style={{
-                        position: "fixed",
-                        bottom: "5%",
-                        right: "45px",
+                        position: isSmallScreen ? 'relative' : 'fixed',
+                        bottom: isSmallScreen ? '0' : '5%',
+                        right: isSmallScreen ? '0' : '45px',
                         zIndex: "999",
-                    }}>
+                        width: isSmallScreen ? '100%' : 'auto',
+                        textAlign: 'right',
+                    }}
+                >
                     <Button
                         variant="text"
                         disableElevation
-                        style={{ 
-                            backgroundColor: isFormIncomplete ? "#CCC" : "#C3ACD6", 
-                            color: isFormIncomplete ? "#999" : "white" 
+                        style={{
+                            backgroundColor: isFormIncomplete ? "#CCC" : "#C3ACD6",
+                            color: isFormIncomplete ? "#999" : "white"
                         }}
                         onClick={handleDodajPrzepis}
                         disabled={isFormIncomplete}
