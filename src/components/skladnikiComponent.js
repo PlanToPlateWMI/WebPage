@@ -13,6 +13,31 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
             updateIngredients({ id: '', qty: '' }, index);
         }
     };
+    const handleQuantityKeyPress = (event) => {
+        const charCode = event.which ? event.which : event.keyCode;
+        const inputValue = event.target.value;
+
+        const hasDot = inputValue.includes('.');
+        const beforeDot = inputValue.split('.')[0];
+        const afterDot = inputValue.split('.')[1];
+
+        const newValue = inputValue + String.fromCharCode(charCode);
+
+        const isValidNumber = (value) => {
+            const floatValue = parseFloat(value);
+            return !isNaN(floatValue) && floatValue >= 0 && floatValue <= 9999.99;
+        };
+
+        if (
+            (charCode < 48 || charCode > 57) &&
+            (charCode !== 8 && charCode !== 46) ||
+            (newValue.length > 1 && newValue.charAt(0) === '0' && newValue.charAt(1) !== '.') ||
+            (hasDot && afterDot && afterDot.length >= 2) ||
+            !isValidNumber(newValue)
+        ) {
+            event.preventDefault();
+        }
+    };
 
     const handleQuantityChange = (event) => {
         // Update the parent component's state with the new quantity
@@ -39,6 +64,7 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
                 label="Wpisz ilość"
                 variant="outlined"
                 onChange={handleQuantityChange}
+                onKeyPress={handleQuantityKeyPress}
                 sx={{ width: '120px' }}
             />
         </div>
