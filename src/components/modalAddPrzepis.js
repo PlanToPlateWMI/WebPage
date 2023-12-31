@@ -30,7 +30,7 @@ import {
     useGetAllProductsQuery,
     useCreateRecipeMutation,
     useGetAllQuery,
-    useGetMyRecipesQuery
+    useGetMyRecipesQuery,
 } from "../redux/api/index.js";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -42,12 +42,12 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const ModalAddPrzepis = () => {
     const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const { refetch: refetchAll } = useGetAllQuery();
     const { refetch: refetchOwn } = useGetMyRecipesQuery();
     const { isModalAddPrzepisOpen } = useAppSelector(
@@ -58,6 +58,16 @@ const ModalAddPrzepis = () => {
     const [createRecipe] = useCreateRecipeMutation();
 
     const handleCloseDialog = () => {
+        setTitleValue("");
+        setLevelValue([]);
+        setCategoryValue("");
+        setPortionsValue("");
+        setTimeValue("");
+        setIsVegeValue(false);
+        setSteps([]);
+        setIngredients([]);
+        setNumericValue("");
+        setSkladnikiCount(1);
         dispatch(closeDialogs(false));
     };
 
@@ -122,15 +132,11 @@ const ModalAddPrzepis = () => {
         }
     };
 
-    const [krokiCount, setKrokiCount] = useState(1);
     const handleAddKroki = () => {
-        setKrokiCount((prevCount) => prevCount + 1);
+        setSteps((prevSteps) => [...prevSteps, ""]);
+        console.log(steps);
     };
-    const handleRemoveKroki = () => {
-        if (krokiCount > 1) {
-            setKrokiCount((prevCount) => prevCount - 1);
-        }
-    };
+
     const [titleValue, setTitleValue] = useState("");
     const [levelValue, setLevelValue] = useState([]);
     const [categoryValue, setCategoryValue] = useState("");
@@ -173,20 +179,31 @@ const ModalAddPrzepis = () => {
         setIsVegeValue(newValue);
     };
 
-    const [steps, setSteps] = useState([]);
-    const [ingredients, setIngredients] = useState([]);
+    const [steps, setSteps] = useState([""]);
+    const [ingredients, setIngredients] = useState([{ id: "", qty: "" }]);
 
     const updateSteps = (step, index) => {
+        console.log(index, step);
         let newSteps = [...steps];
         newSteps[index] = step;
         setSteps(newSteps);
+        console.log(steps);
     };
 
     const deleteSteps = (index) => {
-        let newSteps = [...steps];
-        newSteps.splice(index, 1);
-        setSteps(newSteps);
+        setSteps((prevSteps) => {
+            let newSteps = prevSteps.filter((_, i) => i !== index);
+            return newSteps;
+        });
     };
+
+    const deleteIngredients = (index) => {
+        setIngredients((prevIngredients) => {
+            let newIngredients = prevIngredients.filter((_, i) => i !== index);
+            return newIngredients;
+        });
+    };
+
 
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
@@ -227,14 +244,19 @@ const ModalAddPrzepis = () => {
             setIngredients([]);
             setNumericValue("");
             setSkladnikiCount(1);
-            setKrokiCount(1);
         } catch (error) {
             console.error("Error submitting recipe", error);
         }
     };
 
-    const isFormIncomplete = !titleValue || !levelValue[0] || !categoryValue || !numericValue || !portionsValue || !steps.length || !ingredients.length;
-
+    const isFormIncomplete =
+        !titleValue ||
+        !levelValue[0] ||
+        !categoryValue ||
+        !numericValue ||
+        !portionsValue ||
+        !steps.length ||
+        !ingredients.length;
 
     return (
         <Dialog
@@ -260,11 +282,12 @@ const ModalAddPrzepis = () => {
             </DialogTitle>
             <DialogContent style={{ textAlign: "left", paddingTop: "15px" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{
-                        display: "flex",
-                        flexDirection: isSmallScreen ? "column" : "row",
-                        gap: "16px"
-                    }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: isSmallScreen ? "column" : "row",
+                            gap: "16px",
+                        }}>
                         <TextField
                             id="outlined-basic"
                             label="Wpisz nazwę"
@@ -317,7 +340,7 @@ const ModalAddPrzepis = () => {
                             value={numericValue}
                             onChange={handleNumericChange}
                             style={{
-                                width: 300
+                                width: 300,
                             }}
                         />
                         <Autocomplete
@@ -345,7 +368,9 @@ const ModalAddPrzepis = () => {
                                 sx={{
                                     paddingTop: "5px",
                                     paddingLeft: isSmallScreen ? "0" : "65px",
-                                    textAlign: isSmallScreen ? "left" : "initial",
+                                    textAlign: isSmallScreen
+                                        ? "left"
+                                        : "initial",
                                     "& .MuiSvgIcon-root": {
                                         color: "#a0db5c",
                                     },
@@ -355,7 +380,11 @@ const ModalAddPrzepis = () => {
                     </div>
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
-                            <Grid container spacing={1} direction="row" alignItems="center">
+                            <Grid
+                                container
+                                spacing={1}
+                                direction="row"
+                                alignItems="center">
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -378,22 +407,20 @@ const ModalAddPrzepis = () => {
                                 </Fab>
                             </Grid>
 
-                            {[...Array(krokiCount)].map((_, index) => (
-                                <Grid container alignItems="center" spacing={2}>
-                                    <KrokiComponent
-                                        key={index}
-                                        updateSteps={updateSteps}
-                                        index={index}
-                                        handleRemoveKroki={deleteSteps}
-                                        krokiCount={krokiCount}
-                                    />
-                                </Grid>
+                            {steps.map((step, index) => (
+                                <KrokiComponent
+                                    key={`${steps.length}-${index}`}
+                                    updateSteps={updateSteps}
+                                    index={index}
+                                    handleRemoveKroki={deleteSteps}
+                                    krokiCount={steps.length}
+                                    step={step}
+                                />
                             ))}
                         </Grid>
 
-
                         <Grid item xs={12} sm={6}>
-                            <Grid container spacing={1} >
+                            <Grid container spacing={1}>
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -415,37 +442,20 @@ const ModalAddPrzepis = () => {
                                         onClick={handleAddSkladniki}>
                                         <AddIcon />
                                     </Fab>
-
                                 </Grid>
                             </Grid>
 
-                            {[...Array(skladnikiCount)].map((_, index) => (
-                                <Grid container alignItems="center" spacing={2}>
-                                    <Grid item key={index}>
-                                        <SkladnikiComponent
-                                            updateIngredients={updateIngredients}
-                                            index={index}
-                                            products={products}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <Fab
-                                            color="secondary"
-                                            aria-label="remove"
-                                            style={{
-                                                backgroundColor: "#d11f1f",
-                                                width: "35px",
-                                                height: "25px",
-                                                visibility:
-                                                    skladnikiCount <= 1
-                                                        ? "hidden"
-                                                        : "visible",
-                                            }}
-                                            onClick={handleRemoveSkladniki}>
-                                            <RemoveIcon />
-                                        </Fab>
-                                    </Grid>
-                                </Grid>
+                            {ingredients.map((item, index) => (
+                                <SkladnikiComponent
+                                    updateIngredients={
+                                        updateIngredients
+                                    }
+                                    index={index}
+                                    products={products}
+                                    handleRemoveSkladniki={deleteIngredients}
+                                    skladnikiCount={skladnikiCount}
+                                    ingredient={item}
+                                />
                             ))}
                         </Grid>
                     </Grid>
@@ -453,22 +463,22 @@ const ModalAddPrzepis = () => {
 
                 <div
                     style={{
-                        position: 'relative',
-                        width: '100%',
-                        marginTop: 'auto',
-                        textAlign: 'right',
-                    }}
-                >
+                        position: "relative",
+                        width: "100%",
+                        marginTop: "auto",
+                        textAlign: "right",
+                    }}>
                     <Button
                         variant="text"
                         disableElevation
                         style={{
-                            backgroundColor: isFormIncomplete ? "#CCC" : "#C3ACD6",
-                            color: isFormIncomplete ? "#999" : "white"
+                            backgroundColor: isFormIncomplete
+                                ? "#CCC"
+                                : "#C3ACD6",
+                            color: isFormIncomplete ? "#999" : "white",
                         }}
                         onClick={handleDodajPrzepis}
-                        disabled={isFormIncomplete}
-                    >
+                        disabled={isFormIncomplete}>
                         Dodaj przepis
                     </Button>
                 </div>

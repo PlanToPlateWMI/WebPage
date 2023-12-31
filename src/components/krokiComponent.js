@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from "react";
 import TextField from '@mui/material/TextField';
 import { useMediaQuery } from '@mui/material';
@@ -21,20 +22,22 @@ import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount }) => {
+const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount, step }) => {
     const handleStepChange = (event) => {
         updateSteps(event.target.value, index);
     };
+
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
-            <Grid item key={index}>
+        <div style={{ display: 'flex', gap: '20px', paddingBottom: '30px' }}>
+            <Grid item>
                 <TextField
                     id={`step-${index}`}
                     label="Wpisz krok"
                     multiline
                     maxRows={4}
+                    value={step}
                     style={{
                         width: isSmallScreen ? '300px' : '500px',
                         maxWidth: '100%',
@@ -51,7 +54,7 @@ const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount }) =
                         width: "35px",
                         height: "25px",
                         visibility:
-                            krokiCount <= 1
+                            krokiCount < 2
                                 ? "hidden"
                                 : "visible",
                     }}

@@ -3,38 +3,46 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import Fab from "@mui/material/Fab";
+import Grid from "@mui/material/Grid";
+import RemoveIcon from "@mui/icons-material/Remove";
 
-const SkladnikiComponent = ({ updateIngredients, index, products }) => {
+const SkladnikiComponent = ({ updateIngredients, index, products, handleRemoveSkladniki, skladnikiCount }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const handleProductChange = (event, newValue) => {
         setSelectedProduct(newValue);
         if (newValue) {
-            updateIngredients({ id: newValue.id, qty: '' }, index);
+            updateIngredients({ id: newValue.id, qty: "" }, index);
         } else {
-            updateIngredients({ id: '', qty: '' }, index);
+            updateIngredients({ id: "", qty: "" }, index);
         }
     };
     const handleQuantityKeyPress = (event) => {
         const charCode = event.which ? event.which : event.keyCode;
         const inputValue = event.target.value;
 
-        const hasDot = inputValue.includes('.');
-        const beforeDot = inputValue.split('.')[0];
-        const afterDot = inputValue.split('.')[1];
+        const hasDot = inputValue.includes(".");
+        const beforeDot = inputValue.split(".")[0];
+        const afterDot = inputValue.split(".")[1];
 
         const newValue = inputValue + String.fromCharCode(charCode);
 
         const isValidNumber = (value) => {
             const floatValue = parseFloat(value);
-            return !isNaN(floatValue) && floatValue >= 0 && floatValue <= 9999.99;
+            return (
+                !isNaN(floatValue) && floatValue >= 0 && floatValue <= 9999.99
+            );
         };
 
         if (
-            (charCode < 48 || charCode > 57) &&
-            (charCode !== 8 && charCode !== 46) ||
-            (newValue.length > 1 && newValue.charAt(0) === '0' && newValue.charAt(1) !== '.') ||
+            ((charCode < 48 || charCode > 57) &&
+                charCode !== 8 &&
+                charCode !== 46) ||
+            (newValue.length > 1 &&
+                newValue.charAt(0) === "0" &&
+                newValue.charAt(1) !== ".") ||
             (hasDot && afterDot && afterDot.length >= 2) ||
             !isValidNumber(newValue)
         ) {
@@ -45,32 +53,62 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
     const handleQuantityChange = (event) => {
         // Update the parent component's state with the new quantity
         if (selectedProduct) {
-            updateIngredients({ id: selectedProduct.id, qty: event.target.value }, index);
+            updateIngredients(
+                { id: selectedProduct.id, qty: event.target.value },
+                index
+            );
         }
     };
 
     return (
-        <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
-            <Autocomplete
-                disablePortal
-                id={`product-autocomplete-${index}`}
-                options={products}
-                getOptionLabel={(option) => option.label || ''}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderInput={(params) => <TextField {...params} label="Wybierz produkt" />}
-                onChange={handleProductChange}
-                value={selectedProduct}
-                sx={{ width: isSmallScreen ? '200px' :'300px'}}
-            />
-            <TextField
-                id={`product-quantity-${index}`}
-                label="Ilość"
-                variant="outlined"
-                onChange={handleQuantityChange}
-                onKeyPress={handleQuantityKeyPress}
-                sx={{ width: isSmallScreen ? '80px': '120px' }}
-            />
-        </div>
+        <>
+            <Grid item key={index}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "20px",
+                        paddingBottom: "10px",
+                    }}>
+                    <Autocomplete
+                        disablePortal
+                        id={`product-autocomplete-${index}`}
+                        options={products}
+                        getOptionLabel={(option) => option.label || ""}
+                        isOptionEqualToValue={(option, value) =>
+                            option.id === value.id
+                        }
+                        renderInput={(params) => (
+                            <TextField {...params} label="Wybierz produkt" />
+                        )}
+                        onChange={handleProductChange}
+                        value={selectedProduct}
+                        sx={{ width: isSmallScreen ? "200px" : "300px" }}
+                    />
+                    <TextField
+                        id={`product-quantity-${index}`}
+                        label="Ilość"
+                        variant="outlined"
+                        onChange={handleQuantityChange}
+                        onKeyPress={handleQuantityKeyPress}
+                        sx={{ width: isSmallScreen ? "80px" : "120px" }}
+                    />
+                </div>
+            </Grid>
+            <Grid item>
+                <Fab
+                    color="secondary"
+                    aria-label="remove"
+                    style={{
+                        backgroundColor: "#d11f1f",
+                        width: "35px",
+                        height: "25px",
+                        visibility: skladnikiCount <= 1 ? "hidden" : "visible",
+                    }}
+                    onClick={handleRemoveSkladniki}>
+                    <RemoveIcon />
+                </Fab>
+            </Grid>
+        </>
     );
 };
 
