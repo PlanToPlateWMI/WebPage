@@ -29,6 +29,7 @@ import Lista from "../images/lis.jpg";
 import Przepisy from "../images/prz.jpg";
 import Spizarnia from "../images/spiz.jpg";
 import QR from "../images/qr.jpg";
+import ModalAddPrzepis from "./modalAddPrzepis.js";
 
 const defaultTheme = createTheme();
 
@@ -109,6 +110,7 @@ export function AboutUs() {
                     Napisz do nas
                 </Button>
             </div>
+            <ModalAddPrzepis />
         </ThemeProvider>
     );
 }

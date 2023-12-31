@@ -30,6 +30,7 @@ import {
     useGetAllProductsQuery,
     useCreateRecipeMutation,
     useGetAllQuery,
+    useGetMyRecipesQuery
 } from "../redux/api/index.js";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -47,8 +48,8 @@ import { useTheme } from '@mui/material/styles';
 const ModalAddPrzepis = () => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { refetch } = useGetAllQuery();
-
+    const { refetch: refetchAll } = useGetAllQuery();
+    const { refetch: refetchOwn } = useGetMyRecipesQuery();
     const { isModalAddPrzepisOpen } = useAppSelector(
         (state) => state.authSlice
     );
@@ -131,7 +132,7 @@ const ModalAddPrzepis = () => {
         }
     };
     const [titleValue, setTitleValue] = useState("");
-    const [levelValue, setLevelValue] = useState("");
+    const [levelValue, setLevelValue] = useState([]);
     const [categoryValue, setCategoryValue] = useState("");
     const [portionsValue, setPortionsValue] = useState("");
     const [isVegeValue, setIsVegeValue] = useState(false);
@@ -156,7 +157,7 @@ const ModalAddPrzepis = () => {
                     break;
             }
         }
-        setLevelValue(englishValue);
+        setLevelValue([newValue.label, englishValue]);
     };
 
     const handleCategoryChange = (event, newValue) => {
@@ -181,6 +182,12 @@ const ModalAddPrzepis = () => {
         setSteps(newSteps);
     };
 
+    const deleteSteps = (index) => {
+        let newSteps = [...steps];
+        newSteps.splice(index, 1);
+        setSteps(newSteps);
+    };
+
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
         newIngredients[index] = ingredient;
@@ -192,7 +199,7 @@ const ModalAddPrzepis = () => {
     const handleDodajPrzepis = async () => {
         const recipeData = {
             title: titleValue,
-            level: levelValue,
+            level: levelValue[1],
             time: parseInt(timeValue),
             steps: steps.join("&"),
             portions: parseInt(portionsValue),
@@ -206,11 +213,12 @@ const ModalAddPrzepis = () => {
 
         try {
             const result = await createRecipe(recipeData).unwrap();
-            refetch();
+            refetchAll();
+            refetchOwn();
             console.log("Recipe submitted successfully", result);
 
             setTitleValue("");
-            setLevelValue("");
+            setLevelValue([]);
             setCategoryValue("");
             setPortionsValue("");
             setTimeValue("");
@@ -225,7 +233,7 @@ const ModalAddPrzepis = () => {
         }
     };
 
-    const isFormIncomplete = !titleValue || !levelValue || !categoryValue || !numericValue || !portionsValue;
+    const isFormIncomplete = !titleValue || !levelValue[0] || !categoryValue || !numericValue || !portionsValue || !steps.length || !ingredients.length;
 
 
     return (
@@ -270,12 +278,12 @@ const ModalAddPrzepis = () => {
                             id="combo-box-demo-poziomy"
                             options={poziomyTrudnosci}
                             sx={{ width: 300 }}
-                            value={levelValue}
+                            value={levelValue[0]}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     label="Wybierz poziom trudności"
-                                    value={levelValue}
+                                    value={levelValue[0]}
                                 />
                             )}
                             onChange={handleLevelChange}
@@ -372,29 +380,13 @@ const ModalAddPrzepis = () => {
 
                             {[...Array(krokiCount)].map((_, index) => (
                                 <Grid container alignItems="center" spacing={2}>
-                                    <Grid item key={index}>
-                                        <KrokiComponent
-                                            updateSteps={updateSteps}
-                                            index={index}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <Fab
-                                            color="secondary"
-                                            aria-label="remove"
-                                            style={{
-                                                backgroundColor: "#d11f1f",
-                                                width: "35px",
-                                                height: "25px",
-                                                visibility:
-                                                    krokiCount <= 1
-                                                        ? "hidden"
-                                                        : "visible",
-                                            }}
-                                            onClick={handleRemoveKroki}>
-                                            <RemoveIcon />
-                                        </Fab>
-                                    </Grid>
+                                    <KrokiComponent
+                                        key={index}
+                                        updateSteps={updateSteps}
+                                        index={index}
+                                        handleRemoveKroki={deleteSteps}
+                                        krokiCount={krokiCount}
+                                    />
                                 </Grid>
                             ))}
                         </Grid>

@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React from "react";
 import TextField from '@mui/material/TextField';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import Fab from "@mui/material/Fab";
+import Grid from "@mui/material/Grid";
+import RemoveIcon from "@mui/icons-material/Remove";
 
-const KrokiComponent = ({ updateSteps, index }) => {
+const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount }) => {
     const handleStepChange = (event) => {
         updateSteps(event.target.value, index);
     };
@@ -27,17 +29,36 @@ const KrokiComponent = ({ updateSteps, index }) => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
-            <TextField
-                id={`step-${index}`}
-                label="Wpisz krok"
-                multiline
-                maxRows={4}
-                style={{
-                    width: isSmallScreen ? '300px' : '500px',
-                    maxWidth: '100%', 
-                }}
-                onChange={handleStepChange}
-            />
+            <Grid item key={index}>
+                <TextField
+                    id={`step-${index}`}
+                    label="Wpisz krok"
+                    multiline
+                    maxRows={4}
+                    style={{
+                        width: isSmallScreen ? '300px' : '500px',
+                        maxWidth: '100%',
+                    }}
+                    onChange={handleStepChange}
+                />
+            </Grid>
+            <Grid item>
+                <Fab
+                    color="secondary"
+                    aria-label="remove"
+                    style={{
+                        backgroundColor: "#d11f1f",
+                        width: "35px",
+                        height: "25px",
+                        visibility:
+                            krokiCount <= 1
+                                ? "hidden"
+                                : "visible",
+                    }}
+                    onClick={() => handleRemoveKroki(index)}>
+                    <RemoveIcon />
+                </Fab>
+            </Grid>
         </div>
     );
 };
