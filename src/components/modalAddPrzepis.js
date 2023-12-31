@@ -347,7 +347,7 @@ const ModalAddPrzepis = () => {
                     </div>
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
-                            <Grid container spacing={1} direction={isSmallScreen ? 'column' : 'row'}>
+                            <Grid container spacing={1} direction="row" alignItems="center">
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -357,19 +357,17 @@ const ModalAddPrzepis = () => {
                                     }}>
                                     Dodaj kroki
                                 </Typography>
-                                <Grid item style={{ paddingTop: "20px" }}>
-                                    <Fab
-                                        color="primary"
-                                        aria-label="add"
-                                        style={{
-                                            backgroundColor: "#a0db5c",
-                                            width: "35px",
-                                            height: "25px",
-                                        }}
-                                        onClick={handleAddKroki}>
-                                        <AddIcon />
-                                    </Fab>
-                                </Grid>
+                                <Fab
+                                    color="primary"
+                                    aria-label="add"
+                                    style={{
+                                        backgroundColor: "#a0db5c",
+                                        width: "35px",
+                                        height: "25px",
+                                    }}
+                                    onClick={handleAddKroki}>
+                                    <AddIcon />
+                                </Fab>
                             </Grid>
 
                             {[...Array(krokiCount)].map((_, index) => (
@@ -403,7 +401,7 @@ const ModalAddPrzepis = () => {
 
 
                         <Grid item xs={12} sm={6}>
-                            <Grid container spacing={1} direction={isSmallScreen ? 'column' : 'row'}>
+                            <Grid container spacing={1} >
                                 <Typography
                                     variant="h6"
                                     style={{

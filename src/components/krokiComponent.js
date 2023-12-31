@@ -16,12 +16,15 @@
 
 import React from "react";
 import TextField from '@mui/material/TextField';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const KrokiComponent = ({ updateSteps, index }) => {
     const handleStepChange = (event) => {
         updateSteps(event.target.value, index);
     };
-
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <div style={{ display: 'flex', gap: '20px', paddingBottom: '10px' }}>
             <TextField
@@ -29,7 +32,10 @@ const KrokiComponent = ({ updateSteps, index }) => {
                 label="Wpisz krok"
                 multiline
                 maxRows={4}
-                style={{ width: '500px' }}
+                style={{
+                    width: isSmallScreen ? '300px' : '500px',
+                    maxWidth: '100%', 
+                }}
                 onChange={handleStepChange}
             />
         </div>

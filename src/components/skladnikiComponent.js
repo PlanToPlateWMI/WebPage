@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const SkladnikiComponent = ({ updateIngredients, index, products }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
-
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const handleProductChange = (event, newValue) => {
         setSelectedProduct(newValue);
         if (newValue) {
@@ -57,7 +60,7 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
                 renderInput={(params) => <TextField {...params} label="Wybierz produkt" />}
                 onChange={handleProductChange}
                 value={selectedProduct}
-                sx={{ width: 300 }}
+                sx={{ width: isSmallScreen ? '200px' :'300px'}}
             />
             <TextField
                 id={`product-quantity-${index}`}
@@ -65,7 +68,7 @@ const SkladnikiComponent = ({ updateIngredients, index, products }) => {
                 variant="outlined"
                 onChange={handleQuantityChange}
                 onKeyPress={handleQuantityKeyPress}
-                sx={{ width: '120px' }}
+                sx={{ width: isSmallScreen ? '80px': '120px' }}
             />
         </div>
     );
