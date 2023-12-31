@@ -369,31 +369,34 @@ const ModalAddPrzepis = () => {
                                         onClick={handleAddKroki}>
                                         <AddIcon />
                                     </Fab>
-                                    <Fab
-                                        color="secondary"
-                                        aria-label="remove"
-                                        style={{
-                                            backgroundColor: "#d11f1f",
-                                            width: "35px",
-                                            height: "25px",
-                                            visibility:
-                                                krokiCount <= 1
-                                                    ? "hidden"
-                                                    : "visible",
-                                            marginLeft: "25px",
-                                        }}
-                                        onClick={handleRemoveKroki}>
-                                        <RemoveIcon />
-                                    </Fab>
                                 </Grid>
                             </Grid>
 
                             {[...Array(krokiCount)].map((_, index) => (
-                                <Grid item key={index}>
-                                    <KrokiComponent
-                                        updateSteps={updateSteps}
-                                        index={index}
-                                    />
+                                <Grid container alignItems="center" spacing={2}>
+                                    <Grid item key={index}>
+                                        <KrokiComponent
+                                            updateSteps={updateSteps}
+                                            index={index}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Fab
+                                            color="secondary"
+                                            aria-label="remove"
+                                            style={{
+                                                backgroundColor: "#d11f1f",
+                                                width: "35px",
+                                                height: "25px",
+                                                visibility:
+                                                    krokiCount <= 1
+                                                        ? "hidden"
+                                                        : "visible",
+                                            }}
+                                            onClick={handleRemoveKroki}>
+                                            <RemoveIcon />
+                                        </Fab>
+                                    </Grid>
                                 </Grid>
                             ))}
                         </Grid>
@@ -422,32 +425,36 @@ const ModalAddPrzepis = () => {
                                         onClick={handleAddSkladniki}>
                                         <AddIcon />
                                     </Fab>
-                                    <Fab
-                                        color="secondary"
-                                        aria-label="remove"
-                                        style={{
-                                            backgroundColor: "#d11f1f",
-                                            width: "35px",
-                                            height: "25px",
-                                            visibility:
-                                                skladnikiCount <= 1
-                                                    ? "hidden"
-                                                    : "visible",
-                                            marginLeft: "25px",
-                                        }}
-                                        onClick={handleRemoveSkladniki}>
-                                        <RemoveIcon />
-                                    </Fab>
+
                                 </Grid>
                             </Grid>
 
                             {[...Array(skladnikiCount)].map((_, index) => (
-                                <Grid item key={index}>
-                                    <SkladnikiComponent
-                                        updateIngredients={updateIngredients}
-                                        index={index}
-                                        products={products}
-                                    />
+                                <Grid container alignItems="center" spacing={2}>
+                                    <Grid item key={index}>
+                                        <SkladnikiComponent
+                                            updateIngredients={updateIngredients}
+                                            index={index}
+                                            products={products}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Fab
+                                            color="secondary"
+                                            aria-label="remove"
+                                            style={{
+                                                backgroundColor: "#d11f1f",
+                                                width: "35px",
+                                                height: "25px",
+                                                visibility:
+                                                    skladnikiCount <= 1
+                                                        ? "hidden"
+                                                        : "visible",
+                                            }}
+                                            onClick={handleRemoveSkladniki}>
+                                            <RemoveIcon />
+                                        </Fab>
+                                    </Grid>
                                 </Grid>
                             ))}
                         </Grid>
@@ -456,11 +463,9 @@ const ModalAddPrzepis = () => {
 
                 <div
                     style={{
-                        position: isSmallScreen ? 'relative' : 'fixed',
-                        bottom: isSmallScreen ? '0' : '5%',
-                        right: isSmallScreen ? '0' : '45px',
-                        zIndex: "999",
-                        width: isSmallScreen ? '100%' : 'auto',
+                        position: 'relative',
+                        width: '100%',
+                        marginTop: 'auto',
                         textAlign: 'right',
                     }}
                 >
