@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://plantoplatetest.lm.r.appspot.com",
+        baseUrl: "https://plantoplate.lm.r.appspot.com",
         prepareHeaders: (headers, { getState }) => {
             const token = getState().authSlice.token;
             if (token) {

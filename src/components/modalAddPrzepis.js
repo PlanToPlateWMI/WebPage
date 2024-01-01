@@ -203,22 +203,27 @@ const ModalAddPrzepis = () => {
 
     const deleteIngredients = (index) => {
         setIngredients(ingredients.filter((_, i) => i !== index));
-    }; 
+    };
 
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
         newIngredients[index] = ingredient;
         setIngredients(newIngredients);
-    
+
         // Update the set of selected ingredients
         const newSelectedIngredients = new Set(selectedIngredients);
         newSelectedIngredients.delete(ingredients[index].id); // Remove the old ingredient
         newSelectedIngredients.add(ingredient.id); // Add the new ingredient
         setSelectedIngredients(newSelectedIngredients);
     };
-    
+
 
     const handleDodajPrzepis = async () => {
+        const filteredIngredients = ingredients.filter(ing => ing.id && ing.qty);
+
+        if (filteredIngredients.length === 0) {
+            return;
+        }
         const recipeData = {
             title: titleValue,
             level: levelValue[1],
@@ -227,7 +232,7 @@ const ModalAddPrzepis = () => {
             portions: parseInt(portionsValue),
             isVege: isVegeValue,
             category: parseInt(categoryValue),
-            ingredients: ingredients.map((ing) => ({
+            ingredients: filteredIngredients.map((ing) => ({
                 id: parseInt(ing.id, 10),
                 qty: parseFloat(ing.qty),
             })),
