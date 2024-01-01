@@ -64,8 +64,8 @@ const ModalAddPrzepis = () => {
         setPortionsValue("");
         setTimeValue("");
         setIsVegeValue(false);
-        setSteps([]);
-        setIngredients([]);
+        setSteps([""]);
+        setIngredients([{ id: "", qty: "" }]);
         setNumericValue("");
         setSkladnikiCount(1);
         dispatch(closeDialogs(false));
@@ -124,7 +124,7 @@ const ModalAddPrzepis = () => {
 
     const [skladnikiCount, setSkladnikiCount] = useState(1);
     const handleAddSkladniki = () => {
-        setSkladnikiCount((prevCount) => prevCount + 1);
+        setIngredients([...ingredients, { id: "", qty: "" }]);
     };
     const handleRemoveSkladniki = () => {
         if (skladnikiCount > 1) {
@@ -142,6 +142,9 @@ const ModalAddPrzepis = () => {
     const [categoryValue, setCategoryValue] = useState("");
     const [portionsValue, setPortionsValue] = useState("");
     const [isVegeValue, setIsVegeValue] = useState(false);
+
+    const [selectedIngredients, setSelectedIngredients] = useState(new Set());
+
 
     const handleTitleChange = (event) => {
         const newValue = event.target.value;
@@ -182,6 +185,7 @@ const ModalAddPrzepis = () => {
     const [steps, setSteps] = useState([""]);
     const [ingredients, setIngredients] = useState([{ id: "", qty: "" }]);
 
+
     const updateSteps = (step, index) => {
         console.log(index, step);
         let newSteps = [...steps];
@@ -198,20 +202,21 @@ const ModalAddPrzepis = () => {
     };
 
     const deleteIngredients = (index) => {
-        setIngredients((prevIngredients) => {
-            let newIngredients = prevIngredients.filter((_, i) => i !== index);
-            return newIngredients;
-        });
-    };
-
+        setIngredients(ingredients.filter((_, i) => i !== index));
+    }; 
 
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
         newIngredients[index] = ingredient;
         setIngredients(newIngredients);
-
-        console.log(newIngredients);
+    
+        // Update the set of selected ingredients
+        const newSelectedIngredients = new Set(selectedIngredients);
+        newSelectedIngredients.delete(ingredients[index].id); // Remove the old ingredient
+        newSelectedIngredients.add(ingredient.id); // Add the new ingredient
+        setSelectedIngredients(newSelectedIngredients);
     };
+    
 
     const handleDodajPrzepis = async () => {
         const recipeData = {
@@ -450,11 +455,13 @@ const ModalAddPrzepis = () => {
                                     updateIngredients={
                                         updateIngredients
                                     }
+                                    key={`${ingredients.length}-${index}`}
                                     index={index}
                                     products={products}
-                                    handleRemoveSkladniki={deleteIngredients}
-                                    skladnikiCount={skladnikiCount}
+                                    handleRemoveSkladniki={() => deleteIngredients(index)}
+                                    skladnikiCount={ingredients.length}
                                     ingredient={item}
+                                    selectedIngredients={selectedIngredients}
                                 />
                             ))}
                         </Grid>
