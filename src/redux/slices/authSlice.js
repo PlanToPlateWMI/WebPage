@@ -1,6 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../api/index.js";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const storedToken = localStorage.getItem('token');
 const storedRole = localStorage.getItem('role');
@@ -59,7 +58,6 @@ const authSlice = createSlice({
             .addMatcher(
                 api.endpoints.getFavorite.matchFulfilled,
                 (state, { payload }) => {
-                    console.log(payload);
                     state.favorites = payload;
                 }
             )
@@ -90,7 +88,6 @@ const authSlice = createSlice({
             .addMatcher(
                 api.endpoints.deleteRecipe.matchFulfilled,
                 (state, { payload, error }) => {
-                    console.log("close");
                     state.isModalOpen = false;
                     state.selectedRecipe = [];
                 }
@@ -102,8 +99,6 @@ const authSlice = createSlice({
                     state.isModalAddPrzepisOpen = false;
                 }
             );
-
-            //createRecipe
     },
 });
 

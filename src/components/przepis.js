@@ -18,7 +18,6 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Own from "../images/own.jpg";
@@ -44,18 +43,12 @@ const Przepis = ({ recipe, refetch }) => {
         id,
         vege,
         time,
-        categoryName,
         level,
-        portions,
-        steps,
     } = recipe;
     const { token, favorites, role } = useAppSelector((state) => state.authSlice);
     const dispatch = useAppDispatch();
 
-    //console.log(recipe);
-
     const handleOpenDialog = () => {
-        console.log(id);
         dispatch(openModalPrzepisDialog(true));
         dispatch(showPrzepis(id));
     };

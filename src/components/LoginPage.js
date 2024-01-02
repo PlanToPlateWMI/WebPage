@@ -24,7 +24,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -37,7 +37,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import Logo from "../images/Logo2.jpg";
 import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+
 const defaultTheme = createTheme();
 
 export function LoginPage() {
@@ -77,7 +77,7 @@ export function LoginPage() {
         const password = data.get("password");
         const scrypt = require("scrypt-async");
 
-        var key;
+        let key;
         scrypt(
             password,
             email,
@@ -121,6 +121,7 @@ export function LoginPage() {
                 {!isSmallScreen && ( // Check if it's not a small screen
                     <img
                         src={Logo}
+                        alt="Description of the logo"
                         style={{
                             flex: '1',
                             backgroundRepeat: 'no-repeat',

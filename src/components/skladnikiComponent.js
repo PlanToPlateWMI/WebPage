@@ -64,9 +64,7 @@ const SkladnikiComponent = ({
         const inputValue = event.target.value;
 
         const hasDot = inputValue.includes(".");
-        const beforeDot = inputValue.split(".")[0];
         const afterDot = inputValue.split(".")[1];
-
         const newValue = inputValue + String.fromCharCode(charCode);
 
         const isValidNumber = (value) => {

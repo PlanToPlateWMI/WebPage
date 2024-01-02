@@ -41,7 +41,6 @@ import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -126,11 +125,7 @@ const ModalAddPrzepis = () => {
     const handleAddSkladniki = () => {
         setIngredients([...ingredients, { id: "", qty: "" }]);
     };
-    const handleRemoveSkladniki = () => {
-        if (skladnikiCount > 1) {
-            setSkladnikiCount((prevCount) => prevCount - 1);
-        }
-    };
+
 
     const handleAddKroki = () => {
         setSteps((prevSteps) => [...prevSteps, ""]);

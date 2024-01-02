@@ -17,12 +17,10 @@ import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Pagination from "@mui/material/Pagination";
 import {
     useGetAllQuery,
@@ -38,19 +36,17 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { openModalAddDialog } from "../redux/slices/authSlice.js";
-import { useAppDispatch, useAppSelector } from "../app/hooks.js";
-import { useTheme } from '@mui/material/styles';
+import { useAppSelector } from "../app/hooks.js";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Checkbox from '@mui/material/Checkbox';
 import { Button } from '@mui/material';
+
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const dispatch = useAppDispatch();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
@@ -87,7 +83,7 @@ export function RecepiesPage() {
 
     useEffect(() => {
         setPage(1);
-    }, [filter, filterLevel,showOnlyFavorites, showOnlyOwn]);
+    }, [filter, filterLevel, showOnlyFavorites, showOnlyOwn]);
 
     if (!recipeData || !categories) {
         return;

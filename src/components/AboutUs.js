@@ -18,9 +18,6 @@ import * as React from "react";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
 import Header from "./header";
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
