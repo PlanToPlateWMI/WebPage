@@ -31,7 +31,7 @@ const Header = () => {
     const handleNavigateToLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        navigate("/login");
+        window.location.reload(); 
     };
 
     const handleNavigateToAboutUs = () => {
