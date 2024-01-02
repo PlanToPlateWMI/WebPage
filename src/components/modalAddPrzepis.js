@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -14,6 +30,7 @@ import {
     useGetAllProductsQuery,
     useCreateRecipeMutation,
     useGetAllQuery,
+    useGetMyRecipesQuery,
 } from "../redux/api/index.js";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -25,10 +42,14 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Grid";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const ModalAddPrzepis = () => {
-    const { refetch } = useGetAllQuery();
-
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const { refetch: refetchAll } = useGetAllQuery();
+    const { refetch: refetchOwn } = useGetMyRecipesQuery();
     const { isModalAddPrzepisOpen } = useAppSelector(
         (state) => state.authSlice
     );
@@ -37,17 +58,26 @@ const ModalAddPrzepis = () => {
     const [createRecipe] = useCreateRecipeMutation();
 
     const handleCloseDialog = () => {
+        setTitleValue("");
+        setLevelValue([]);
+        setCategoryValue("");
+        setPortionsValue("");
+        setTimeValue("");
+        setIsVegeValue(false);
+        setSteps([""]);
+        setIngredients([{ id: "", qty: "" }]);
+        setNumericValue("");
+        setSkladnikiCount(1);
         dispatch(closeDialogs(false));
     };
 
     const { data: productsData } = useGetAllProductsQuery();
 
-    // Format products data for Autocomplete
     const products = productsData
         ? productsData.map((product) => ({
-              label: `${product.name} - ${product.unit}`,
-              id: product.id,
-          }))
+            label: `${product.name} - ${product.unit}`,
+            id: product.id,
+        }))
         : [];
 
     const poziomyTrudnosci = [
@@ -81,8 +111,12 @@ const ModalAddPrzepis = () => {
     const [timeValue, setTimeValue] = useState("");
 
     const handleNumericChange = (event) => {
-        const enteredValue = event.target.value;
-        const onlyNums = enteredValue.replace(/\D/g, "");
+        let enteredValue = event.target.value;
+        let onlyNums = enteredValue.replace(/\D/g, "");
+
+        if (onlyNums.length > 3) {
+            onlyNums = onlyNums.substring(0, 3);
+        }
 
         setNumericValue(onlyNums);
         setTimeValue(onlyNums);
@@ -90,7 +124,7 @@ const ModalAddPrzepis = () => {
 
     const [skladnikiCount, setSkladnikiCount] = useState(1);
     const handleAddSkladniki = () => {
-        setSkladnikiCount((prevCount) => prevCount + 1);
+        setIngredients([...ingredients, { id: "", qty: "" }]);
     };
     const handleRemoveSkladniki = () => {
         if (skladnikiCount > 1) {
@@ -98,20 +132,19 @@ const ModalAddPrzepis = () => {
         }
     };
 
-    const [krokiCount, setKrokiCount] = useState(1);
     const handleAddKroki = () => {
-        setKrokiCount((prevCount) => prevCount + 1);
+        setSteps((prevSteps) => [...prevSteps, ""]);
+        console.log(steps);
     };
-    const handleRemoveKroki = () => {
-        if (krokiCount > 1) {
-            setKrokiCount((prevCount) => prevCount - 1);
-        }
-    };
+
     const [titleValue, setTitleValue] = useState("");
-    const [levelValue, setLevelValue] = useState("");
+    const [levelValue, setLevelValue] = useState([]);
     const [categoryValue, setCategoryValue] = useState("");
     const [portionsValue, setPortionsValue] = useState("");
     const [isVegeValue, setIsVegeValue] = useState(false);
+
+    const [selectedIngredients, setSelectedIngredients] = useState(new Set());
+
 
     const handleTitleChange = (event) => {
         const newValue = event.target.value;
@@ -133,7 +166,7 @@ const ModalAddPrzepis = () => {
                     break;
             }
         }
-        setLevelValue(englishValue);
+        setLevelValue([newValue.label, englishValue]);
     };
 
     const handleCategoryChange = (event, newValue) => {
@@ -146,38 +179,60 @@ const ModalAddPrzepis = () => {
 
     const handleCheckboxChange = (event) => {
         const newValue = event.target.checked;
-        setIsVegeValue(newValue); // Update the state based on checkbox status
+        setIsVegeValue(newValue);
     };
 
-    const [steps, setSteps] = useState([]);
-    const [ingredients, setIngredients] = useState([]);
+    const [steps, setSteps] = useState([""]);
+    const [ingredients, setIngredients] = useState([{ id: "", qty: "" }]);
 
-    // Function to update steps
+
     const updateSteps = (step, index) => {
+        console.log(index, step);
         let newSteps = [...steps];
         newSteps[index] = step;
         setSteps(newSteps);
+        console.log(steps);
     };
 
-    // Function to update ingredients
+    const deleteSteps = (index) => {
+        setSteps((prevSteps) => {
+            let newSteps = prevSteps.filter((_, i) => i !== index);
+            return newSteps;
+        });
+    };
+
+    const deleteIngredients = (index) => {
+        setIngredients(ingredients.filter((_, i) => i !== index));
+    };
+
     const updateIngredients = (ingredient, index) => {
         let newIngredients = [...ingredients];
         newIngredients[index] = ingredient;
         setIngredients(newIngredients);
 
-        console.log(newIngredients);
+        // Update the set of selected ingredients
+        const newSelectedIngredients = new Set(selectedIngredients);
+        newSelectedIngredients.delete(ingredients[index].id); // Remove the old ingredient
+        newSelectedIngredients.add(ingredient.id); // Add the new ingredient
+        setSelectedIngredients(newSelectedIngredients);
     };
 
+
     const handleDodajPrzepis = async () => {
+        const filteredIngredients = ingredients.filter(ing => ing.id && ing.qty);
+
+        if (filteredIngredients.length === 0) {
+            return;
+        }
         const recipeData = {
             title: titleValue,
-            level: levelValue,
+            level: levelValue[1],
             time: parseInt(timeValue),
             steps: steps.join("&"),
             portions: parseInt(portionsValue),
             isVege: isVegeValue,
             category: parseInt(categoryValue),
-            ingredients: ingredients.map((ing) => ({
+            ingredients: filteredIngredients.map((ing) => ({
                 id: parseInt(ing.id, 10),
                 qty: parseFloat(ing.qty),
             })),
@@ -185,11 +240,12 @@ const ModalAddPrzepis = () => {
 
         try {
             const result = await createRecipe(recipeData).unwrap();
-            refetch();
+            refetchAll();
+            refetchOwn();
             console.log("Recipe submitted successfully", result);
 
             setTitleValue("");
-            setLevelValue("");
+            setLevelValue([]);
             setCategoryValue("");
             setPortionsValue("");
             setTimeValue("");
@@ -198,14 +254,19 @@ const ModalAddPrzepis = () => {
             setIngredients([]);
             setNumericValue("");
             setSkladnikiCount(1);
-            setKrokiCount(1);
         } catch (error) {
             console.error("Error submitting recipe", error);
         }
     };
 
-    const isFormIncomplete = !titleValue || !levelValue || !categoryValue || !numericValue || !portionsValue;
-
+    const isFormIncomplete =
+        !titleValue ||
+        !levelValue[0] ||
+        !categoryValue ||
+        !numericValue ||
+        !portionsValue ||
+        !steps.length ||
+        !ingredients.length;
 
     return (
         <Dialog
@@ -218,7 +279,7 @@ const ModalAddPrzepis = () => {
                     backgroundColor: "rgb(195, 172, 214)",
                 }}>
                 <Typography variant="h5" style={{ fontWeight: "bold" }}>
-                    Dodawanie własnego przepisu
+                    Dodanie własnego przepisu
                 </Typography>
                 <IconButton
                     edge="end"
@@ -231,12 +292,17 @@ const ModalAddPrzepis = () => {
             </DialogTitle>
             <DialogContent style={{ textAlign: "left", paddingTop: "15px" }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ display: "flex", gap: "16px" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: isSmallScreen ? "column" : "row",
+                            gap: "16px",
+                        }}>
                         <TextField
                             id="outlined-basic"
                             label="Wpisz nazwę"
                             variant="outlined"
-                            style={{ width: 500 }}
+                            style={{ width: 300 }}
                             value={titleValue}
                             onChange={handleTitleChange}
                         />
@@ -245,12 +311,12 @@ const ModalAddPrzepis = () => {
                             id="combo-box-demo-poziomy"
                             options={poziomyTrudnosci}
                             sx={{ width: 300 }}
-                            value={levelValue}
+                            value={levelValue[0]}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     label="Wybierz poziom trudności"
-                                    value={levelValue}
+                                    value={levelValue[0]}
                                 />
                             )}
                             onChange={handleLevelChange}
@@ -274,6 +340,7 @@ const ModalAddPrzepis = () => {
                         style={{
                             display: "flex",
                             gap: "16px",
+                            flexDirection: isSmallScreen ? "column" : "row",
                             paddingTop: "15px",
                         }}>
                         <TextField
@@ -282,6 +349,9 @@ const ModalAddPrzepis = () => {
                             variant="outlined"
                             value={numericValue}
                             onChange={handleNumericChange}
+                            style={{
+                                width: 300,
+                            }}
                         />
                         <Autocomplete
                             disablePortal
@@ -307,7 +377,10 @@ const ModalAddPrzepis = () => {
                                 label="Ten przepis jest wegański"
                                 sx={{
                                     paddingTop: "5px",
-                                    paddingLeft: "65px",
+                                    paddingLeft: isSmallScreen ? "0" : "65px",
+                                    textAlign: isSmallScreen
+                                        ? "left"
+                                        : "initial",
                                     "& .MuiSvgIcon-root": {
                                         color: "#a0db5c",
                                     },
@@ -316,10 +389,12 @@ const ModalAddPrzepis = () => {
                         </FormGroup>
                     </div>
                     <Grid container spacing={4}>
-                        {/* Контейнер для компонентов "Kroki" */}
-                        <Grid item xs={6}>
-                            {/* Содержимое первого контейнера "Kroki" */}
-                            <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <Grid
+                                container
+                                spacing={1}
+                                direction="row"
+                                alignItems="center">
                                 <Typography
                                     variant="h6"
                                     style={{
@@ -329,50 +404,32 @@ const ModalAddPrzepis = () => {
                                     }}>
                                     Dodaj kroki
                                 </Typography>
-                                <Grid item style={{ paddingTop: "20px" }}>
-                                    <Fab
-                                        color="primary"
-                                        aria-label="add"
-                                        style={{
-                                            backgroundColor: "#a0db5c",
-                                            width: "35px",
-                                            height: "25px",
-                                        }}
-                                        onClick={handleAddKroki}>
-                                        <AddIcon />
-                                    </Fab>
-                                    <Fab
-                                        color="secondary"
-                                        aria-label="remove"
-                                        style={{
-                                            backgroundColor: "#d11f1f",
-                                            width: "35px",
-                                            height: "25px",
-                                            visibility:
-                                                krokiCount <= 1
-                                                    ? "hidden"
-                                                    : "visible",
-                                            marginLeft: "25px",
-                                        }}
-                                        onClick={handleRemoveKroki}>
-                                        <RemoveIcon />
-                                    </Fab>
-                                </Grid>
+                                <Fab
+                                    color="primary"
+                                    aria-label="add"
+                                    style={{
+                                        backgroundColor: "#a0db5c",
+                                        width: "35px",
+                                        height: "25px",
+                                    }}
+                                    onClick={handleAddKroki}>
+                                    <AddIcon />
+                                </Fab>
                             </Grid>
-                            {/* Рендеринг компонентов Kroki */}
-                            {[...Array(krokiCount)].map((_, index) => (
-                                <Grid item key={index}>
-                                    <KrokiComponent
-                                        updateSteps={updateSteps}
-                                        index={index}
-                                    />
-                                </Grid>
+
+                            {steps.map((step, index) => (
+                                <KrokiComponent
+                                    key={`${steps.length}-${index}`}
+                                    updateSteps={updateSteps}
+                                    index={index}
+                                    handleRemoveKroki={deleteSteps}
+                                    krokiCount={steps.length}
+                                    step={step}
+                                />
                             ))}
                         </Grid>
 
-                        {/* Контейнер для компонентов "Skladniki" */}
-                        <Grid item xs={6}>
-                            {/* Содержимое второго контейнера "Skladniki" */}
+                        <Grid item xs={12} sm={6}>
                             <Grid container spacing={1}>
                                 <Typography
                                     variant="h6"
@@ -395,33 +452,22 @@ const ModalAddPrzepis = () => {
                                         onClick={handleAddSkladniki}>
                                         <AddIcon />
                                     </Fab>
-                                    <Fab
-                                        color="secondary"
-                                        aria-label="remove"
-                                        style={{
-                                            backgroundColor: "#d11f1f",
-                                            width: "35px",
-                                            height: "25px",
-                                            visibility:
-                                                skladnikiCount <= 1
-                                                    ? "hidden"
-                                                    : "visible",
-                                            marginLeft: "25px",
-                                        }}
-                                        onClick={handleRemoveSkladniki}>
-                                        <RemoveIcon />
-                                    </Fab>
                                 </Grid>
                             </Grid>
-                            {/* Рендеринг компонентов Skladniki */}
-                            {[...Array(skladnikiCount)].map((_, index) => (
-                                <Grid item key={index}>
-                                    <SkladnikiComponent
-                                        updateIngredients={updateIngredients}
-                                        index={index}
-                                        products={products}
-                                    />
-                                </Grid>
+
+                            {ingredients.map((item, index) => (
+                                <SkladnikiComponent
+                                    updateIngredients={
+                                        updateIngredients
+                                    }
+                                    key={`${ingredients.length}-${index}`}
+                                    index={index}
+                                    products={products}
+                                    handleRemoveSkladniki={() => deleteIngredients(index)}
+                                    skladnikiCount={ingredients.length}
+                                    ingredient={item}
+                                    selectedIngredients={selectedIngredients}
+                                />
                             ))}
                         </Grid>
                     </Grid>
@@ -429,21 +475,22 @@ const ModalAddPrzepis = () => {
 
                 <div
                     style={{
-                        position: "fixed",
-                        bottom: "5%",
-                        right: "45px",
-                        zIndex: "999",
+                        position: "relative",
+                        width: "100%",
+                        marginTop: "auto",
+                        textAlign: "right",
                     }}>
                     <Button
                         variant="text"
                         disableElevation
-                        style={{ 
-                            backgroundColor: isFormIncomplete ? "#CCC" : "#C3ACD6", 
-                            color: isFormIncomplete ? "#999" : "white" 
+                        style={{
+                            backgroundColor: isFormIncomplete
+                                ? "#CCC"
+                                : "#C3ACD6",
+                            color: isFormIncomplete ? "#999" : "white",
                         }}
                         onClick={handleDodajPrzepis}
-                        disabled={isFormIncomplete}
-                    >
+                        disabled={isFormIncomplete}>
                         Dodaj przepis
                     </Button>
                 </div>

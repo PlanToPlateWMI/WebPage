@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -13,8 +28,8 @@ import {
     useGetAllQuery,
     useGetFavoriteQuery,
     useGetCategoriesQuery,
+    useGetOwnQuery
 } from "../redux/api/index.js";
-import Button from "@mui/material/Button";
 import Header from "./header";
 import Przepis from "./przepis";
 import ModalPrzepis from "./modalPrzepis.js";
@@ -23,35 +38,25 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import { openModalAddDialog } from "../redux/slices/authSlice.js";
 import { useAppDispatch, useAppSelector } from "../app/hooks.js";
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link
-                color="inherit"
-                href="https://github.com/orgs/PlanToPlateWMI/repositories">
-                Plan To Plate
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {". Wszelkie prawa zastrzeżone."}
-        </Typography>
-    );
-}
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Checkbox from '@mui/material/Checkbox';
+import { Button } from '@mui/material';
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const defaultTheme = createTheme();
 
 export function RecepiesPage() {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const dispatch = useAppDispatch();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const { refetch } = useGetFavoriteQuery();
     const { data: recipeData } = useGetAllQuery();
     const { data: categories } = useGetCategoriesQuery();
+    const { token, role } = useAppSelector((state) => state.authSlice);
 
     const [filter, setFilter] = useState("Wszystkie");
     const [filterLevel, setFilterLevel] = useState("all");
@@ -61,19 +66,35 @@ export function RecepiesPage() {
         { friendlyTitle: "Średnie", id: "MEDIUM" },
         { friendlyTitle: "Ciężkie", id: "HARD" },
     ];
-    const { token, role } = useAppSelector((state) => state.authSlice);
+
+    const [containerVisible, setContainerVisible] = useState(false);
+
+    const toggleContainer = () => {
+        setContainerVisible(!containerVisible);
+    };
+    const { data: favoriteRecipesData } = useGetFavoriteQuery();
+    const { data: ownRecipesData } = useGetOwnQuery();
+
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+    const [showOnlyOwn, setShowOnlyOwn] = useState(false);
+
+    const handleCheckboxChange = (event) => {
+        setShowOnlyFavorites(event.target.checked);
+    };
+    const handleOwnCheckboxChange = (event) => {
+        setShowOnlyOwn(event.target.checked);
+    };
 
     useEffect(() => {
         setPage(1);
-    }, [filter, filterLevel]);
+    }, [filter, filterLevel,showOnlyFavorites, showOnlyOwn]);
 
     if (!recipeData || !categories) {
-        return; 
+        return;
     }
-    
+
     const recipesPerPage = 12;
     const offset = (page - 1) * recipesPerPage;
-    const pageCount = Math.ceil(recipeData.length / recipesPerPage);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -84,11 +105,19 @@ export function RecepiesPage() {
         setSearchQuery(query);
     };
 
-    const handleOpenAddDialog = () => {
-        dispatch(openModalAddDialog(true));
-    };
-
     const filteredRecipes = recipeData
+        .filter((recipe) => {
+            if (showOnlyFavorites) {
+                return favoriteRecipesData.some((favRecipe) => favRecipe.id === recipe.id);
+            }
+            return true;
+        })
+        .filter((recipe) => {
+            if (showOnlyOwn) {
+                return ownRecipesData.some((ownRecipe) => ownRecipe.id === recipe.id);
+            }
+            return true;
+        })
         .filter((recipe) => {
             if (filter === "Wszystkie") return true;
             return recipe.categoryName === filter;
@@ -107,18 +136,19 @@ export function RecepiesPage() {
     if (filteredRecipes) {
         filteredRecipesCount = filteredRecipes.length;
     }
+    ;
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
+            <main style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh', paddingTop: '90px' }}>
                 <Paper
                     component="form"
                     sx={{
                         p: '5px 10px',
                         display: 'flex',
                         alignItems: 'center',
-                        width: 600,
+                        width: isSmallScreen ? '90vw' : 600,
                         margin: '0 auto',
                     }}
                 >
@@ -139,63 +169,123 @@ export function RecepiesPage() {
                             <CloseIcon />
                         </IconButton>
                     )}
-                </Paper>
-                <Container sx={{ py: 2 }} maxWidth="md">
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            p: 2,
-                        }}>
-                        <h3>Wybierz kategorię: &nbsp;&nbsp;</h3>
-                        <FormControlLabel
-                            control={
-                                <Radio
-                                    checked={filter === "Wszystkie"}
-                                    onChange={() => setFilter("Wszystkie")}
-                                    value="Wszystkie"
-                                />
-                            }
-                            label="Wszystkie"
-                            key={0}
-                        />
 
-                        {categories.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filter === item.name}
-                                        onChange={() => setFilter(item.name)}
-                                        value={item.name}
-                                    />
-                                }
-                                label={item.name}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            p: 2,
-                        }}>
-                        <h3>Wybierz poziom &nbsp;&nbsp;&nbsp;&nbsp; <br /> trudności: &nbsp;&nbsp;&nbsp;&nbsp;  </h3>
-                        {filtersLevel.map((item) => (
-                            <FormControlLabel
-                                control={
-                                    <Radio
-                                        checked={filterLevel === item.id}
-                                        onChange={() => setFilterLevel(item.id)}
-                                        value={item.friendlyTitle}
-                                    />
-                                }
-                                label={item.friendlyTitle}
-                                key={item.id}
-                            />
-                        ))}
-                    </Box>
-                    <Grid container spacing={4}>
+                </Paper>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                        variant="text"
+                        disableElevation
+                        style={{
+                            backgroundColor: '#C3ACD6',
+                            color: 'white',
+                            width: '220px',
+                            marginTop: '20px',
+                        }}
+                        onClick={toggleContainer}
+                    >
+                        {containerVisible ? 'Zamknij filtrowanie' : 'Otwórz filtrowanie'}
+                    </Button>
+                </div>
+
+                <Container sx={{ py: 1 }} maxWidth="md">
+                    <div>
+
+
+                        {containerVisible && (
+                            <div>
+                                {token !== "" && role === "ROLE_ADMIN" ? (
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={6}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    p: 1,
+                                                }}
+                                            >
+                                                <h3>Tylko własne przepisy: &nbsp;&nbsp;</h3>
+                                                <Checkbox
+                                                    checked={showOnlyOwn}
+                                                    onChange={handleOwnCheckboxChange}
+                                                    {...label}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    p: 1,
+                                                }}
+                                            >
+                                                <h3>Tylko ulubione przepisy: &nbsp;&nbsp;</h3>
+                                                <Checkbox
+                                                    checked={showOnlyFavorites}
+                                                    onChange={handleCheckboxChange}
+                                                    {...label}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                ) : (
+                                    null
+                                )}
+
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                    <Grid container spacing={4}>
+                                        <Grid item xs={6} md={6}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                <h3>Wybierz kategorię:</h3>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Radio
+                                                            checked={filter === 'Wszystkie'}
+                                                            onChange={() => setFilter('Wszystkie')}
+                                                            value="Wszystkie"
+                                                        />
+                                                    }
+                                                    label="Wszystkie"
+                                                />
+                                                {categories.map((item) => (
+                                                    <FormControlLabel
+                                                        key={item.id}
+                                                        control={
+                                                            <Radio
+                                                                checked={filter === item.name}
+                                                                onChange={() => setFilter(item.name)}
+                                                                value={item.name}
+                                                            />
+                                                        }
+                                                        label={item.name}
+                                                    />
+                                                ))}
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={6} md={6}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                <h3>Wybierz poziom trudności:</h3>
+                                                {filtersLevel.map((item) => (
+                                                    <FormControlLabel
+                                                        key={item.id}
+                                                        control={
+                                                            <Radio
+                                                                checked={filterLevel === item.id}
+                                                                onChange={() => setFilterLevel(item.id)}
+                                                                value={item.friendlyTitle}
+                                                            />
+                                                        }
+                                                        label={item.friendlyTitle}
+                                                    />
+                                                ))}
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </div>
+                        )}
+                    </div>
+                    <Grid container spacing={4} sx={{ marginTop: '10px' }}>
                         {filteredRecipes
                             .slice(offset, offset + recipesPerPage)
                             .map((recipe) => (
@@ -207,24 +297,6 @@ export function RecepiesPage() {
                             ))}
                     </Grid>
                 </Container>
-
-
-                {token !== "" && role === "ROLE_ADMIN" ? (
-                    <div style={{ position: 'fixed', bottom: '10%', right: '35px', zIndex: '999' }}>
-                        <Fab
-                            color="primary"
-                            aria-label="add"
-                            style={{
-                                backgroundColor: "#C3ACD6",
-                            }}
-                            onClick={handleOpenAddDialog}
-                        >
-                            <AddIcon />
-                        </Fab>
-                    </div>
-                ) : (
-                    null
-                )}
 
             </main>
 
@@ -238,22 +310,6 @@ export function RecepiesPage() {
                     />
                 </Box>
             )}
-
-            {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2, marginTop: 'auto' }} component="footer">
-                <Typography
-                    variant="subtitle1"
-                    align="center"
-                    color="text.secondary"
-                    component="p"
-                >
-                    Email:{" "}
-                    <a href="mailto:plantoplatemobileapp@gmail.com">
-                        plantoplatemobileapp@gmail.com
-                    </a>
-                </Typography>
-                <Copyright />
-            </Box>
             <ModalPrzepis />
             <ModalAddPrzepis />
         </ThemeProvider>

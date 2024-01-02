@@ -1,17 +1,29 @@
+/*
+ * Copyright 2023 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-// import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -24,10 +36,14 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import Logo from "../images/Logo2.jpg";
-
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export function LoginPage() {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     const { refetch } = useGetAllQuery();
     const [signIn] = useSigninMutation();
     const [error, setError] = useState(null);
@@ -87,6 +103,8 @@ export function LoginPage() {
             if (response.data.token) {
                 const token = response.data.token;
                 const role = response.data.role;
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', role);
                 refetch();
                 navigate("/");
             }
@@ -100,19 +118,21 @@ export function LoginPage() {
         <ThemeProvider theme={defaultTheme}>
             <Grid container component="main" sx={{ height: "100vh" }}>
                 <CssBaseline />
-                <img 
-                    src={Logo} 
-                    style={{
-                        flex: "1",
-                        backgroundRepeat: "no-repeat",
-                        backgroundColor: (t) =>
-                            t.palette.mode === "light"
-                                ? t.palette.grey[50]
-                                : t.palette.grey[900],
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                />
+                {!isSmallScreen && ( // Check if it's not a small screen
+                    <img
+                        src={Logo}
+                        style={{
+                            flex: '1',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: (t) =>
+                                t.palette.mode === 'light'
+                                    ? t.palette.grey[50]
+                                    : t.palette.grey[900],
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        }}
+                    />
+                )}
                 <Grid
                     item
                     xs={12}

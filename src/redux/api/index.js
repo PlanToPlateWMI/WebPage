@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://plantoplatetest.lm.r.appspot.com",
+        baseUrl: "https://plantoplate.lm.r.appspot.com",
         prepareHeaders: (headers, { getState }) => {
             const token = getState().authSlice.token;
             if (token) {
@@ -15,6 +15,10 @@ export const api = createApi({
     endpoints: (builder) => ({
         getFavorite: builder.query({
             query: () => "/api/recipes/selected",
+        }),
+
+        getOwn: builder.query({
+            query: () => "/api/recipes/owned",
         }),
 
         getAll: builder.query({
@@ -95,5 +99,6 @@ export const {
     useRemoveFromFavoriteMutation,
     useCreateRecipeMutation,
     useGetMyRecipesQuery,
-    useDeleteRecipeMutation
+    useDeleteRecipeMutation,
+    useGetOwnQuery
 } = api;

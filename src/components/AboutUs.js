@@ -1,11 +1,25 @@
+/*
+ * Copyright 2023 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import * as React from "react";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Header from "./header";
 import Button from '@mui/material/Button';
@@ -15,24 +29,9 @@ import Lista from "../images/lis.jpg";
 import Przepisy from "../images/prz.jpg";
 import Spizarnia from "../images/spiz.jpg";
 import QR from "../images/qr.jpg";
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link
-                color="inherit"
-                href="https://github.com/orgs/PlanToPlateWMI/repositories">
-                Plan To Plate
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {". Wszelkie prawa zastrzeżone."}
-        </Typography>
-    );
-}
+import ModalAddPrzepis from "./modalAddPrzepis.js";
 
 const defaultTheme = createTheme();
-
 
 export function AboutUs() {
 
@@ -46,6 +45,8 @@ export function AboutUs() {
         backgroundColor: '#C3ACD6',
         color: 'white',
         marginLeft: 'auto',
+        marginRight: 'auto', // Центрирует по горизонтали
+
     };
 
     const divStyle = {
@@ -63,16 +64,11 @@ export function AboutUs() {
         display: 'inline-block',
     }
 
-    const captionStyle = {
-        fontSize: '14px',
-        marginTop: '5px',
-    };
-
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <Header />
-            <div style={divStyle}>
+            <div style={{ ...divStyle, paddingTop: '80px' }}>
                 PlanToPlate to niezbędne narzędzie dla każdego pragnącego w pełni kontrolować swoje codzienne nawyki żywieniowe. Nasza aplikacja mobilna i strona internetowa to klucz do łatwego planowania jadłospisów, precyzyjnego zarządzania zakupami oraz odkrywania nowych, kulinarnych inspiracji osobom indywidualnym i grupom.    <br />
                 Z PlanToPlate zdobędziesz kontrolę nad swoją dietą, odkryjesz kulinarne horyzonty i zaoszczędzisz cenny czas, który dotąd poświęcałeś na codzienny stres związany z posiłkami. Zobacz możliwości naszej aplikacji mobilnej!
             </div>
@@ -83,9 +79,10 @@ export function AboutUs() {
                 <img src={Spizarnia} alt="Spizarnia" style={imageStyle} />
             </div>
 
-            <div style={divStyle}>
+            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
                 Dołącz do naszej społeczności i odkryj, jak łatwo może być cieszyć się smakiem zdrowego życia!
             </div>
+
             <div style={{ textAlign: 'center' }}>
                 <img src={QR} alt="QR code" style={{
                     width: '175px',
@@ -94,9 +91,16 @@ export function AboutUs() {
                 }} />
                 <h4>Pobierz aplikację mobilną w <a href="  https://play.google.com/store/apps/details?id=pl.plantoplate&pcampaignid=web_share" target="_blank">Google Play</a></h4>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px', flexDirection: 'column', textAlign: 'right' }}>
-                <p style={{ marginBottom: '5px', marginLeft: 'auto' }}>Jeżeli chcesz usunąć konto:</p>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '10px',
+                marginRight: '10px',
+                flexDirection: 'column',
+                textAlign: 'center'
+            }}>
+                <p style={{ marginBottom: '5px' }}>Jeżeli chcesz usunąć konto:</p>
                 <Button
                     variant="contained"
                     endIcon={<SendIcon />}
@@ -106,11 +110,7 @@ export function AboutUs() {
                     Napisz do nas
                 </Button>
             </div>
-
-            {/* Footer */}
-            <Box sx={{ backgroundColor: "#AA95BB", p: 2, bottom: 0, width: "100%" }} component="footer">
-                <Copyright />
-            </Box>
+            <ModalAddPrzepis />
         </ThemeProvider>
     );
 }
