@@ -235,8 +235,8 @@ const ModalAddPrzepis = () => {
 
         try {
             const result = await createRecipe(recipeData).unwrap();
-            refetchAll();
-            refetchOwn();
+            await refetchAll();
+            await refetchOwn();
             console.log("Recipe submitted successfully", result);
 
             setTitleValue("");

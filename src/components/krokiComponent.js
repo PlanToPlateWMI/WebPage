@@ -39,7 +39,7 @@ const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount, ste
                     maxRows={4}
                     value={step}
                     style={{
-                        width: isSmallScreen ? '300px' : '500px',
+                        width: isSmallScreen ? '270px' : '290px',
                         maxWidth: '100%',
                     }}
                     onChange={handleStepChange}

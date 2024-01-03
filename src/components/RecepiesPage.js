@@ -83,7 +83,7 @@ export function RecepiesPage() {
 
     useEffect(() => {
         setPage(1);
-    }, [filter, filterLevel, showOnlyFavorites, showOnlyOwn]);
+    }, [filter, filterLevel, showOnlyFavorites, showOnlyOwn, searchQuery]);
 
     if (!recipeData || !categories) {
         return;
