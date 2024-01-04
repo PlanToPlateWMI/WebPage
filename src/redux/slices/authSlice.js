@@ -13,6 +13,7 @@ const initialState = {
     isModalAddPrzepisOpen: false,
     categories: [],
     role: storedRole || "",
+    ownRecipes:[]
     
 };
 
@@ -98,7 +99,14 @@ const authSlice = createSlice({
                     console.log("close");
                     state.isModalAddPrzepisOpen = false;
                 }
-            );
+            ) .addMatcher(
+                api.endpoints.getMyRecipes.matchFulfilled,
+                (state, { payload, error }) => {
+                    console.log("close");
+                    state.ownRecipes = payload;
+                }
+            )
+            ;
     },
 });
 

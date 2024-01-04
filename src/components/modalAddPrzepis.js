@@ -238,7 +238,7 @@ const ModalAddPrzepis = () => {
             await refetchAll();
             await refetchOwn();
             console.log("Recipe submitted successfully", result);
-            window.location.reload(); 
+
             setTitleValue("");
             setLevelValue([]);
             setCategoryValue("");
@@ -260,8 +260,8 @@ const ModalAddPrzepis = () => {
         !categoryValue ||
         !numericValue ||
         !portionsValue ||
-        !steps.length ||
-        !ingredients.length;
+        !steps.some(step => step !== "")||
+    !ingredients.some(ingredient => ingredient.id !== "" && ingredient.qty !== "");
 
     return (
         <Dialog

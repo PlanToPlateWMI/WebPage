@@ -26,7 +26,7 @@ import {
     useGetAllQuery,
     useGetFavoriteQuery,
     useGetCategoriesQuery,
-    useGetOwnQuery
+    useGetMyRecipesQuery
 } from "../redux/api/index.js";
 import Header from "./header";
 import Przepis from "./przepis";
@@ -69,7 +69,7 @@ export function RecepiesPage() {
         setContainerVisible(!containerVisible);
     };
     const { data: favoriteRecipesData } = useGetFavoriteQuery();
-    const { data: ownRecipesData } = useGetOwnQuery();
+    const { data: ownRecipesData } = useGetMyRecipesQuery();
 
     const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
     const [showOnlyOwn, setShowOnlyOwn] = useState(false);

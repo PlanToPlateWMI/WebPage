@@ -95,7 +95,7 @@ const SkladnikiComponent = ({
                     style={{
                         display: "flex",
                         gap: "20px",
-                        paddingBottom: "10px",
+                        paddingBottom: "20px",
                     }}>
                     <Autocomplete
                         disablePortal

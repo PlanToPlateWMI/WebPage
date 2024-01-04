@@ -30,7 +30,7 @@ const KrokiComponent = ({ updateSteps, index, handleRemoveKroki, krokiCount, ste
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <div style={{ display: 'flex', gap: '20px', paddingBottom: '30px' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingBottom: '20px' }}>
             <Grid item>
                 <TextField
                     id={`step-${index}`}
