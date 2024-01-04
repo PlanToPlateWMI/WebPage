@@ -238,7 +238,7 @@ const ModalAddPrzepis = () => {
             await refetchAll();
             await refetchOwn();
             console.log("Recipe submitted successfully", result);
-
+            window.location.reload(); 
             setTitleValue("");
             setLevelValue([]);
             setCategoryValue("");
